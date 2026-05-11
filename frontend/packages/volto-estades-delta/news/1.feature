@@ -1,0 +1,1 @@
+First two Volto blocks for property pages (PropertyHero, PropertyDescription) grouped under "Estades Delta", plus the tenantRoutingMiddleware that rewrites `*.estadesdelta.local` hostnames to `/properties/<slug>` so each microsite renders the right Property from a single Plone site. [@josepcastellsportfolio]

@@ -1,0 +1,1 @@
+Initial scaffold of the Estades Delta monorepo (Plone 6.1 + Volto 18 + Traefik + Postgres pgvector + Redis), with local dev stack, CI workflows, and project conventions in CLAUDE.md. [@josepcastellsportfolio]
