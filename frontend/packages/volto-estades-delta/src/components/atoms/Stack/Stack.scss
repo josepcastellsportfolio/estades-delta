@@ -1,0 +1,50 @@
+.ed-stack {
+  display: flex;
+}
+.ed-stack--vertical {
+  flex-direction: column;
+}
+.ed-stack--horizontal {
+  flex-direction: row;
+}
+
+.ed-stack--wrap {
+  flex-wrap: wrap;
+}
+
+.ed-stack--align-start {
+  align-items: flex-start;
+}
+.ed-stack--align-center {
+  align-items: center;
+}
+.ed-stack--align-end {
+  align-items: flex-end;
+}
+.ed-stack--align-stretch {
+  align-items: stretch;
+}
+
+.ed-stack--justify-start {
+  justify-content: flex-start;
+}
+.ed-stack--justify-center {
+  justify-content: center;
+}
+.ed-stack--justify-end {
+  justify-content: flex-end;
+}
+.ed-stack--justify-between {
+  justify-content: space-between;
+}
+
+/* Gap tokens (mirror SPACING in tokens.ts) */
+.ed-stack--gap-0 { gap: 0; }
+.ed-stack--gap-1 { gap: var(--ed-space-1); }
+.ed-stack--gap-2 { gap: var(--ed-space-2); }
+.ed-stack--gap-3 { gap: var(--ed-space-3); }
+.ed-stack--gap-4 { gap: var(--ed-space-4); }
+.ed-stack--gap-6 { gap: var(--ed-space-6); }
+.ed-stack--gap-8 { gap: var(--ed-space-8); }
+.ed-stack--gap-12 { gap: var(--ed-space-12); }
+.ed-stack--gap-16 { gap: var(--ed-space-16); }

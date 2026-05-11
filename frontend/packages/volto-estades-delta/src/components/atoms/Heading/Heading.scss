@@ -1,0 +1,40 @@
+/* Heading inherits sizing from reset.scss on the matching tag, but supports
+ * the `decorative` modifier (oversized hero copy) and `tone` (primary/muted)
+ * without touching the underlying tag's defaults.
+ */
+
+.ed-heading {
+  margin: 0;
+  color: var(--ed-color-text-primary);
+}
+
+.ed-heading--tone-primary {
+  color: var(--ed-color-primary-default);
+}
+.ed-heading--tone-secondary {
+  color: var(--ed-color-text-secondary);
+}
+.ed-heading--tone-muted {
+  color: var(--ed-color-text-muted);
+}
+.ed-heading--tone-inverse {
+  color: var(--ed-color-text-inverse);
+}
+
+.ed-heading--decorative {
+  font-family: var(--ed-font-display);
+  font-size: var(--ed-font-size-5xl);
+  font-weight: var(--ed-font-weight-regular);
+  letter-spacing: -0.02em;
+  line-height: var(--ed-line-height-tight);
+}
+
+.ed-heading--size-2xl {
+  font-size: var(--ed-font-size-2xl);
+}
+.ed-heading--size-xl {
+  font-size: var(--ed-font-size-xl);
+}
+.ed-heading--size-lg {
+  font-size: var(--ed-font-size-lg);
+}

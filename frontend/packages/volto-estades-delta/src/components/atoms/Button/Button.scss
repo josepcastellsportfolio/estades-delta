@@ -1,0 +1,90 @@
+.ed-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ed-space-2);
+  font-family: var(--ed-font-body);
+  font-weight: var(--ed-font-weight-medium);
+  letter-spacing: 0;
+  text-align: center;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: var(--ed-radius-full);
+  cursor: pointer;
+  transition:
+    background-color 120ms ease-out,
+    border-color 120ms ease-out,
+    color 120ms ease-out,
+    box-shadow 120ms ease-out;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.ed-btn:focus-visible {
+  outline: 2px solid var(--ed-color-primary-default);
+  outline-offset: 2px;
+}
+
+.ed-btn[disabled],
+.ed-btn[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Sizes */
+.ed-btn--sm {
+  padding: var(--ed-space-2) var(--ed-space-4);
+  font-size: var(--ed-font-size-sm);
+  line-height: var(--ed-line-height-tight);
+}
+
+.ed-btn--md {
+  padding: var(--ed-space-3) var(--ed-space-6);
+  font-size: var(--ed-font-size-md);
+  line-height: var(--ed-line-height-tight);
+}
+
+.ed-btn--lg {
+  padding: var(--ed-space-4) var(--ed-space-8);
+  font-size: var(--ed-font-size-lg);
+  line-height: var(--ed-line-height-tight);
+}
+
+/* Variants */
+.ed-btn--primary {
+  background: var(--ed-color-primary-default);
+  color: var(--ed-color-primary-contrast);
+  border-color: var(--ed-color-primary-default);
+}
+.ed-btn--primary:hover {
+  background: var(--ed-color-primary-hover);
+  border-color: var(--ed-color-primary-hover);
+}
+
+.ed-btn--secondary {
+  background: var(--ed-color-surface-elevated);
+  color: var(--ed-color-primary-default);
+  border-color: var(--ed-color-primary-default);
+}
+.ed-btn--secondary:hover {
+  background: var(--ed-color-primary-bg);
+  color: var(--ed-color-primary-hover);
+  border-color: var(--ed-color-primary-hover);
+}
+
+.ed-btn--ghost {
+  background: transparent;
+  color: var(--ed-color-primary-default);
+  border-color: transparent;
+  padding-inline: var(--ed-space-3);
+}
+.ed-btn--ghost:hover {
+  background: var(--ed-color-primary-bg);
+  color: var(--ed-color-primary-hover);
+}
+
+/* Full-width modifier — useful inside narrow cards / mobile drawers. */
+.ed-btn--block {
+  width: 100%;
+}

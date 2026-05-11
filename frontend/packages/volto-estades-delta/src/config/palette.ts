@@ -1,25 +1,27 @@
 import type { ConfigType } from '@plone/registry';
-import { DEFAULT_PALETTE } from '../theme/tokens';
+import MarketplaceBodyPalette from '../components/MarketplaceBodyPalette';
 
 /**
- * Make sure the marketplace root (and any page rendered before the
- * PropertyView component decides on a per-tenant palette) starts with the
- * Arrossar master palette. We do this by setting `data-palette` on the
- * `<body>` from the server side via Volto's `htmlBodyAttributes` hook.
+ * Marketplace boots with `data-palette="arrossar"` on `<body>`.
  *
- * When a PropertyView mounts, it wraps its subtree in <PaletteScope
- * palette={property.palette}/> which overrides the body-level value for that
- * subtree via the CSS variable cascade.
+ * We do this through Volto's `config.settings.appExtras` slot rather than
+ * `htmlBodyAttributes` (which exists for Plone Classic, not Volto 18): a
+ * regular React component mounted inside <AppExtras> uses Helmet to push the
+ * attribute on <body>. PropertyView and other tenant-specific subtrees
+ * override the cascade via <PaletteScope palette={...}> wrappers rather
+ * than mutating the body again.
  */
 export default function installPalette(config: ConfigType) {
-  const existing =
-    ((config.settings as Record<string, unknown>).htmlBodyAttributes as Record<
-      string,
-      unknown
-    >) || {};
-  (config.settings as Record<string, unknown>).htmlBodyAttributes = {
+  const settings = config.settings as Record<string, unknown>;
+  const existing = (settings.appExtras as unknown[]) || [];
+  settings.appExtras = [
     ...existing,
-    'data-palette': DEFAULT_PALETTE,
-  };
+    {
+      // react-router matchPath: match every path under "/" (non-exact),
+      // i.e. effectively every page in the site.
+      match: { path: '/', exact: false, strict: false },
+      component: MarketplaceBodyPalette,
+    },
+  ];
   return config;
 }

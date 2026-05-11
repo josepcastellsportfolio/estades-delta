@@ -1,0 +1,61 @@
+.ed-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--ed-color-surface-elevated);
+  color: var(--ed-color-text-primary);
+  border: 1px solid var(--ed-color-border);
+  border-radius: var(--ed-radius-lg);
+  overflow: hidden;
+}
+
+.ed-card--elevation-0 {
+  box-shadow: none;
+}
+
+.ed-card--elevation-1 {
+  box-shadow: var(--ed-shadow-sm);
+}
+
+.ed-card--elevation-2 {
+  box-shadow: var(--ed-shadow-md);
+}
+
+.ed-card--elevation-3 {
+  box-shadow: var(--ed-shadow-lg);
+}
+
+.ed-card--interactive {
+  cursor: pointer;
+  transition:
+    transform 160ms ease-out,
+    box-shadow 160ms ease-out;
+}
+
+.ed-card--interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ed-shadow-lg);
+}
+
+.ed-card__header {
+  padding: var(--ed-space-6);
+  border-bottom: 1px solid var(--ed-color-border);
+}
+
+.ed-card__body {
+  padding: var(--ed-space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ed-space-4);
+  flex: 1 1 auto;
+}
+
+.ed-card__footer {
+  padding: var(--ed-space-4) var(--ed-space-6);
+  border-top: 1px solid var(--ed-color-border);
+  background: var(--ed-color-surface);
+}
+
+/* Padded variant: no header/footer slots, padding on the whole card. */
+.ed-card--padded > * {
+  padding: var(--ed-space-6);
+}
