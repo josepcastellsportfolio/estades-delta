@@ -1,11 +1,11 @@
 .ed-card {
   display: flex;
+  overflow: hidden;
   flex-direction: column;
-  background: var(--ed-color-surface-elevated);
-  color: var(--ed-color-text-primary);
   border: 1px solid var(--ed-color-border);
   border-radius: var(--ed-radius-lg);
-  overflow: hidden;
+  background: var(--ed-color-surface-elevated);
+  color: var(--ed-color-text-primary);
 }
 
 .ed-card--elevation-0 {
@@ -32,8 +32,8 @@
 }
 
 .ed-card--interactive:hover {
-  transform: translateY(-2px);
   box-shadow: var(--ed-shadow-lg);
+  transform: translateY(-2px);
 }
 
 .ed-card__header {
@@ -42,11 +42,11 @@
 }
 
 .ed-card__body {
-  padding: var(--ed-space-6);
   display: flex;
-  flex-direction: column;
-  gap: var(--ed-space-4);
   flex: 1 1 auto;
+  flex-direction: column;
+  padding: var(--ed-space-6);
+  gap: var(--ed-space-4);
 }
 
 .ed-card__footer {

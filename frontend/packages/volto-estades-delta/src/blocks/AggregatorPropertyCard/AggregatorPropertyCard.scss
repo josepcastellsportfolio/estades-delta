@@ -5,42 +5,42 @@
 
 .aggregatorPropertyCard__media {
   position: relative;
+  overflow: hidden;
   aspect-ratio: 4 / 3;
   background: var(--ed-color-surface);
-  background-size: cover;
   background-position: center;
-  overflow: hidden;
+  background-size: cover;
 }
 
 .aggregatorPropertyCard__media-placeholder {
   position: absolute;
-  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--ed-color-text-muted);
   font-family: var(--ed-font-body);
   font-size: var(--ed-font-size-sm);
+  inset: 0;
 }
 
 .aggregatorPropertyCard__tag-row {
   position: absolute;
-  top: var(--ed-space-3);
-  left: var(--ed-space-3);
-  right: var(--ed-space-3);
-  display: flex;
-  gap: var(--ed-space-2);
-  flex-wrap: wrap;
   z-index: 1;
+  top: var(--ed-space-3);
+  right: var(--ed-space-3);
+  left: var(--ed-space-3);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ed-space-2);
 }
 
 .aggregatorPropertyCard__meta {
   display: flex;
   align-items: center;
-  gap: var(--ed-space-2);
   color: var(--ed-color-text-secondary);
   font-family: var(--ed-font-body);
   font-size: var(--ed-font-size-sm);
+  gap: var(--ed-space-2);
 }
 
 .aggregatorPropertyCard__meta-separator {
@@ -61,7 +61,7 @@
 }
 
 .aggregatorPropertyCard__price-prefix {
-  font-size: var(--ed-font-size-sm);
   color: var(--ed-color-text-muted);
   font-family: var(--ed-font-body);
+  font-size: var(--ed-font-size-sm);
 }

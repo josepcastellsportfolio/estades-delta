@@ -1,9 +1,9 @@
 .ed-rating {
   display: inline-flex;
   align-items: center;
-  gap: var(--ed-space-2);
-  font-family: var(--ed-font-body);
   color: var(--ed-color-text-primary);
+  font-family: var(--ed-font-body);
+  gap: var(--ed-space-2);
 }
 
 .ed-rating__stars {
@@ -28,8 +28,8 @@
   top: 0;
   left: 0;
   overflow: hidden;
-  white-space: nowrap;
   color: var(--ed-color-secondary-default);
+  white-space: nowrap;
 }
 
 .ed-rating__score {

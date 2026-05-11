@@ -2,22 +2,22 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--ed-space-2);
-  font-family: var(--ed-font-body);
-  font-weight: var(--ed-font-weight-medium);
-  letter-spacing: 0;
-  text-align: center;
-  text-decoration: none;
   border: 1px solid transparent;
   border-radius: var(--ed-radius-full);
   cursor: pointer;
+  font-family: var(--ed-font-body);
+  font-weight: var(--ed-font-weight-medium);
+  gap: var(--ed-space-2);
+  letter-spacing: 0;
+  text-align: center;
+  text-decoration: none;
   transition:
     background-color 120ms ease-out,
     border-color 120ms ease-out,
     color 120ms ease-out,
     box-shadow 120ms ease-out;
-  white-space: nowrap;
   user-select: none;
+  white-space: nowrap;
 }
 
 .ed-btn:focus-visible {
@@ -27,8 +27,8 @@
 
 .ed-btn[disabled],
 .ed-btn[aria-disabled='true'] {
-  opacity: 0.55;
   cursor: not-allowed;
+  opacity: 0.55;
   pointer-events: none;
 }
 
@@ -53,30 +53,30 @@
 
 /* Variants */
 .ed-btn--primary {
+  border-color: var(--ed-color-primary-default);
   background: var(--ed-color-primary-default);
   color: var(--ed-color-primary-contrast);
-  border-color: var(--ed-color-primary-default);
 }
 .ed-btn--primary:hover {
-  background: var(--ed-color-primary-hover);
   border-color: var(--ed-color-primary-hover);
+  background: var(--ed-color-primary-hover);
 }
 
 .ed-btn--secondary {
+  border-color: var(--ed-color-primary-default);
   background: var(--ed-color-surface-elevated);
   color: var(--ed-color-primary-default);
-  border-color: var(--ed-color-primary-default);
 }
 .ed-btn--secondary:hover {
+  border-color: var(--ed-color-primary-hover);
   background: var(--ed-color-primary-bg);
   color: var(--ed-color-primary-hover);
-  border-color: var(--ed-color-primary-hover);
 }
 
 .ed-btn--ghost {
+  border-color: transparent;
   background: transparent;
   color: var(--ed-color-primary-default);
-  border-color: transparent;
   padding-inline: var(--ed-space-3);
 }
 .ed-btn--ghost:hover {

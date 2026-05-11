@@ -7,24 +7,24 @@ html {
 }
 
 body {
+  background: var(--ed-color-bg);
+  color: var(--ed-color-text-primary);
   font-family: var(--ed-font-body);
   font-size: var(--ed-font-size-md);
-  font-weight: var(--ed-font-weight-regular);
-  line-height: var(--ed-line-height-normal);
-  color: var(--ed-color-text-primary);
-  background: var(--ed-color-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-weight: var(--ed-font-weight-regular);
+  line-height: var(--ed-line-height-normal);
 }
 
 h1,
 h2 {
-  font-family: var(--ed-font-display);
-  font-weight: var(--ed-font-weight-regular);
-  line-height: var(--ed-line-height-tight);
-  letter-spacing: -0.02em;
   margin: 0 0 var(--ed-space-4);
   color: var(--ed-color-text-primary);
+  font-family: var(--ed-font-display);
+  font-weight: var(--ed-font-weight-regular);
+  letter-spacing: -0.02em;
+  line-height: var(--ed-line-height-tight);
 }
 
 h1 {
@@ -41,11 +41,11 @@ h3,
 h4,
 h5,
 h6 {
+  margin: 0 0 var(--ed-space-3);
+  color: var(--ed-color-text-primary);
   font-family: var(--ed-font-body);
   font-weight: var(--ed-font-weight-bold);
   line-height: var(--ed-line-height-snug);
-  margin: 0 0 var(--ed-space-3);
-  color: var(--ed-color-text-primary);
 }
 
 h3 {

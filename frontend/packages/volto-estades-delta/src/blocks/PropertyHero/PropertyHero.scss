@@ -1,36 +1,36 @@
 .propertyHero {
   position: relative;
-  min-height: 360px;
   display: flex;
-  align-items: flex-end;
-  background-color: var(--ed-color-surface);
-  background-size: cover;
-  background-position: center;
-  border-radius: var(--ed-radius-lg);
   overflow: hidden;
+  min-height: 360px;
+  align-items: flex-end;
+  border-radius: var(--ed-radius-lg);
+  background-color: var(--ed-color-surface);
+  background-position: center;
+  background-size: cover;
   isolation: isolate;
 }
 
 /* Scrim overlay improves text legibility on bright images. */
 .propertyHero[data-with-image='true']::after {
-  content: '';
   position: absolute;
-  inset: 0;
+  z-index: 1;
   background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0) 0%,
     rgba(0, 0, 0, 0.55) 100%
   );
-  z-index: 1;
+  content: '';
+  inset: 0;
 }
 
 .propertyHero__inner {
   position: relative;
   z-index: 2;
-  padding: var(--ed-space-12) var(--ed-space-8);
-  width: 100%;
   display: flex;
+  width: 100%;
   flex-direction: column;
+  padding: var(--ed-space-12) var(--ed-space-8);
   gap: var(--ed-space-4);
 }
 
@@ -50,9 +50,9 @@
 /* Without image — we sit on a flat surface and the tokens already paint
  * correctly via the cascading palette. */
 .propertyHero__subtitle {
+  margin: 0;
+  color: var(--ed-color-text-secondary);
   font-family: var(--ed-font-body);
   font-size: var(--ed-font-size-lg);
   line-height: var(--ed-line-height-relaxed);
-  color: var(--ed-color-text-secondary);
-  margin: 0;
 }

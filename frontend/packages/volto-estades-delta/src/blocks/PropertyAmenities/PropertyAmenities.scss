@@ -11,11 +11,11 @@
 }
 
 .propertyAmenities__group-title {
+  margin: 0 0 var(--ed-space-3);
+  color: var(--ed-color-text-muted);
   font-family: var(--ed-font-body);
   font-size: var(--ed-font-size-sm);
   font-weight: var(--ed-font-weight-medium);
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--ed-color-text-muted);
-  margin: 0 0 var(--ed-space-3);
 }
