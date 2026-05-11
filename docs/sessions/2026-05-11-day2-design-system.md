@@ -121,7 +121,12 @@ Backend REST API:
 ## Próximo paso (Day 3 — sugerido)
 
 1. Visual smoke en navegador: `http://api.estadesdelta.local:8081/josep-test/casa-demo-riumar` con login admin y probar que los blocks se pueden insertar.
-2. AggregatorFilters (date range + capacity + zone) para listar los Properties en el marketplace.
-3. PropertyMap (Leaflet + OSM) para AggregatorPropertyCard y PropertyView.
-4. Hot reload del backend (Dockerfile.dev con pip install -e .).
-5. Commit pnpm-lock.yaml y restaurar --frozen-lockfile.
+2. **Arreglar `VOLTO_TENANT_MAP` + middleware multi-tenant** — el bug `casa-demo.estadesdelta.local` → 404 viene de que el middleware rewritea a un path sin prefijo de idioma (`/properties/casa-demo-riumar`), pero Volto inyecta `/ca/` automáticamente, y la Property real vive en `/josep-test/casa-demo-riumar`. Dos opciones:
+   - **A (hotfix)**: mapear con prefijo de idioma en `VOLTO_TENANT_MAP` (`/ca/josep-test/casa-demo-riumar`). Rápido pero acopla routing a idioma default — si el usuario cambia idioma, el subdominio rompe el switch.
+   - **B (correcto)**: middleware rewritea sin prefijo, Volto detecta idioma vía `Accept-Language`/cookie y prepende `/<lang>/`. Requiere ajustar `middleware/tenantRouting.ts` para no asumir `/properties/<slug>` y aceptar el path real de la Property; o crear redirects backend `/properties/<slug>` → `/<owner>/<slug>` vía `plone.app.redirector`. Esta es la decisión arquitectónica que queremos a futuro.
+   - Acordado: si Day 3 viene apretado, ship opción A con `// TODO(day4)` en código apuntando a opción B. Si hay tiempo, hacer B directamente.
+3. AggregatorFilters (date range + capacity + zone) para listar los Properties en el marketplace.
+4. PropertyMap (Leaflet + OSM) para AggregatorPropertyCard y PropertyView.
+5. Wire `@testing-library/react` + `jest-dom` para reactivar los `.test.tsx.disabled` (60+ assertions ya escritas, lo único que falta es la config).
+6. Hot reload del backend (Dockerfile.dev con pip install -e .).
+7. Commit pnpm-lock.yaml y restaurar --frozen-lockfile.
