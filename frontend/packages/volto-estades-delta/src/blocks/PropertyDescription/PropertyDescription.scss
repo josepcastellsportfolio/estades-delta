@@ -1,0 +1,13 @@
+.propertyDescription {
+  padding: var(--ed-space-8) 0;
+}
+
+.propertyDescription__body {
+  font-family: var(--ed-font-body);
+  font-size: var(--ed-font-size-md);
+  line-height: var(--ed-line-height-relaxed);
+  color: var(--ed-color-text-primary);
+  margin: 0;
+  /* Long-form copy reads better at constrained width. */
+  max-width: 65ch;
+}

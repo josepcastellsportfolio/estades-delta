@@ -1,4 +1,7 @@
 import React from 'react';
+import Heading from '../../components/atoms/Heading';
+import Stack from '../../components/atoms/Stack';
+import './PropertyDescription.scss';
 
 export interface PropertyDescriptionData {
   '@type': 'propertyDescription';
@@ -16,12 +19,10 @@ const PropertyDescriptionView: React.FC<ViewProps> = ({ data, className }) => (
     className={`block propertyDescription ${className ?? ''}`}
     data-block-type="propertyDescription"
   >
-    {data.heading ? (
-      <h2 className="propertyDescription__heading">{data.heading}</h2>
-    ) : null}
-    {data.body ? (
-      <p className="propertyDescription__body">{data.body}</p>
-    ) : null}
+    <Stack direction="vertical" gap={4}>
+      {data.heading ? <Heading level={2}>{data.heading}</Heading> : null}
+      {data.body ? <p className="propertyDescription__body">{data.body}</p> : null}
+    </Stack>
   </section>
 );
 
