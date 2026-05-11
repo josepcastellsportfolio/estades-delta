@@ -1,4 +1,5 @@
 """Content types for estades.delta."""
+
 from estades.delta.content.booking import Booking
 from estades.delta.content.booking import IBooking
 from estades.delta.content.owner import IOwner

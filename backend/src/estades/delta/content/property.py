@@ -1,4 +1,5 @@
 """Property content type: a single chalet / casa rural / apartament turistic."""
+
 from estades.delta import _
 from plone.app.textfield import RichText
 from plone.dexterity.content import Container
@@ -18,7 +19,9 @@ class IProperty(model.Schema):
     # --- Identity / SEO ---
     short_name = schema.TextLine(
         title=_("Short name (URL slug)"),
-        description=_("Used for canonical URLs and the *.estadesdelta.local subdomain."),
+        description=_(
+            "Used for canonical URLs and the *.estadesdelta.local subdomain."
+        ),
         required=True,
     )
 
@@ -147,11 +150,13 @@ class IProperty(model.Schema):
     )
     custom_domain = schema.TextLine(
         title=_("Custom domain"),
-        description=_("Optional fully-qualified domain for this microsite (e.g. casariumar.cat)."),
+        description=_(
+            "Optional fully-qualified domain for this microsite (e.g. casariumar.cat)."
+        ),
         required=False,
     )
 
-    # --- Long-form copy (kept rich for multilingual override via plone.app.multilingual) ---
+    # --- Long-form copy (rich; multilingual overrides via plone.app.multilingual) ---
     long_description = RichText(
         title=_("Long description"),
         required=False,

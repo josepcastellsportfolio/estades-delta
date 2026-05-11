@@ -2,7 +2,13 @@
 <object meta_type="Plone Types Tool"
         name="portal_types"
 >
-  <object meta_type="Dexterity FTI" name="Property" />
-  <object meta_type="Dexterity FTI" name="Owner" />
-  <object meta_type="Dexterity FTI" name="Booking" />
+  <object meta_type="Dexterity FTI"
+          name="Property"
+  />
+  <object meta_type="Dexterity FTI"
+          name="Owner"
+  />
+  <object meta_type="Dexterity FTI"
+          name="Booking"
+  />
 </object>

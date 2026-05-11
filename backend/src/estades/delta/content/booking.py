@@ -1,6 +1,6 @@
 """Booking content type: a single reservation tied to a Property."""
+
 from estades.delta import _
-from plone.app.relationfield.behavior import IRelatedItems
 from plone.autoform import directives
 from plone.dexterity.content import Item
 from plone.supermodel import model
@@ -73,7 +73,7 @@ class IBooking(model.Schema):
     )
     # nights is computed via an indexer; not stored as a writable field.
 
-    # --- Money (in EUR, full precision; rounding to cents happens at PaymentIntent time) ---
+    # --- Money (in EUR, full precision; cents rounding at PaymentIntent time) ---
     subtotal = schema.Float(
         title=_("Subtotal"),
         required=False,
@@ -133,7 +133,9 @@ class IBooking(model.Schema):
     # --- External (Beds24 etc.) ---
     booking_external_id = schema.TextLine(
         title=_("External booking ID"),
-        description=_("Used for idempotency when receiving Beds24 / Booking.com webhooks."),
+        description=_(
+            "Used for idempotency when receiving Beds24 / Booking.com webhooks."
+        ),
         required=False,
     )
 

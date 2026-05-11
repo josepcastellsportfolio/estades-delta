@@ -3,6 +3,7 @@
 Owners onboard via Stripe Connect Express; payments are destination charges with
 our commission taken as ``application_fee_amount``. See CLAUDE.md section 10.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -73,8 +74,8 @@ class StripeStubAdapter:
     def create_payment_intent(self, booking_obj) -> StripePaymentIntentResult:
         total = float(getattr(booking_obj, "total_amount", 0.0) or 0.0)
         commission = float(getattr(booking_obj, "our_commission_amount", 0.0) or 0.0)
-        amount_cents = int(round(total * 100))
-        fee_cents = int(round(commission * 100))
+        amount_cents = round(total * 100)
+        fee_cents = round(commission * 100)
         booking_id = getattr(booking_obj, "id", "?")
         logger.info(
             "StripeStub.create_payment_intent booking=%s total=%.2f commission=%.2f",
@@ -101,7 +102,9 @@ class StripeStubAdapter:
             total,
             rate,
         )
-        return CommissionBreakdown(rate=rate, commission_amount=commission, owner_payout=payout)
+        return CommissionBreakdown(
+            rate=rate, commission_amount=commission, owner_payout=payout
+        )
 
     def handle_webhook(self, payload: dict, signature: str) -> None:
         event_type = payload.get("type", "<unknown>")

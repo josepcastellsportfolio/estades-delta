@@ -1,5 +1,5 @@
 """Owner content type: a property owner (individual or company)."""
-from datetime import date
+
 from estades.delta import _
 from plone.dexterity.content import Container
 from plone.supermodel import model

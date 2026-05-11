@@ -3,6 +3,7 @@
 Phase 1 returns mock data; Phase 2 will hit Beds24 API v2 sandbox; Phase 3 swaps to
 production credentials.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -35,7 +36,10 @@ class IBeds24Adapter(Protocol):
     """Protocol implemented by all Beds24 adapters (stub, sandbox, prod)."""
 
     def sync_calendar(self, property_obj) -> list[AvailabilityWindow]:
-        """Pull availability for a Property from Beds24. Stub: returns 60-day open window."""
+        """Pull availability for a Property from Beds24.
+
+        Stub: returns a 60-day open window.
+        """
 
     def create_booking(
         self, property_obj, check_in: date, check_out: date, guest_email: str
@@ -48,17 +52,24 @@ class IBeds24Adapter(Protocol):
         """Push manual availability change to Beds24."""
 
     def handle_webhook(self, payload: dict) -> None:
-        """Process an incoming Beds24 webhook (cancellation, OTA-originated booking, etc.)."""
+        """Process an incoming Beds24 webhook.
+
+        Handles cancellations, OTA-originated bookings, etc.
+        """
 
 
 class Beds24StubAdapter:
     """Phase 1 stub — logs calls and returns mock-but-coherent data."""
 
     def sync_calendar(self, property_obj) -> list[AvailabilityWindow]:
-        logger.info("Beds24Stub.sync_calendar property=%s", getattr(property_obj, "id", "?"))
+        logger.info(
+            "Beds24Stub.sync_calendar property=%s", getattr(property_obj, "id", "?")
+        )
         today = date.today()
         return [
-            AvailabilityWindow(start=today, end=today + timedelta(days=60), available=True)
+            AvailabilityWindow(
+                start=today, end=today + timedelta(days=60), available=True
+            )
         ]
 
     def create_booking(
