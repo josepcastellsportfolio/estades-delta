@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layers>
+  <layer interface="estades.delta.interfaces.IBrowserLayer"
+         name="estades.delta"
+  />
+</layers>

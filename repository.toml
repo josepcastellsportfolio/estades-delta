@@ -1,0 +1,32 @@
+[repository]
+name = "estadesdelta"
+changelog = "CHANGELOG.md"
+version = "version.txt"
+version_format = "calver"
+container_images_prefix = "ghcr.io/estadesdelta/estadesdelta"
+compose = ["docker-compose.yml"]
+
+[repository.towncrier]
+section = "Project"
+settings = "towncrier.toml"
+
+[backend.package]
+name = "estades.delta"
+path = "backend"
+changelog = "backend/CHANGELOG.md"
+towncrier_settings = "backend/pyproject.toml"
+base_package = "Products.CMFPlone"
+publish = false
+
+[frontend.package]
+name = "volto-estades-delta"
+path = "frontend/packages/volto-estades-delta"
+changelog = "frontend/packages/volto-estades-delta/CHANGELOG.md"
+towncrier_settings = "frontend/packages/volto-estades-delta/towncrier.toml"
+base_package = "@plone/volto"
+publish = false
+
+[cookieplone]
+template = "project"
+template_version = "f43600068a2ed0e833072cdc4963358a238a430a"
+generated_date = "2026-05-11 11:53:20"
