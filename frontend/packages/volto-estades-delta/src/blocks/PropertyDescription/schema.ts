@@ -1,13 +1,13 @@
-import type { BlockSchema } from "@plone/types";
+import type { BlockSchema } from '@plone/types';
 
 const PropertyDescriptionSchema = (): BlockSchema => ({
-  title: "Property description",
+  title: 'Property description',
   fieldsets: [
-    { id: "default", title: "Description", fields: ["heading", "body"] },
+    { id: 'default', title: 'Description', fields: ['heading', 'body'] },
   ],
   properties: {
-    heading: { title: "Heading", type: "string" },
-    body: { title: "Body", type: "string", widget: "textarea" },
+    heading: { title: 'Heading', type: 'string' },
+    body: { title: 'Body', type: 'string', widget: 'textarea' },
   },
   required: [],
 });

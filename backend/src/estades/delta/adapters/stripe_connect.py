@@ -8,6 +8,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from estades.delta import logger
 from typing import Protocol
+from typing import runtime_checkable
 
 
 @dataclass(frozen=True)
@@ -41,6 +42,7 @@ class CommissionBreakdown:
     owner_payout: float
 
 
+@runtime_checkable
 class IStripeAdapter(Protocol):
     """Protocol implemented by all Stripe adapters (stub, sandbox, prod)."""
 

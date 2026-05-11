@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
 export interface PropertyHeroData {
-  "@type": "propertyHero";
+  '@type': 'propertyHero';
   title?: string;
   subtitle?: string;
   hero_image?: string;
@@ -20,16 +20,18 @@ const PropertyHeroView: React.FC<ViewProps> = ({ data, className }) => {
 
   return (
     <section
-      className={`block propertyHero ${className ?? ""}`}
+      className={`block propertyHero ${className ?? ''}`}
       data-block-type="propertyHero"
       style={bg}
     >
       <div className="propertyHero__inner">
-        {data.title ? <h1 className="propertyHero__title">{data.title}</h1> : null}
+        {data.title ? (
+          <h1 className="propertyHero__title">{data.title}</h1>
+        ) : null}
         {data.subtitle ? (
           <p className="propertyHero__subtitle">{data.subtitle}</p>
         ) : null}
-        {typeof data.capacity === "number" ? (
+        {typeof data.capacity === 'number' ? (
           <p className="propertyHero__capacity">
             <strong>{data.capacity}</strong> guests max
           </p>

@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
 export interface PropertyDescriptionData {
-  "@type": "propertyDescription";
+  '@type': 'propertyDescription';
   heading?: string;
   body?: string;
 }
@@ -13,7 +13,7 @@ interface ViewProps {
 
 const PropertyDescriptionView: React.FC<ViewProps> = ({ data, className }) => (
   <section
-    className={`block propertyDescription ${className ?? ""}`}
+    className={`block propertyDescription ${className ?? ''}`}
     data-block-type="propertyDescription"
   >
     {data.heading ? (

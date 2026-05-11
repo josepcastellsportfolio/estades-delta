@@ -10,6 +10,7 @@ from datetime import date
 from datetime import timedelta
 from estades.delta import logger
 from typing import Protocol
+from typing import runtime_checkable
 
 
 @dataclass(frozen=True)
@@ -29,6 +30,7 @@ class Beds24BookingResult:
     confirmed: bool
 
 
+@runtime_checkable
 class IBeds24Adapter(Protocol):
     """Protocol implemented by all Beds24 adapters (stub, sandbox, prod)."""
 

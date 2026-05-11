@@ -1,14 +1,14 @@
-import PropertyHeroView from "./PropertyHeroView";
-import PropertyHeroEdit from "./PropertyHeroEdit";
-import PropertyHeroSchema from "./schema";
+import PropertyHeroView from './PropertyHeroView';
+import PropertyHeroEdit from './PropertyHeroEdit';
+import PropertyHeroSchema from './schema';
 
-export const PROPERTY_HERO_BLOCK_ID = "propertyHero";
+export const PROPERTY_HERO_BLOCK_ID = 'propertyHero';
 
 export const propertyHeroBlock = {
   id: PROPERTY_HERO_BLOCK_ID,
-  title: "Property hero",
+  title: 'Property hero',
   icon: undefined,
-  group: "estadesDelta",
+  group: 'estadesDelta',
   view: PropertyHeroView,
   edit: PropertyHeroEdit,
   blockSchema: PropertyHeroSchema,

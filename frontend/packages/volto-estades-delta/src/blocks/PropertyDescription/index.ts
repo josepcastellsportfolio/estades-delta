@@ -1,14 +1,14 @@
-import PropertyDescriptionView from "./PropertyDescriptionView";
-import PropertyDescriptionEdit from "./PropertyDescriptionEdit";
-import PropertyDescriptionSchema from "./schema";
+import PropertyDescriptionView from './PropertyDescriptionView';
+import PropertyDescriptionEdit from './PropertyDescriptionEdit';
+import PropertyDescriptionSchema from './schema';
 
-export const PROPERTY_DESCRIPTION_BLOCK_ID = "propertyDescription";
+export const PROPERTY_DESCRIPTION_BLOCK_ID = 'propertyDescription';
 
 export const propertyDescriptionBlock = {
   id: PROPERTY_DESCRIPTION_BLOCK_ID,
-  title: "Property description",
+  title: 'Property description',
   icon: undefined,
-  group: "estadesDelta",
+  group: 'estadesDelta',
   view: PropertyDescriptionView,
   edit: PropertyDescriptionEdit,
   blockSchema: PropertyDescriptionSchema,

@@ -1,5 +1,5 @@
-import React from "react";
-import PropertyHeroView, { type PropertyHeroData } from "./PropertyHeroView";
+import React from 'react';
+import PropertyHeroView, { type PropertyHeroData } from './PropertyHeroView';
 
 interface EditProps {
   data: PropertyHeroData;

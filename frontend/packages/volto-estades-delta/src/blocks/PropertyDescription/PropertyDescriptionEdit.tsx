@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 import PropertyDescriptionView, {
   type PropertyDescriptionData,
-} from "./PropertyDescriptionView";
+} from './PropertyDescriptionView';
 
 interface EditProps {
   data: PropertyDescriptionData;
