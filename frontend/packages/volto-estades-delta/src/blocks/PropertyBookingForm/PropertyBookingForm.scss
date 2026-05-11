@@ -1,0 +1,73 @@
+.propertyBookingForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ed-space-4);
+}
+
+.propertyBookingForm__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ed-space-1);
+}
+
+.propertyBookingForm__label {
+  font-family: var(--ed-font-body);
+  font-size: var(--ed-font-size-sm);
+  font-weight: var(--ed-font-weight-medium);
+  letter-spacing: 0.02em;
+  color: var(--ed-color-text-secondary);
+}
+
+.propertyBookingForm__input {
+  font-family: var(--ed-font-body);
+  font-size: var(--ed-font-size-md);
+  color: var(--ed-color-text-primary);
+  background: var(--ed-color-surface-elevated);
+  border: 1px solid var(--ed-color-border);
+  border-radius: var(--ed-radius-md);
+  padding: var(--ed-space-3) var(--ed-space-4);
+  width: 100%;
+}
+
+.propertyBookingForm__input:focus {
+  outline: 2px solid var(--ed-color-primary-default);
+  outline-offset: 2px;
+  border-color: var(--ed-color-primary-default);
+}
+
+.propertyBookingForm__row {
+  display: grid;
+  gap: var(--ed-space-3);
+  grid-template-columns: 1fr 1fr;
+}
+
+.propertyBookingForm__error {
+  font-family: var(--ed-font-body);
+  font-size: var(--ed-font-size-sm);
+  color: var(--ed-color-error);
+}
+
+.propertyBookingForm__breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ed-space-2);
+  padding: var(--ed-space-4);
+  background: var(--ed-color-surface);
+  border-radius: var(--ed-radius-md);
+}
+
+.propertyBookingForm__breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--ed-font-body);
+  font-size: var(--ed-font-size-md);
+  color: var(--ed-color-text-secondary);
+}
+
+.propertyBookingForm__breakdown-row--total {
+  padding-top: var(--ed-space-2);
+  border-top: 1px solid var(--ed-color-border);
+  font-weight: var(--ed-font-weight-bold);
+  color: var(--ed-color-text-primary);
+  font-size: var(--ed-font-size-lg);
+}
