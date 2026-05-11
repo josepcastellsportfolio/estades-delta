@@ -39,6 +39,16 @@ const PropertyGalleryView: React.FC<ViewProps> = ({
   const moreCount = Math.max(0, total - visibleCount);
 
   const handleClick = (i: number) => () => onOpen?.(i);
+  // Keyboard support paired with the `role="button"` on each interactive cell.
+  // Both Enter and Space invoke onOpen, mirroring native <button> behaviour.
+  const handleKeyDown =
+    (i: number) =>
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        onOpen?.(i);
+      }
+    };
 
   return (
     <section
@@ -49,8 +59,10 @@ const PropertyGalleryView: React.FC<ViewProps> = ({
       <div
         className="propertyGallery__cell propertyGallery__cell--hero"
         style={cellStyle(data.hero)}
-        onClick={handleClick(0)}
+        onClick={data.hero ? handleClick(0) : undefined}
+        onKeyDown={data.hero ? handleKeyDown(0) : undefined}
         role={data.hero ? 'button' : undefined}
+        tabIndex={data.hero ? 0 : undefined}
         aria-label={data.alt ?? 'hero image'}
       >
         {data.hero ? null : (
@@ -69,7 +81,9 @@ const PropertyGalleryView: React.FC<ViewProps> = ({
             className="propertyGallery__cell"
             style={cellStyle(src)}
             onClick={handleClick(i + 1)}
+            onKeyDown={handleKeyDown(i + 1)}
             role="button"
+            tabIndex={0}
             aria-label={`${data.alt ?? 'gallery image'} ${i + 2}`}
           >
             {showOverlay ? (
