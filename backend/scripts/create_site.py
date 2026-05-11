@@ -47,9 +47,7 @@ site_id = "Plone"
 payload = {
     "title": "Estades Delta",
     "profile_id": _DEFAULT_PROFILE,
-
     "distribution_name": "volto",
-
     "setup_content": False,
     "default_language": "es",
     "portal_timezone": "UTC",
