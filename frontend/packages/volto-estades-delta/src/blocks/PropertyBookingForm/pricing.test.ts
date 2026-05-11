@@ -30,8 +30,10 @@ describe('computeBookingTotal', () => {
     expect(out.nights).toBe(3);
     expect(out.subtotal).toBe(3 * 160);
     expect(out.cleaningFee).toBe(50);
-    expect(out.touristTaxTotal).toBe(3 * 1.1 * 2);
-    expect(out.total).toBe(3 * 160 + 50 + 3 * 1.1 * 2);
+    // Tourist tax uses round2 internally; compare with toBeCloseTo to keep
+    // float-precision noise (3 * 1.1 = 6.6000000000000005) out of the assert.
+    expect(out.touristTaxTotal).toBeCloseTo(3 * 1.1 * 2, 2);
+    expect(out.total).toBeCloseTo(3 * 160 + 50 + 3 * 1.1 * 2, 2);
   });
 
   it('charges low-season for January nights', () => {
@@ -94,9 +96,10 @@ describe('computeBookingTotal', () => {
     const out = computeBookingTotal({
       ...baseInput,
       checkIn: new Date('2026-06-29'),
-      checkOut: new Date('2026-07-02'), // mid, high, high
+      checkOut: new Date('2026-07-02'),
+      // Nights are: jun 29 (mid) | jun 30 (mid) | jul 1 (high)
       adults: 2,
     });
-    expect(out.nightlyRates).toEqual([110, 160, 160]);
+    expect(out.nightlyRates).toEqual([110, 110, 160]);
   });
 });

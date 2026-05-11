@@ -42,8 +42,7 @@ const PropertyGalleryView: React.FC<ViewProps> = ({
   // Keyboard support paired with the `role="button"` on each interactive cell.
   // Both Enter and Space invoke onOpen, mirroring native <button> behaviour.
   const handleKeyDown =
-    (i: number) =>
-    (e: React.KeyboardEvent<HTMLDivElement>) => {
+    (i: number) => (e: React.KeyboardEvent<HTMLDivElement>) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         onOpen?.(i);
