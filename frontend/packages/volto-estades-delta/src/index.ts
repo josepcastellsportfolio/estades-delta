@@ -3,6 +3,7 @@ import installSettings from './config/settings';
 import installBlocks from './config/blocks';
 import installMiddleware from './config/middleware';
 import installPalette from './config/palette';
+import installViews from './config/views';
 
 // Importing the entry .scss once at addon load registers all design tokens,
 // palette custom properties, font @imports, and the typography reset on the
@@ -13,6 +14,7 @@ import './theme/index.scss';
 function applyConfig(config: ConfigType) {
   installSettings(config);
   installBlocks(config);
+  installViews(config);
   installMiddleware(config);
   installPalette(config);
 
