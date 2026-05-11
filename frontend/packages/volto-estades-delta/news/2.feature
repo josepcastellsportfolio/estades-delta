@@ -1,0 +1,1 @@
+Introduce design tokens (spacing, typography, radii, shadows, font families, breakpoints) and the three Estades Delta palettes scoped via `data-palette`. New `PaletteScope` component with tests + Storybook stories. The marketplace boots with `data-palette="arrossar"` on `<body>` via Volto's `htmlBodyAttributes`. [@josepcastellsportfolio]

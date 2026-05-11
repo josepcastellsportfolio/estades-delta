@@ -166,6 +166,21 @@ class IProperty(model.Schema):
         required=False,
     )
 
+    # --- Visual theme ---
+    palette = schema.Choice(
+        title=_("Visual palette"),
+        description=_(
+            "Microsite theme. Affects colours only (typography and layout are "
+            "fixed). Arrossar (green rural) for chalets de campo, masies, "
+            "agroturismes. Riu i Mar (boutique navy, serene) for coastal, "
+            "naval, ornithological orientation. Capvespre (ocre emotional) "
+            "for experience retreats and photo-stays."
+        ),
+        vocabulary="estades.delta.vocabularies.Palettes",
+        default="arrossar",
+        required=True,
+    )
+
     # --- Chatbot (reserved fields — wired in Month 2+ via the assistant service) ---
     chatbot_enabled = schema.Bool(
         title=_("Chatbot enabled"),

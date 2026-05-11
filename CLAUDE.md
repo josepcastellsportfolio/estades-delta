@@ -117,6 +117,8 @@ Una sola Plone Site (`/Plone`) contiene todos los Properties (chalets). Cada Pro
 
 **Por qué no multi-site o lineage:** maintenance overhead inadmisible para solo operator, y no aporta valor real porque tenants no son competidores legales que necesiten aislamiento de datos cataláctico. Trade-off elegido conscientemente.
 
+**Multi-palette sobre multi-tenant:** además del routing por hostname, cada microsite renderiza con una de **3 paletas visuales** (Arrossar / Riu i Mar / Capvespre) seleccionable en el campo `palette` de la Property. Tipografía única (DM Serif Display + DM Sans) para coherencia agregador. El marketplace (`estadesdelta.cat`/`.local`) está bloqueado a Arrossar como master. Ver `docs/ADRs/013-multi-palette-theming.md` y `frontend/packages/volto-estades-delta/docs/DESIGN_TOKENS.md`.
+
 ### 5.2 Layout de servicios (Fase 1 — local)
 
 ```
@@ -221,6 +223,7 @@ Chalet/casa rural turística. Children: Photos, custom blocks.
 - `check_in_time`, `check_out_time`
 - `beds24_property_id` (sync external)
 - `custom_domain` (e.g. `casariumar.cat`)
+- `palette` (Choice: `arrossar` | `riu-i-mar` | `capvespre`, default `arrossar`) — controla tema visual del microsite
 - **Chatbot reserved fields** (no usar todavía): `chatbot_enabled`, `chatbot_tier`, `chatbot_custom_prompt`
 
 **Multilingüe:** title, subtitle, description, long_description, house_rules son `plone.app.multilingual` aware.
@@ -499,6 +502,7 @@ ADRs completos en `docs/ADRs/`. Estos son los resumidos:
 | 008 | Fork `recetia_assistant` para chatbot, no refactor | Validar demanda primero, extraer core genérico después |
 | 009 | Claude Haiku 4.5 como LLM default | Mejor relación calidad/precio multilingüe, margen sano todos los tiers |
 | 010 | Holded para facturación (no self-hosted) | Verifactu compliance (2026) no negociable |
+| 013 | 3 paletas visuales + tipografía única (DM Serif Display + DM Sans), marketplace master Arrossar | Identidad por propiedad sin perder coherencia de agregador. ADR completo en `docs/ADRs/013-multi-palette-theming.md` |
 
 ---
 

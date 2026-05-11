@@ -1,0 +1,43 @@
+.ed-price {
+  display: inline-flex;
+  align-items: baseline;
+  color: var(--ed-color-text-primary);
+  font-family: var(--ed-font-body);
+  gap: var(--ed-space-1);
+}
+
+.ed-price__amount {
+  font-feature-settings:
+    'tnum' on,
+    'lnum' on; /* tabular figures */
+  font-weight: var(--ed-font-weight-bold);
+}
+
+.ed-price__currency {
+  color: var(--ed-color-text-secondary);
+  font-weight: var(--ed-font-weight-medium);
+}
+
+.ed-price__suffix {
+  color: var(--ed-color-text-muted);
+  font-size: var(--ed-font-size-sm);
+  font-weight: var(--ed-font-weight-regular);
+}
+
+.ed-price--size-md .ed-price__amount {
+  font-size: var(--ed-font-size-xl);
+}
+
+.ed-price--size-lg .ed-price__amount {
+  font-size: var(--ed-font-size-2xl);
+}
+
+.ed-price--size-xl .ed-price__amount {
+  font-size: var(--ed-font-size-3xl);
+}
+
+.ed-price--strikethrough .ed-price__amount {
+  color: var(--ed-color-text-muted);
+  font-weight: var(--ed-font-weight-regular);
+  text-decoration: line-through;
+}

@@ -1,0 +1,1 @@
+Volto addon Day 2 work: seven atoms, five property-page blocks, AggregatorPropertyCard, and a PropertyView template that reads `content.palette` and wraps its subtree in `<PaletteScope/>` so each microsite paints with the right boutique palette. [@josepcastellsportfolio]

@@ -1,0 +1,83 @@
+/* Minimal reset on top of Volto core. Volto already ships Barceloneta resets,
+ * so we only normalise things that conflict with our typography hierarchy.
+ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--ed-color-bg);
+  color: var(--ed-color-text-primary);
+  font-family: var(--ed-font-body);
+  font-size: var(--ed-font-size-md);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: var(--ed-font-weight-regular);
+  line-height: var(--ed-line-height-normal);
+}
+
+h1,
+h2 {
+  margin: 0 0 var(--ed-space-4);
+  color: var(--ed-color-text-primary);
+  font-family: var(--ed-font-display);
+  font-weight: var(--ed-font-weight-regular);
+  letter-spacing: -0.02em;
+  line-height: var(--ed-line-height-tight);
+}
+
+h1 {
+  font-size: var(--ed-font-size-4xl);
+}
+
+h2 {
+  font-size: var(--ed-font-size-3xl);
+  letter-spacing: -0.01em;
+  line-height: var(--ed-line-height-snug);
+}
+
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 var(--ed-space-3);
+  color: var(--ed-color-text-primary);
+  font-family: var(--ed-font-body);
+  font-weight: var(--ed-font-weight-bold);
+  line-height: var(--ed-line-height-snug);
+}
+
+h3 {
+  font-size: var(--ed-font-size-2xl);
+}
+
+h4 {
+  font-size: var(--ed-font-size-xl);
+  font-weight: var(--ed-font-weight-medium);
+}
+
+h5 {
+  font-size: var(--ed-font-size-lg);
+  font-weight: var(--ed-font-weight-medium);
+}
+
+h6 {
+  font-size: var(--ed-font-size-md);
+  font-weight: var(--ed-font-weight-medium);
+}
+
+p {
+  margin: 0 0 var(--ed-space-4);
+  color: var(--ed-color-text-primary);
+}
+
+a {
+  color: var(--ed-color-primary-default);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  color: var(--ed-color-primary-hover);
+}

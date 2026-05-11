@@ -1,0 +1,52 @@
+.ed-rating {
+  display: inline-flex;
+  align-items: center;
+  color: var(--ed-color-text-primary);
+  font-family: var(--ed-font-body);
+  gap: var(--ed-space-2);
+}
+
+.ed-rating__stars {
+  position: relative;
+  display: inline-block;
+  font-size: 1em;
+  line-height: 1;
+}
+
+.ed-rating__stars-bg,
+.ed-rating__stars-fg {
+  display: inline-block;
+  letter-spacing: 0;
+}
+
+.ed-rating__stars-bg {
+  color: var(--ed-color-border-strong);
+}
+
+.ed-rating__stars-fg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  color: var(--ed-color-secondary-default);
+  white-space: nowrap;
+}
+
+.ed-rating__score {
+  font-weight: var(--ed-font-weight-medium);
+}
+
+.ed-rating__count {
+  color: var(--ed-color-text-muted);
+  font-size: var(--ed-font-size-sm);
+}
+
+.ed-rating--size-sm {
+  font-size: var(--ed-font-size-sm);
+}
+.ed-rating--size-md {
+  font-size: var(--ed-font-size-md);
+}
+.ed-rating--size-lg {
+  font-size: var(--ed-font-size-lg);
+}

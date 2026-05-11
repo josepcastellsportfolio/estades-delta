@@ -13,5 +13,9 @@ class TestSetupInstall:
         assert IBrowserLayer in browser_layers
 
     def test_latest_version(self, profile_last_version):
-        """Test latest version of default profile."""
-        assert profile_last_version(f"{PACKAGE_NAME}:default") == "1000"
+        """Test latest version of default profile.
+
+        Bumped to 1001 in Day 2 when Property gained the `palette` field and
+        we added the corresponding back-fill upgrade step.
+        """
+        assert profile_last_version(f"{PACKAGE_NAME}:default") == "1001"

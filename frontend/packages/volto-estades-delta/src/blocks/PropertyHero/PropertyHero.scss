@@ -1,0 +1,58 @@
+.propertyHero {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  min-height: 360px;
+  align-items: flex-end;
+  border-radius: var(--ed-radius-lg);
+  background-color: var(--ed-color-surface);
+  background-position: center;
+  background-size: cover;
+  isolation: isolate;
+}
+
+/* Scrim overlay improves text legibility on bright images. */
+.propertyHero[data-with-image='true']::after {
+  position: absolute;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+  content: '';
+  inset: 0;
+}
+
+.propertyHero__inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  padding: var(--ed-space-12) var(--ed-space-8);
+  gap: var(--ed-space-4);
+}
+
+/* Inverted typography when we sit on top of an image. */
+.propertyHero[data-with-image='true'] .propertyHero__inner {
+  color: var(--ed-color-text-inverse);
+}
+
+.propertyHero[data-with-image='true'] .ed-heading {
+  color: var(--ed-color-text-inverse);
+}
+
+.propertyHero[data-with-image='true'] .propertyHero__subtitle {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Without image — we sit on a flat surface and the tokens already paint
+ * correctly via the cascading palette. */
+.propertyHero__subtitle {
+  margin: 0;
+  color: var(--ed-color-text-secondary);
+  font-family: var(--ed-font-body);
+  font-size: var(--ed-font-size-lg);
+  line-height: var(--ed-line-height-relaxed);
+}

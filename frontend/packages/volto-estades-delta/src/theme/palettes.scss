@@ -1,0 +1,147 @@
+/* The three Estades Delta palettes, applied via [data-palette="…"].
+ *
+ * Marketplace aggregator (estadesdelta.cat / .local) uses Arrossar as master.
+ * Each Property may override with `riu-i-mar` or `capvespre` per the
+ * `palette` field on the content type.
+ *
+ * Choosing a palette per property (rule of thumb):
+ *   arrossar    — green, rural: masies, agroturismes, chalets de campo.
+ *   riu-i-mar   — boutique navy, serene: coastal, naval, ornithological.
+ *   capvespre   — emotional ocre/teal: experience retreats, photo-stays.
+ */
+
+/* ─── A) Arrossar (master) ───────────────────────────────────────────── */
+[data-palette='arrossar'] {
+  --ed-color-primary-default: #2d5f3f;
+  --ed-color-primary-hover: #1f4530;
+  --ed-color-primary-subtle: #5a8366;
+  --ed-color-primary-bg: #e8f0eb;
+  --ed-color-primary-contrast: #ffffff;
+
+  --ed-color-secondary-default: #c49a4f;
+  --ed-color-secondary-hover: #9a7838;
+  --ed-color-secondary-subtle: #d9b776;
+  --ed-color-secondary-contrast: #1a1f1a;
+
+  --ed-color-accent-default: #a85432;
+  --ed-color-accent-hover: #87421f;
+  --ed-color-accent-contrast: #ffffff;
+
+  --ed-color-bg: #faf7f0;
+  --ed-color-surface: #f0ebe0;
+  --ed-color-surface-elevated: #ffffff;
+  --ed-color-border: #d9d4c7;
+  --ed-color-border-strong: #b8b2a0;
+
+  --ed-color-text-primary: #1a1f1a;
+  --ed-color-text-secondary: #4d5446;
+  --ed-color-text-muted: #8a8f82;
+  --ed-color-text-inverse: #faf7f0;
+
+  --ed-color-success: #4a7a4f;
+  --ed-color-warning: #c49a4f;
+  --ed-color-error: #a8423c;
+  --ed-color-info: #4a6b7a;
+}
+
+/* ─── B) Riu i Mar ───────────────────────────────────────────────────── */
+[data-palette='riu-i-mar'] {
+  --ed-color-primary-default: #2d4a5f;
+  --ed-color-primary-hover: #1f3445;
+  --ed-color-primary-subtle: #547588;
+  --ed-color-primary-bg: #e5ecef;
+  --ed-color-primary-contrast: #ffffff;
+
+  --ed-color-secondary-default: #8fa5b0;
+  --ed-color-secondary-hover: #6a8190;
+  --ed-color-secondary-subtle: #b5c5cc;
+  --ed-color-secondary-contrast: #1a1f26;
+
+  --ed-color-accent-default: #c49a6e;
+  --ed-color-accent-hover: #9a7849;
+  --ed-color-accent-contrast: #1a1f26;
+
+  --ed-color-bg: #f8f7f4;
+  --ed-color-surface: #eeede8;
+  --ed-color-surface-elevated: #ffffff;
+  --ed-color-border: #d5d3cc;
+  --ed-color-border-strong: #adaba1;
+
+  --ed-color-text-primary: #1a1f26;
+  --ed-color-text-secondary: #4a5560;
+  --ed-color-text-muted: #8a929b;
+  --ed-color-text-inverse: #f8f7f4;
+
+  --ed-color-success: #4a7a66;
+  --ed-color-warning: #c49a4f;
+  --ed-color-error: #a8423c;
+  --ed-color-info: #4a6b82;
+}
+
+/* ─── C) Capvespre ───────────────────────────────────────────────────── */
+[data-palette='capvespre'] {
+  --ed-color-primary-default: #b5723a;
+  --ed-color-primary-hover: #8a551f;
+  --ed-color-primary-subtle: #c99564;
+  --ed-color-primary-bg: #f5ebe0;
+  --ed-color-primary-contrast: #faf6ee;
+
+  --ed-color-secondary-default: #4a5f75;
+  --ed-color-secondary-hover: #344559;
+  --ed-color-secondary-subtle: #708498;
+  --ed-color-secondary-contrast: #faf6ee;
+
+  --ed-color-accent-default: #d9b776;
+  --ed-color-accent-hover: #b89757;
+  --ed-color-accent-contrast: #261f1a;
+
+  --ed-color-bg: #faf6ee;
+  --ed-color-surface: #f0ebe0;
+  --ed-color-surface-elevated: #ffffff;
+  --ed-color-border: #d9d2c0;
+  --ed-color-border-strong: #b5ac95;
+
+  --ed-color-text-primary: #261f1a;
+  --ed-color-text-secondary: #544840;
+  --ed-color-text-muted: #8c8478;
+  --ed-color-text-inverse: #faf6ee;
+
+  --ed-color-success: #5f7a4f;
+  --ed-color-warning: #c99564;
+  --ed-color-error: #a8453c;
+  --ed-color-info: #4a6b82;
+}
+
+/* ─── Fallback (no data-palette ancestor) — mirror Arrossar ──────────── */
+:root {
+  --ed-color-primary-default: #2d5f3f;
+  --ed-color-primary-hover: #1f4530;
+  --ed-color-primary-subtle: #5a8366;
+  --ed-color-primary-bg: #e8f0eb;
+  --ed-color-primary-contrast: #ffffff;
+
+  --ed-color-secondary-default: #c49a4f;
+  --ed-color-secondary-hover: #9a7838;
+  --ed-color-secondary-subtle: #d9b776;
+  --ed-color-secondary-contrast: #1a1f1a;
+
+  --ed-color-accent-default: #a85432;
+  --ed-color-accent-hover: #87421f;
+  --ed-color-accent-contrast: #ffffff;
+
+  --ed-color-bg: #faf7f0;
+  --ed-color-surface: #f0ebe0;
+  --ed-color-surface-elevated: #ffffff;
+  --ed-color-border: #d9d4c7;
+  --ed-color-border-strong: #b8b2a0;
+
+  --ed-color-text-primary: #1a1f1a;
+  --ed-color-text-secondary: #4d5446;
+  --ed-color-text-muted: #8a8f82;
+  --ed-color-text-inverse: #faf7f0;
+
+  --ed-color-success: #4a7a4f;
+  --ed-color-warning: #c49a4f;
+  --ed-color-error: #a8423c;
+  --ed-color-info: #4a6b7a;
+}

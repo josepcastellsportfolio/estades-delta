@@ -33,4 +33,9 @@
       component=".preferred_languages"
       />
 
+  <utility
+      name="estades.delta.vocabularies.Palettes"
+      component=".palettes"
+      />
+
 </configure>
