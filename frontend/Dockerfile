@@ -31,9 +31,8 @@ LABEL maintainer="Josep Castells <josepcastellsbusiness@gmail.com>" \
 
 COPY --from=builder /app/ /app/
 
-RUN <<EOT
-    set -e
-    CI=1 npm i -g corepack@latest && corepack enable pnpm
-    CI=1 corepack use pnpm@9.15.9
-    CI=1 corepack prepare pnpm@9.15.9 --activate
-EOT
+# Day 1: the original template appends `npm i -g corepack@latest` here. As the
+# default user has no write access to /usr/local/lib/node_modules in
+# plone/frontend-prod-config 18.33.1 this hangs forever. The builder stage
+# already produced /app/node_modules via pnpm, so we just trust that and skip
+# the global corepack install. Revisit in Day 2 if production runtime needs it.

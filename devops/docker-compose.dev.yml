@@ -13,9 +13,14 @@ name: estadesdelta-dev
 
 services:
   traefik:
-    image: traefik:v3.1
+    # v3.7+ required because Docker 29 ships API v1.52 (min 1.44). Older Traefik
+    # versions bundle a go-docker client that negotiates an obsolete API and fails
+    # with "client version 1.24 is too old". DOCKER_API_VERSION pins the client.
+    image: traefik:v3.7
     container_name: estadesdelta-traefik
     restart: unless-stopped
+    environment:
+      DOCKER_API_VERSION: "1.44"
     ports:
       # Apache2 on the host already binds :80, so Traefik takes :8081. All test URLs
       # therefore use :8081 explicitly (e.g. http://estadesdelta.local:8081).
@@ -104,8 +109,9 @@ services:
       - "traefik.http.middlewares.mw-backend-vhm-classic.replacepathregex.replacement=/VirtualHostBase/http/api.estadesdelta.local:8081/Plone/VirtualHostRoot$$1"
 
       # /++api++/ on the frontend hostname (proxied by Volto SSR usually, but exposed for
-      # direct REST tests).
-      - "traefik.http.routers.rt-backend-api.rule=Host(`estadesdelta.local`,`www.estadesdelta.local`,`casa-demo.estadesdelta.local`) && PathPrefix(`/++api++`)"
+      # direct REST tests). Traefik v3 requires Host() to take a single value, so we
+      # OR together one Host(...) per hostname.
+      - "traefik.http.routers.rt-backend-api.rule=(Host(`estadesdelta.local`) || Host(`www.estadesdelta.local`) || Host(`casa-demo.estadesdelta.local`)) && PathPrefix(`/++api++`)"
       - "traefik.http.routers.rt-backend-api.entrypoints=http"
       - "traefik.http.routers.rt-backend-api.service=svc-backend"
       - "traefik.http.routers.rt-backend-api.middlewares=mw-backend-vhm-api"
@@ -130,20 +136,29 @@ services:
       - backend
     environment:
       RAZZLE_INTERNAL_API_PATH: "http://backend:8080/Plone"
-      RAZZLE_API_PATH: "http://estadesdelta.local"
+      RAZZLE_API_PATH: "http://estadesdelta.local:8081"
       RAZZLE_DEV_PROXY_API_PATH: "http://backend:8080"
       # Multi-tenant routing map (used by middleware/tenantRouting.js).
       VOLTO_TENANT_MAP: '{"casa-demo.estadesdelta.local":"/properties/casa-demo-riumar"}'
+    healthcheck:
+      # Override the default healthcheck: it follows 302 -> /ca -> 404 and fails.
+      # Accept any 2xx/3xx response on /.
+      test: ["CMD-SHELL", "wget -q --max-redirect=0 --server-response http://127.0.0.1:3000/ -O /dev/null 2>&1 | grep -qE 'HTTP/.* (200|301|302|304)'"]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 5
     labels:
       - "traefik.enable=true"
       - "traefik.constraint-label=estadesdelta-dev"
       - "traefik.http.services.svc-frontend.loadbalancer.server.port=3000"
       # Marketplace + microsite + www variants all hit the Volto SSR; routing decisions
       # are taken inside Volto based on X-Forwarded-Host.
-      - "traefik.http.routers.rt-frontend.rule=Host(`estadesdelta.local`,`www.estadesdelta.local`,`casa-demo.estadesdelta.local`)"
+      - "traefik.http.routers.rt-frontend.rule=Host(`estadesdelta.local`) || Host(`www.estadesdelta.local`) || Host(`casa-demo.estadesdelta.local`)"
       - "traefik.http.routers.rt-frontend.entrypoints=http"
       - "traefik.http.routers.rt-frontend.service=svc-frontend"
-      - "traefik.http.routers.rt-frontend.priority=1"  # lower than backend API routes
+      # Backend API router has a longer matcher (Host && PathPrefix), so it already wins
+      # for /++api++/* on those hostnames; no explicit priority needed here.
     networks:
       - estadesdelta
 
