@@ -7,14 +7,15 @@ COPY --chown=node volto.config.js /app/
 COPY --chown=node package.json /app/package.json.temp
 COPY --chown=node mrs.developer.json /app/
 COPY --chown=node pnpm-workspace.yaml /app/
-COPY --chown=node pnpm-lock.yaml /app/pnpm-lock.yaml
+# Day 1: no pnpm-lock.yaml exists yet (will be generated during the first install below).
+# Re-enable --frozen-lockfile in Day 2 once the lockfile is committed.
 
 RUN --mount=type=cache,id=pnpm,target=/app/.pnpm-store,uid=1000 <<EOT
     set -e
     python3 -c "import json; orig_data = json.load(open('package.json.temp')); orig_deps = orig_data['dependencies']; data = json.load(open('package.json')); data['dependencies'].update(orig_deps); json.dump(data, open('package.json', 'w'), indent=2)"
     rm package.json.temp
     pnpm dlx mrs-developer missdev --no-config --fetch-https
-    pnpm install && pnpm build:deps
+    pnpm install --no-frozen-lockfile && pnpm build:deps
     pnpm build
     # This is necessary because the build is trying to recreate the node_modules folder
     # by telling it to CI=1 it will just recreate them

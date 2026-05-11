@@ -1,0 +1,10 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="estades.delta"
+    >
+
+  <!-- Dexterity wires class and schema through the FTIs in profiles/default/types/.
+       The interface modules and content classes are imported by FTI klass="..." strings;
+       no ZCML registration of factories is needed here. -->
+
+</configure>

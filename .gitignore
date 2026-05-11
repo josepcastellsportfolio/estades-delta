@@ -1,5 +1,53 @@
+# Editor / IDE
 !.vscode
-node_modules
+.idea/
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+.tooling-venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.tox/
+htmlcov/
+.coverage
+.coverage.*
+
+# Node
+node_modules/
+.pnpm-store/
+.next/
+.cache/
+# mrs-developer clones Volto core into frontend/core/ during build; never commit.
+frontend/core/
+
+# Translations build artefacts
+*.mo
+
+# Plone runtime / build
 /core
 /public
-*.mo
+backend/var/
+backend/instance/
+backend/.installed.cfg
+backend/develop-eggs/
+backend/parts/
+
+# Secrets & local config — NEVER commit .env
+.env
+.env.local
+.env.*.local
+
+# Docker / OS
+*.log
+.DS_Store
+Thumbs.db
