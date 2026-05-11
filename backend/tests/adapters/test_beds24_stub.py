@@ -3,6 +3,7 @@
 The real adapter implementation lands in Phase 2; until then we only assert that the
 stub conforms to the protocol and returns the documented mock shape.
 """
+
 from datetime import date
 from estades.delta.adapters.beds24 import AvailabilityWindow
 from estades.delta.adapters.beds24 import Beds24BookingResult
@@ -39,8 +40,13 @@ def test_create_booking_returns_external_id():
 
 
 def test_update_availability_is_noop():
-    Beds24StubAdapter().update_availability(_FakeProperty(), date.today(), date.today(), False)
+    Beds24StubAdapter().update_availability(
+        _FakeProperty(), date.today(), date.today(), False
+    )
 
 
 def test_handle_webhook_is_noop():
-    Beds24StubAdapter().handle_webhook({"type": "booking.cancelled", "booking_id": "abc"})
+    Beds24StubAdapter().handle_webhook({
+        "type": "booking.cancelled",
+        "booking_id": "abc",
+    })

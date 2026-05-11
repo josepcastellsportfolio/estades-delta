@@ -1,4 +1,5 @@
 """Tests for the Phase 1 Stripe Connect stub adapter (no network)."""
+
 from estades.delta.adapters.stripe_connect import CommissionBreakdown
 from estades.delta.adapters.stripe_connect import IStripeAdapter
 from estades.delta.adapters.stripe_connect import StripeConnectOnboarding
