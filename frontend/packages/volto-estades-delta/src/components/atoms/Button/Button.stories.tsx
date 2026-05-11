@@ -18,16 +18,24 @@ export default meta;
 
 type Story = StoryObj<typeof Button>;
 
-export const Primary: Story = { args: { variant: 'primary', children: 'Reservar' } };
+export const Primary: Story = {
+  args: { variant: 'primary', children: 'Reservar' },
+};
 export const Secondary: Story = {
   args: { variant: 'secondary', children: 'Veure detalls' },
 };
-export const Ghost: Story = { args: { variant: 'ghost', children: 'Cancel·lar' } };
+export const Ghost: Story = {
+  args: { variant: 'ghost', children: 'Cancel·lar' },
+};
 export const Disabled: Story = {
   args: { variant: 'primary', disabled: true, children: 'Reservar' },
 };
 export const Block: Story = {
-  args: { variant: 'primary', block: true, children: 'Continuar amb la reserva' },
+  args: {
+    variant: 'primary',
+    block: true,
+    children: 'Continuar amb la reserva',
+  },
 };
 
 /** Visual regression across all three palettes — quick smoke check. */
@@ -45,7 +53,13 @@ export const InAllPalettes: Story = {
             }}
           >
             <Button {...args} />
-            <div style={{ fontSize: 12, marginTop: 8, color: 'var(--ed-color-text-muted)' }}>
+            <div
+              style={{
+                fontSize: 12,
+                marginTop: 8,
+                color: 'var(--ed-color-text-muted)',
+              }}
+            >
               {p}
             </div>
           </div>

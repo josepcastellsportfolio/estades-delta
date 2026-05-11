@@ -45,10 +45,7 @@ export const Rating: React.FC<RatingProps> = ({
     <span className={cls} role="img" aria-label={a11y}>
       <span className="ed-rating__stars" aria-hidden="true">
         <span className="ed-rating__stars-bg">{stars}</span>
-        <span
-          className="ed-rating__stars-fg"
-          style={{ width: `${pct}%` }}
-        >
+        <span className="ed-rating__stars-fg" style={{ width: `${pct}%` }}>
           {stars}
         </span>
       </span>

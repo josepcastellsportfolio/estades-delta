@@ -29,7 +29,9 @@ describe('<PropertyBookingFormView />', () => {
     expect(screen.getByLabelText(/adults/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/^nens$/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/beb/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Reservar' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Reservar' }),
+    ).toBeInTheDocument();
   });
 
   it('shows an error when checkout precedes checkin', () => {

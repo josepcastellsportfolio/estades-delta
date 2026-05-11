@@ -20,7 +20,9 @@ describe('<AggregatorPropertyCardView />', () => {
         }}
       />,
     );
-    expect(screen.getByRole('heading', { level: 3, name: 'Casa Demo' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 3, name: 'Casa Demo' }),
+    ).toBeInTheDocument();
     expect(screen.getByText('Deltebre · Riumar')).toBeInTheDocument();
     expect(screen.getByText('6 hostes')).toBeInTheDocument();
     expect(screen.getByText('3 hab')).toBeInTheDocument();
@@ -44,7 +46,11 @@ describe('<AggregatorPropertyCardView />', () => {
   it('renders tag pill when tag prop is set', () => {
     render(
       <AggregatorPropertyCardView
-        data={{ '@type': 'aggregatorPropertyCard', title: 't', tag: 'Destacat' }}
+        data={{
+          '@type': 'aggregatorPropertyCard',
+          title: 't',
+          tag: 'Destacat',
+        }}
       />,
     );
     expect(screen.getByText('Destacat')).toBeInTheDocument();

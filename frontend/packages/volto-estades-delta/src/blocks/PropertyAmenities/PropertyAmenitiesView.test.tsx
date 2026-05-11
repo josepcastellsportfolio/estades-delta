@@ -13,7 +13,9 @@ describe('<PropertyAmenitiesView />', () => {
         }}
       />,
     );
-    expect(screen.getByRole('heading', { level: 2, name: 'Comoditats' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Comoditats' }),
+    ).toBeInTheDocument();
     expect(screen.getByText('wifi')).toBeInTheDocument();
     expect(screen.getByText('aire condicionat')).toBeInTheDocument();
     expect(screen.getByText('cuina equipada')).toBeInTheDocument();

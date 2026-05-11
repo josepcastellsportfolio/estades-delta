@@ -13,7 +13,9 @@ describe('<PropertyHeroView />', () => {
         }}
       />,
     );
-    expect(screen.getByRole('heading', { level: 1, name: 'Casa Demo' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Casa Demo' }),
+    ).toBeInTheDocument();
     expect(screen.getByText('Una casa al Delta')).toBeInTheDocument();
   });
 
@@ -38,7 +40,9 @@ describe('<PropertyHeroView />', () => {
     );
     const section = container.querySelector('.propertyHero') as HTMLElement;
     expect(section.getAttribute('data-with-image')).toBe('true');
-    expect(section.style.backgroundImage).toContain('https://example.com/x.jpg');
+    expect(section.style.backgroundImage).toContain(
+      'https://example.com/x.jpg',
+    );
   });
 
   it('flags data-with-image=false when no hero_image', () => {

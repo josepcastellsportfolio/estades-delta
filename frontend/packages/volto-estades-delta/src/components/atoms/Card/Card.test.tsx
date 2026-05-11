@@ -20,7 +20,9 @@ describe('<Card />', () => {
         body
       </Card>,
     );
-    expect(screen.getByRole('heading', { level: 3, name: 'Title' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 3, name: 'Title' }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Book' })).toBeInTheDocument();
     expect(screen.getByText('body')).toBeInTheDocument();
   });

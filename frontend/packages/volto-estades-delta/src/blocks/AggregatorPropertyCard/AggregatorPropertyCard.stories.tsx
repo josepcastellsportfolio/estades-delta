@@ -32,7 +32,9 @@ const sampleImg =
   'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=800&q=70';
 
 export const Default: Story = {
-  render: () => <AggregatorPropertyCardView data={{ ...base, image: sampleImg }} />,
+  render: () => (
+    <AggregatorPropertyCardView data={{ ...base, image: sampleImg }} />
+  ),
 };
 
 export const WithoutImage: Story = {

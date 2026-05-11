@@ -98,12 +98,7 @@ const AggregatorPropertyCardView: React.FC<ViewProps> = ({
             ) : null}
           </div>
           {data.href ? (
-            <Button
-              as="a"
-              variant="secondary"
-              size="sm"
-              href={data.href}
-            >
+            <Button as="a" variant="secondary" size="sm" href={data.href}>
               Veure
             </Button>
           ) : null}
@@ -113,7 +108,13 @@ const AggregatorPropertyCardView: React.FC<ViewProps> = ({
       <Stack direction="vertical" gap={2}>
         {data.title ? <Heading level={3}>{data.title}</Heading> : null}
         {data.location ? (
-          <span style={{ color: 'var(--ed-color-text-muted)', fontFamily: 'var(--ed-font-body)', fontSize: 'var(--ed-font-size-sm)' }}>
+          <span
+            style={{
+              color: 'var(--ed-color-text-muted)',
+              fontFamily: 'var(--ed-font-body)',
+              fontSize: 'var(--ed-font-size-sm)',
+            }}
+          >
             {data.location}
           </span>
         ) : null}
@@ -122,7 +123,9 @@ const AggregatorPropertyCardView: React.FC<ViewProps> = ({
             {meta.map((part, i) => (
               <React.Fragment key={part}>
                 {i > 0 ? (
-                  <span className="aggregatorPropertyCard__meta-separator">·</span>
+                  <span className="aggregatorPropertyCard__meta-separator">
+                    ·
+                  </span>
                 ) : null}
                 <span>{part}</span>
               </React.Fragment>
@@ -130,11 +133,7 @@ const AggregatorPropertyCardView: React.FC<ViewProps> = ({
           </div>
         ) : null}
         {typeof data.rating === 'number' ? (
-          <Rating
-            value={data.rating}
-            count={data.ratingCount}
-            size="sm"
-          />
+          <Rating value={data.rating} count={data.ratingCount} size="sm" />
         ) : null}
       </Stack>
     </Card>

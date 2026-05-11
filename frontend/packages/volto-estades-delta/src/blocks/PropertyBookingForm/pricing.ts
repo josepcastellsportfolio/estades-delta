@@ -52,12 +52,7 @@ function nightsBetween(checkIn: Date, checkOut: Date): number {
   return Math.max(0, Math.round(diff / MS_PER_DAY));
 }
 
-function seasonRate(
-  d: Date,
-  low: number,
-  mid: number,
-  high: number,
-): number {
+function seasonRate(d: Date, low: number, mid: number, high: number): number {
   // d.getMonth() is 0-based: 0 Jan ... 11 Dec
   const m = d.getMonth();
   if (m >= 6 && m <= 8) return high; // Jul Aug Sep

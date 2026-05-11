@@ -26,9 +26,7 @@ describe('<Pill />', () => {
   });
 
   it('renders icon before children', () => {
-    render(
-      <Pill icon={<span data-testid="ic">★</span>}>5.0</Pill>,
-    );
+    render(<Pill icon={<span data-testid="ic">★</span>}>5.0</Pill>);
     expect(screen.getByTestId('ic')).toBeInTheDocument();
     expect(screen.getByText('5.0')).toBeInTheDocument();
   });

@@ -6,13 +6,7 @@ const AggregatorPropertyCardSchema = (): BlockSchema => ({
     {
       id: 'default',
       title: 'Content',
-      fields: [
-        'title',
-        'location',
-        'image',
-        'href',
-        'tag',
-      ],
+      fields: ['title', 'location', 'image', 'href', 'tag'],
     },
     {
       id: 'meta',

@@ -28,7 +28,11 @@ const MAX_SECONDARY = 4;
 const cellStyle = (src?: string): React.CSSProperties | undefined =>
   src ? { backgroundImage: `url(${src})` } : undefined;
 
-const PropertyGalleryView: React.FC<ViewProps> = ({ data, className, onOpen }) => {
+const PropertyGalleryView: React.FC<ViewProps> = ({
+  data,
+  className,
+  onOpen,
+}) => {
   const secondary = (data.images ?? []).slice(0, MAX_SECONDARY);
   const visibleCount = (data.hero ? 1 : 0) + secondary.length;
   const total = typeof data.total === 'number' ? data.total : visibleCount;
@@ -77,19 +81,19 @@ const PropertyGalleryView: React.FC<ViewProps> = ({ data, className, onOpen }) =
         );
       })}
 
-      {Array.from({ length: Math.max(0, MAX_SECONDARY - secondary.length) }).map(
-        (_, i) => (
-          <div
-            key={`empty-${i}`}
-            className="propertyGallery__cell"
-            aria-hidden="true"
-          >
-            <span className="propertyGallery__cell-placeholder">
-              (sense imatge)
-            </span>
-          </div>
-        ),
-      )}
+      {Array.from({
+        length: Math.max(0, MAX_SECONDARY - secondary.length),
+      }).map((_, i) => (
+        <div
+          key={`empty-${i}`}
+          className="propertyGallery__cell"
+          aria-hidden="true"
+        >
+          <span className="propertyGallery__cell-placeholder">
+            (sense imatge)
+          </span>
+        </div>
+      ))}
     </section>
   );
 };

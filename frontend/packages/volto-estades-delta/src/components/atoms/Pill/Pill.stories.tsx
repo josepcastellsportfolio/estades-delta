@@ -29,9 +29,13 @@ export default meta;
 type Story = StoryObj<typeof Pill>;
 
 export const Neutral: Story = { args: { children: 'wifi', tone: 'neutral' } };
-export const Primary: Story = { args: { children: 'destacat', tone: 'primary' } };
+export const Primary: Story = {
+  args: { children: 'destacat', tone: 'primary' },
+};
 export const Success: Story = { args: { children: 'pagat', tone: 'success' } };
-export const Warning: Story = { args: { children: 'pendent', tone: 'warning' } };
+export const Warning: Story = {
+  args: { children: 'pendent', tone: 'warning' },
+};
 export const Error: Story = { args: { children: 'fallat', tone: 'error' } };
 
 export const WithIcon: Story = {

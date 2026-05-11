@@ -21,7 +21,9 @@ const PropertyDescriptionView: React.FC<ViewProps> = ({ data, className }) => (
   >
     <Stack direction="vertical" gap={4}>
       {data.heading ? <Heading level={2}>{data.heading}</Heading> : null}
-      {data.body ? <p className="propertyDescription__body">{data.body}</p> : null}
+      {data.body ? (
+        <p className="propertyDescription__body">{data.body}</p>
+      ) : null}
     </Stack>
   </section>
 );

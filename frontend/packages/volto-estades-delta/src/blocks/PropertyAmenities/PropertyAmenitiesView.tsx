@@ -27,7 +27,8 @@ interface ViewProps {
 
 function toArray(value: string[] | string | undefined): string[] {
   if (!value) return [];
-  if (Array.isArray(value)) return value.filter(Boolean).map((s) => String(s).trim());
+  if (Array.isArray(value))
+    return value.filter(Boolean).map((s) => String(s).trim());
   // Accept comma or pipe separated strings; trim empty entries.
   return value
     .split(/[,|]+/g)
@@ -55,7 +56,10 @@ const PropertyAmenitiesView: React.FC<ViewProps> = ({ data, className }) => {
               const groupItems = toArray(g.items);
               if (groupItems.length === 0) return null;
               return (
-                <div className="propertyAmenities__group" key={g.title ?? `g-${gi}`}>
+                <div
+                  className="propertyAmenities__group"
+                  key={g.title ?? `g-${gi}`}
+                >
                   {g.title ? (
                     <p className="propertyAmenities__group-title">{g.title}</p>
                   ) : null}

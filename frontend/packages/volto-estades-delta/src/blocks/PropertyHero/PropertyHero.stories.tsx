@@ -15,7 +15,7 @@ type Story = StoryObj<typeof PropertyHeroView>;
 
 const sampleData = {
   '@type': 'propertyHero' as const,
-  title: "Casa Demo · Riumar",
+  title: 'Casa Demo · Riumar',
   subtitle: "Una casa al Delta de l'Ebre, vora el riu i a tocar de mar.",
   capacity: 6,
 };

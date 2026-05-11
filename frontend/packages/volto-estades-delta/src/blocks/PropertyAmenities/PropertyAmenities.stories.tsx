@@ -19,7 +19,8 @@ export const Flat: Story = {
       data={{
         '@type': 'propertyAmenities',
         heading: 'Comoditats',
-        items: 'wifi, aire condicionat, cuina equipada, aparcament, terrassa, BBQ',
+        items:
+          'wifi, aire condicionat, cuina equipada, aparcament, terrassa, BBQ',
       }}
     />
   ),

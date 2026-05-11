@@ -39,8 +39,8 @@ const SampleCard: React.FC<{ name: string }> = ({ name }) => (
       }}
     >
       Una casa al Delta amb vista al riu. Frase sample que serveix per validar
-      tipografia DM Sans + DM Serif Display amb caràcters catalans com l·l, ñ,
-      ç i àccents oberts.
+      tipografia DM Sans + DM Serif Display amb caràcters catalans com l·l, ñ, ç
+      i àccents oberts.
     </p>
     <button
       type="button"

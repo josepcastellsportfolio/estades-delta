@@ -8,7 +8,9 @@
 
 .ed-price__amount {
   font-weight: var(--ed-font-weight-bold);
-  font-feature-settings: 'tnum' on, 'lnum' on; /* tabular figures */
+  font-feature-settings:
+    'tnum' on,
+    'lnum' on; /* tabular figures */
 }
 
 .ed-price__currency {

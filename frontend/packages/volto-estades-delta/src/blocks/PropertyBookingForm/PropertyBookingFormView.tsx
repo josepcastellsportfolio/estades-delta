@@ -86,9 +86,13 @@ const PropertyBookingFormView: React.FC<ViewProps> = ({
       children,
       infants,
       basePriceLowSeason: data.basePriceLowSeason ?? 0,
-      basePriceMidSeason: data.basePriceMidSeason ?? data.basePriceLowSeason ?? 0,
+      basePriceMidSeason:
+        data.basePriceMidSeason ?? data.basePriceLowSeason ?? 0,
       basePriceHighSeason:
-        data.basePriceHighSeason ?? data.basePriceMidSeason ?? data.basePriceLowSeason ?? 0,
+        data.basePriceHighSeason ??
+        data.basePriceMidSeason ??
+        data.basePriceLowSeason ??
+        0,
       cleaningFee: data.cleaningFee,
       touristTaxPerNight: data.touristTaxPerNight,
       source: data.source,

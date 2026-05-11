@@ -50,7 +50,9 @@ function getPaletteToken(palette: PropertyContent['palette']): string {
 }
 
 function joinMeta(parts: Array<string | number | undefined>): string[] {
-  return parts.filter((p) => p !== undefined && p !== null && p !== '').map(String);
+  return parts
+    .filter((p) => p !== undefined && p !== null && p !== '')
+    .map(String);
 }
 
 const PropertyView: React.FC<PropertyViewProps> = ({ content }) => {
@@ -62,10 +64,7 @@ const PropertyView: React.FC<PropertyViewProps> = ({ content }) => {
   const description = content.description ?? '';
   const bodyText = longDescription || description;
 
-  const headerMeta = joinMeta([
-    content.municipality,
-    content.zone,
-  ]).join(' · ');
+  const headerMeta = joinMeta([content.municipality, content.zone]).join(' · ');
 
   const facts = joinMeta([
     content.max_guests ? `${content.max_guests} hostes` : undefined,
@@ -92,7 +91,9 @@ const PropertyView: React.FC<PropertyViewProps> = ({ content }) => {
               {content.subtitle}
             </p>
           ) : null}
-          {headerMeta ? <div className="propertyView__meta">{headerMeta}</div> : null}
+          {headerMeta ? (
+            <div className="propertyView__meta">{headerMeta}</div>
+          ) : null}
           {facts.length > 0 ? (
             <Stack direction="horizontal" gap={2} wrap>
               {facts.map((f) => (

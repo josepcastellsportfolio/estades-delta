@@ -5,9 +5,7 @@ import Rating from './Rating';
 describe('<Rating />', () => {
   it('renders an aria-label with score / max', () => {
     render(<Rating value={4.3} />);
-    expect(screen.getByRole('img').getAttribute('aria-label')).toBe(
-      '4.3 de 5',
-    );
+    expect(screen.getByRole('img').getAttribute('aria-label')).toBe('4.3 de 5');
   });
 
   it('clamps to range [0, max]', () => {

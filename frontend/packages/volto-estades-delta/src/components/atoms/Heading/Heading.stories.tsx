@@ -78,7 +78,13 @@ export const TonesAcrossPalettes: Story = {
             <Heading level={4} tone="muted">
               Mut
             </Heading>
-            <div style={{ marginTop: 8, fontSize: 12, color: 'var(--ed-color-text-muted)' }}>
+            <div
+              style={{
+                marginTop: 8,
+                fontSize: 12,
+                color: 'var(--ed-color-text-muted)',
+              }}
+            >
               {p}
             </div>
           </div>

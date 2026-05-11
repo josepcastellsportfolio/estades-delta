@@ -58,7 +58,11 @@ describe('<PropertyGalleryView />', () => {
     const onOpen = jest.fn();
     render(
       <PropertyGalleryView
-        data={{ '@type': 'propertyGallery', hero: images[0], images: [images[1]] }}
+        data={{
+          '@type': 'propertyGallery',
+          hero: images[0],
+          images: [images[1]],
+        }}
         onOpen={onOpen}
       />,
     );
