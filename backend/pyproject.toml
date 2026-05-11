@@ -29,6 +29,7 @@ dependencies = [
     "plone.api",
     "plone.restapi",
     "plone.volto",
+    "plone.app.multilingual",
 ]
 
 [dependency-groups]
@@ -46,6 +47,11 @@ container = [
     "psycopg2==2.9.11",
     "relstorage==4.2.0",
     "zeo==6.1",
+    # Needed at runtime by namespace-style packages (plone.app.theming, etc.) that
+    # still call __import__("pkg_resources").declare_namespace(__name__). Python 3.12
+    # no longer ships pkg_resources in the stdlib. Pin <81 because setuptools 81+
+    # split pkg_resources into a separate distribution.
+    "setuptools<81",
 ]
 
 [project.urls]

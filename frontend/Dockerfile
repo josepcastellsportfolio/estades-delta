@@ -7,14 +7,15 @@ COPY --chown=node volto.config.js /app/
 COPY --chown=node package.json /app/package.json.temp
 COPY --chown=node mrs.developer.json /app/
 COPY --chown=node pnpm-workspace.yaml /app/
-COPY --chown=node pnpm-lock.yaml /app/pnpm-lock.yaml
+# Day 1: no pnpm-lock.yaml exists yet (will be generated during the first install below).
+# Re-enable --frozen-lockfile in Day 2 once the lockfile is committed.
 
 RUN --mount=type=cache,id=pnpm,target=/app/.pnpm-store,uid=1000 <<EOT
     set -e
     python3 -c "import json; orig_data = json.load(open('package.json.temp')); orig_deps = orig_data['dependencies']; data = json.load(open('package.json')); data['dependencies'].update(orig_deps); json.dump(data, open('package.json', 'w'), indent=2)"
     rm package.json.temp
     pnpm dlx mrs-developer missdev --no-config --fetch-https
-    pnpm install && pnpm build:deps
+    pnpm install --no-frozen-lockfile && pnpm build:deps
     pnpm build
     # This is necessary because the build is trying to recreate the node_modules folder
     # by telling it to CI=1 it will just recreate them
@@ -30,9 +31,8 @@ LABEL maintainer="Josep Castells <josepcastellsbusiness@gmail.com>" \
 
 COPY --from=builder /app/ /app/
 
-RUN <<EOT
-    set -e
-    CI=1 npm i -g corepack@latest && corepack enable pnpm
-    CI=1 corepack use pnpm@9.15.9
-    CI=1 corepack prepare pnpm@9.15.9 --activate
-EOT
+# Day 1: the original template appends `npm i -g corepack@latest` here. As the
+# default user has no write access to /usr/local/lib/node_modules in
+# plone/frontend-prod-config 18.33.1 this hangs forever. The builder stage
+# already produced /app/node_modules via pnpm, so we just trust that and skip
+# the global corepack install. Revisit in Day 2 if production runtime needs it.

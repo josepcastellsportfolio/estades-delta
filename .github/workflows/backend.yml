@@ -51,6 +51,10 @@ jobs:
 
   release:
     name: "Backend: Build and publish Container Image"
+    # Phase 1 (local-only) is out-of-scope for GHCR pushes. The plone/meta
+    # workflow targets a non-existent ghcr owner and fails before checking
+    # `push:` flag. Re-enable in Phase 3 when we cut over to Hetzner.
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     uses: plone/meta/.github/workflows/container-image-build-push.yml@2.x
     needs:
       - lint

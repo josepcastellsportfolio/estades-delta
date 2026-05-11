@@ -63,6 +63,8 @@ jobs:
 
   release:
     name: "Frontend: Build and publish container image"
+    # Phase 1 (local-only) is out-of-scope for GHCR pushes. See backend.yml.
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     uses: plone/meta/.github/workflows/container-image-build-push.yml@2.x
     needs:
       - code-analysis

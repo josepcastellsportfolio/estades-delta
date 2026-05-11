@@ -1,5 +1,36 @@
-<configure xmlns="http://namespaces.zope.org/zope">
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="estades.delta"
+    >
 
-  <!-- -*- extra stuff goes here -*- -->
+  <utility
+      name="estades.delta.vocabularies.ChatbotTiers"
+      component=".chatbot_tiers"
+      />
+
+  <utility
+      name="estades.delta.vocabularies.PaymentStatuses"
+      component=".payment_statuses"
+      />
+
+  <utility
+      name="estades.delta.vocabularies.BookingSources"
+      component=".booking_sources"
+      />
+
+  <utility
+      name="estades.delta.vocabularies.StripeConnectStatuses"
+      component=".stripe_connect_statuses"
+      />
+
+  <utility
+      name="estades.delta.vocabularies.LegalIdTypes"
+      component=".legal_id_types"
+      />
+
+  <utility
+      name="estades.delta.vocabularies.PreferredLanguages"
+      component=".preferred_languages"
+      />
 
 </configure>

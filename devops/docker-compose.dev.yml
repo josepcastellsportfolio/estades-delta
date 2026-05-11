@@ -1,0 +1,171 @@
+# Estades Delta — Phase 1 local dev stack.
+#
+# Build context paths are relative to this file's directory (devops/), so we
+# point at ../backend and ../frontend.
+#
+# Hostnames assume *.estadesdelta.local resolves to 127.0.0.1 (see CLAUDE.md
+# section 16 — DNS local). Traefik dashboard at http://localhost:8090.
+#
+# DB image: pgvector/pgvector:pg16 (RelStorage + future RAG embeddings under
+# the embeddings schema; init script in devops/scripts/postgres-init.sql).
+---
+name: estadesdelta-dev
+
+services:
+  traefik:
+    # v3.7+ required because Docker 29 ships API v1.52 (min 1.44). Older Traefik
+    # versions bundle a go-docker client that negotiates an obsolete API and fails
+    # with "client version 1.24 is too old". DOCKER_API_VERSION pins the client.
+    image: traefik:v3.7
+    container_name: estadesdelta-traefik
+    restart: unless-stopped
+    environment:
+      DOCKER_API_VERSION: "1.44"
+    ports:
+      # Apache2 on the host already binds :80, so Traefik takes :8081. All test URLs
+      # therefore use :8081 explicitly (e.g. http://estadesdelta.local:8081).
+      - "8081:80"
+      - "8090:8080"  # dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command:
+      - --api.dashboard=true
+      - --api.insecure=true
+      - --providers.docker=true
+      - --providers.docker.constraints=Label(`traefik.constraint-label`, `estadesdelta-dev`)
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.http.address=:80
+      - --accesslog=true
+      - --log.level=INFO
+    networks:
+      - estadesdelta
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: estadesdelta-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-plone}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-plonedev}
+      POSTGRES_DB: ${DB_NAME:-plone}
+    volumes:
+      - estadesdelta-pg-data:/var/lib/postgresql/data
+      - ./scripts/postgres-init.sql:/docker-entrypoint-initdb.d/00-init.sql:ro
+    networks:
+      - estadesdelta
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-plone} -d ${DB_NAME:-plone}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  redis:
+    image: redis:7-alpine
+    container_name: estadesdelta-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - estadesdelta-redis-data:/data
+    networks:
+      - estadesdelta
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 6
+
+  backend:
+    build:
+      context: ../backend
+      args:
+        - PYTHON_VERSION=3.12
+    image: estadesdelta-backend:dev
+    container_name: estadesdelta-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      # RelStorage tables land in the default schema (public). The dedicated plone_zodb
+      # schema in postgres-init.sql is reserved; wiring zope.conf to use it is a Day 2 task.
+      RELSTORAGE_DSN: "dbname='${DB_NAME:-plone}' user='${DB_USER:-plone}' host='postgres' password='${DB_PASSWORD:-plonedev}' port='5432'"
+      REDIS_URL: "redis://redis:6379/0"
+      SITE: "Plone"
+      # Volto frontend talks to backend at this internal URL.
+      CORS_ALLOW_ORIGIN: "http://estadesdelta.local,http://www.estadesdelta.local,http://casa-demo.estadesdelta.local"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.constraint-label=estadesdelta-dev"
+      - "traefik.http.services.svc-backend.loadbalancer.server.port=8080"
+
+      # VHM rewrite for /++api++/ on the public frontend hostnames.
+      - "traefik.http.middlewares.mw-backend-vhm-api.replacepathregex.regex=^/\\+\\+api\\+\\+($$|/.*)"
+      - "traefik.http.middlewares.mw-backend-vhm-api.replacepathregex.replacement=/VirtualHostBase/http/estadesdelta.local/Plone/++api++/VirtualHostRoot$$1"
+
+      # VHM rewrite for the admin host (api.estadesdelta.local:8081 → Plone Classic UI).
+      - "traefik.http.middlewares.mw-backend-vhm-classic.replacepathregex.regex=^(.*)$$"
+      - "traefik.http.middlewares.mw-backend-vhm-classic.replacepathregex.replacement=/VirtualHostBase/http/api.estadesdelta.local:8081/Plone/VirtualHostRoot$$1"
+
+      # /++api++/ on the frontend hostname (proxied by Volto SSR usually, but exposed for
+      # direct REST tests). Traefik v3 requires Host() to take a single value, so we
+      # OR together one Host(...) per hostname.
+      - "traefik.http.routers.rt-backend-api.rule=(Host(`estadesdelta.local`) || Host(`www.estadesdelta.local`) || Host(`casa-demo.estadesdelta.local`)) && PathPrefix(`/++api++`)"
+      - "traefik.http.routers.rt-backend-api.entrypoints=http"
+      - "traefik.http.routers.rt-backend-api.service=svc-backend"
+      - "traefik.http.routers.rt-backend-api.middlewares=mw-backend-vhm-api"
+
+      # api.estadesdelta.local → Plone Classic UI (no auth in dev).
+      - "traefik.http.routers.rt-backend-classic.rule=Host(`api.estadesdelta.local`)"
+      - "traefik.http.routers.rt-backend-classic.entrypoints=http"
+      - "traefik.http.routers.rt-backend-classic.service=svc-backend"
+      - "traefik.http.routers.rt-backend-classic.middlewares=mw-backend-vhm-classic"
+    networks:
+      - estadesdelta
+
+  frontend:
+    build:
+      context: ../frontend
+      args:
+        - VOLTO_VERSION=18.33.1
+    image: estadesdelta-frontend:dev
+    container_name: estadesdelta-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      RAZZLE_INTERNAL_API_PATH: "http://backend:8080/Plone"
+      RAZZLE_API_PATH: "http://estadesdelta.local:8081"
+      RAZZLE_DEV_PROXY_API_PATH: "http://backend:8080"
+      # Multi-tenant routing map (used by middleware/tenantRouting.js).
+      VOLTO_TENANT_MAP: '{"casa-demo.estadesdelta.local":"/properties/casa-demo-riumar"}'
+    healthcheck:
+      # Override the default healthcheck: it follows 302 -> /ca -> 404 and fails.
+      # Accept any 2xx/3xx response on /.
+      test: ["CMD-SHELL", "wget -q --max-redirect=0 --server-response http://127.0.0.1:3000/ -O /dev/null 2>&1 | grep -qE 'HTTP/.* (200|301|302|304)'"]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 5
+    labels:
+      - "traefik.enable=true"
+      - "traefik.constraint-label=estadesdelta-dev"
+      - "traefik.http.services.svc-frontend.loadbalancer.server.port=3000"
+      # Marketplace + microsite + www variants all hit the Volto SSR; routing decisions
+      # are taken inside Volto based on X-Forwarded-Host.
+      - "traefik.http.routers.rt-frontend.rule=Host(`estadesdelta.local`) || Host(`www.estadesdelta.local`) || Host(`casa-demo.estadesdelta.local`)"
+      - "traefik.http.routers.rt-frontend.entrypoints=http"
+      - "traefik.http.routers.rt-frontend.service=svc-frontend"
+      # Backend API router has a longer matcher (Host && PathPrefix), so it already wins
+      # for /++api++/* on those hostnames; no explicit priority needed here.
+    networks:
+      - estadesdelta
+
+networks:
+  estadesdelta:
+    name: estadesdelta-dev
+
+volumes:
+  estadesdelta-pg-data:
+  estadesdelta-redis-data:

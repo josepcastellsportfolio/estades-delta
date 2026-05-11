@@ -10,7 +10,7 @@ keywords = [
 version="1.0.0"
 readme = "README.md"
 requires-python = ">=3.10,<3.14"
-license = { file = "LICENSE" }
+# Private repository; no LICENSE file shipped.
 maintainers = [
     { name = "Josep Castells", email = "josepcastellsbusiness@gmail.com" },
 ]
@@ -59,3 +59,9 @@ Documentation = "https://MY_READTHEDOCS_PROJECT_SLUG.readthedocs.io/"
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+# This is a documentation project, not a Python package. Tell setuptools not to
+# auto-discover any top-level directory (otherwise it finds `styles/` and
+# `sessions/` and aborts with "Multiple top-level packages discovered").
+packages = []

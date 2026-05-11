@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dc-workflow description=" Lifecycle for a Booking: pending -&gt; confirmed -&gt; completed; cancellable from pending or confirmed."
+             initial_state="pending"
+             manager_bypass="False"
+             state_variable="review_state"
+             title="Booking workflow"
+             workflow_id="booking_workflow"
+>
+  <permission>Access contents information</permission>
+  <permission>Modify portal content</permission>
+  <permission>View</permission>
+
+  <state state_id="pending"
+         title="Pending"
+  >
+    <description>Booking has been created but payment is not confirmed yet.</description>
+    <exit-transition transition_id="confirm" />
+    <exit-transition transition_id="cancel" />
+    <permission-map acquired="False"
+                    name="Access contents information"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Owner</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+    <permission-map acquired="False"
+                    name="Modify portal content"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Owner</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+    <permission-map acquired="False"
+                    name="View"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Owner</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+  </state>
+
+  <state state_id="confirmed"
+         title="Confirmed"
+  >
+    <description>Payment captured, dates blocked, owner notified.</description>
+    <exit-transition transition_id="complete" />
+    <exit-transition transition_id="cancel" />
+    <permission-map acquired="False"
+                    name="Access contents information"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Owner</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+    <permission-map acquired="False"
+                    name="Modify portal content"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+    <permission-map acquired="False"
+                    name="View"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Owner</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+  </state>
+
+  <state state_id="completed"
+         title="Completed"
+  >
+    <description>Guest has checked out; final commission ledger run.</description>
+    <permission-map acquired="False"
+                    name="Access contents information"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Owner</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+    <permission-map acquired="False"
+                    name="Modify portal content"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+    <permission-map acquired="False"
+                    name="View"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Owner</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+  </state>
+
+  <state state_id="cancelled"
+         title="Cancelled"
+  >
+    <description>Booking was cancelled (by guest, owner, or system).</description>
+    <permission-map acquired="False"
+                    name="Access contents information"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Owner</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+    <permission-map acquired="False"
+                    name="Modify portal content"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+    <permission-map acquired="False"
+                    name="View"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Owner</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+  </state>
+
+  <transition after_script=""
+              before_script=""
+              new_state="confirmed"
+              title="Confirm payment and block dates"
+              transition_id="confirm"
+              trigger="USER"
+  >
+    <description>Payment captured via Stripe webhook; transition is normally automatic.</description>
+    <action category="workflow"
+            url="%(content_url)s/content_status_modify?workflow_action=confirm"
+    >Confirm</action>
+    <guard>
+      <guard-permission>Modify portal content</guard-permission>
+    </guard>
+  </transition>
+
+  <transition after_script=""
+              before_script=""
+              new_state="completed"
+              title="Mark completed (post check-out)"
+              transition_id="complete"
+              trigger="USER"
+  >
+    <description>Daily cron transitions confirmed bookings past their check-out date.</description>
+    <action category="workflow"
+            url="%(content_url)s/content_status_modify?workflow_action=complete"
+    >Complete</action>
+    <guard>
+      <guard-permission>Modify portal content</guard-permission>
+    </guard>
+  </transition>
+
+  <transition after_script=""
+              before_script=""
+              new_state="cancelled"
+              title="Cancel"
+              transition_id="cancel"
+              trigger="USER"
+  >
+    <description>Cancellation; refund + Beds24 release are handled in event subscribers.</description>
+    <action category="workflow"
+            url="%(content_url)s/content_status_modify?workflow_action=cancel"
+    >Cancel</action>
+    <guard>
+      <guard-permission>Modify portal content</guard-permission>
+    </guard>
+  </transition>
+
+  <worklist actbox_category="global"
+            actbox_name="Pending bookings (%(count)d)"
+            actbox_url="%(portal_url)s/search?review_state=pending&amp;portal_type=Booking"
+            cataloged_var="review_state"
+            description="Bookings still awaiting payment confirmation."
+            title="Pending bookings"
+            worklist_id="pending_bookings"
+  >
+    <match name="review_state"
+           values="pending"
+    />
+    <guard>
+      <guard-permission>Modify portal content</guard-permission>
+    </guard>
+  </worklist>
+</dc-workflow>
