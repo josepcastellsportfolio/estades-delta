@@ -1,0 +1,1 @@
+Add `palette` field to Property content type (SimpleVocabulary: arrossar / riu-i-mar / capvespre; required; default arrossar). Profile bumped 1000 -> 1001 with an upgrade step that back-fills existing Property instances. [@josepcastellsportfolio]

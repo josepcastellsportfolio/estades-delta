@@ -1,0 +1,1 @@
+Multi-palette theming: three boutique palettes (Arrossar, Riu i Mar, Capvespre) selectable per Property, with Arrossar as the marketplace master. Shared typography (DM Serif Display + DM Sans) across all palettes for aggregator coherence. ADR 013 documents the full reasoning. [@josepcastellsportfolio]

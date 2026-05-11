@@ -3,19 +3,25 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     >
 
-  <!-- Example upgrade step
+  <!--
+    1000 -> 1001 (Day 2, Bloque 1):
+      - Property gains a required `palette` field with default "arrossar".
+      - Existing Property instances are back-filled.
+  -->
   <genericsetup:upgradeSteps
       profile="estades.delta:default"
       source="1000"
       destination="1001"
       >
     <genericsetup:upgradeDepends
-        title="Update registry value"
-        import_steps="plone.app.registry"
+        title="Re-import type info (Property gains `palette` field)"
+        import_steps="typeinfo"
+        run_deps="false"
+        />
+    <genericsetup:upgradeStep
+        title="Backfill palette=arrossar on existing Property instances"
+        handler=".assign_default_palette_to_existing_properties"
         />
   </genericsetup:upgradeSteps>
-  -->
-
-  <!-- -*- extra stuff goes here -*- -->
 
 </configure>

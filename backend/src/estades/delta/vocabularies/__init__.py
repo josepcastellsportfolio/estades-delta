@@ -72,3 +72,18 @@ def preferred_languages(_context):
         ("fr", "Francais"),
         ("de", "Deutsch"),
     ])
+
+
+@provider(IVocabularyFactory)
+def palettes(_context):
+    """Three boutique visual palettes the property owner can pick from.
+
+    Tokens IDs match the [data-palette="…"] selectors used in the Volto addon
+    `theme/palettes.scss`. Keep these strings in sync with PALETTES in
+    frontend/packages/volto-estades-delta/src/theme/tokens.ts.
+    """
+    return _vocabulary([
+        ("arrossar", "Arrossar (rural green)"),
+        ("riu-i-mar", "Riu i Mar (boutique navy)"),
+        ("capvespre", "Capvespre (sunset ocre)"),
+    ])
