@@ -20,6 +20,9 @@ import aggregatorPropertyCardBlock, {
 import aggregatorFiltersBlock, {
   AGGREGATOR_FILTERS_BLOCK_ID,
 } from '../blocks/AggregatorFilters';
+import aggregatorPropertyListBlock, {
+  AGGREGATOR_PROPERTY_LIST_BLOCK_ID,
+} from '../blocks/AggregatorPropertyList';
 import propertyMapBlock, {
   PROPERTY_MAP_BLOCK_ID,
 } from '../blocks/PropertyMap';
@@ -40,6 +43,8 @@ export default function installBlocks(config: ConfigType) {
     aggregatorPropertyCardBlock;
   config.blocks.blocksConfig[AGGREGATOR_FILTERS_BLOCK_ID] =
     aggregatorFiltersBlock;
+  config.blocks.blocksConfig[AGGREGATOR_PROPERTY_LIST_BLOCK_ID] =
+    aggregatorPropertyListBlock;
 
   // Shared map block (used on both Property pages and the marketplace).
   config.blocks.blocksConfig[PROPERTY_MAP_BLOCK_ID] = propertyMapBlock;
