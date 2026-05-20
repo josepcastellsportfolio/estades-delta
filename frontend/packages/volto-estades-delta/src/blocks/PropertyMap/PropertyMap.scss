@@ -1,0 +1,42 @@
+/* PropertyMap — Leaflet/OSM map block for a single Property location.
+ *
+ * Leaflet's own CSS is loaded dynamically by PropertyMapView.tsx once the
+ * component mounts on the client (avoids SSR issues with Razzle + Webpack).
+ */
+
+.propertyMap {
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--ed-radius-lg);
+  background: var(--ed-color-surface-subtle);
+
+  &__container {
+    width: 100%;
+    height: var(--property-map-height, 360px);
+    display: block;
+  }
+
+  /* Shown while map tiles are loading or during SSR hydration. */
+  &__placeholder {
+    width: 100%;
+    height: var(--property-map-height, 360px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ed-color-surface-subtle);
+    color: var(--ed-color-text-disabled);
+    font-family: var(--ed-font-body);
+    font-size: var(--ed-font-size-sm);
+  }
+
+  /* Leaflet attribution override to match our font stack. */
+  .leaflet-container {
+    font-family: var(--ed-font-body);
+    font-size: var(--ed-font-size-xs);
+  }
+
+  .leaflet-control-attribution {
+    background: rgba(255 255 255 / 0.7);
+    font-size: var(--ed-font-size-xs);
+  }
+}

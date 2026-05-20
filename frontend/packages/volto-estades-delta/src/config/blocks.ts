@@ -17,6 +17,12 @@ import propertyBookingFormBlock, {
 import aggregatorPropertyCardBlock, {
   AGGREGATOR_PROPERTY_CARD_BLOCK_ID,
 } from '../blocks/AggregatorPropertyCard';
+import aggregatorFiltersBlock, {
+  AGGREGATOR_FILTERS_BLOCK_ID,
+} from '../blocks/AggregatorFilters';
+import propertyMapBlock, {
+  PROPERTY_MAP_BLOCK_ID,
+} from '../blocks/PropertyMap';
 
 export default function installBlocks(config: ConfigType) {
   // Property-page blocks: hero, gallery, description, amenities, booking form.
@@ -29,9 +35,14 @@ export default function installBlocks(config: ConfigType) {
   config.blocks.blocksConfig[PROPERTY_BOOKING_FORM_BLOCK_ID] =
     propertyBookingFormBlock;
 
-  // Marketplace-aggregator-only block.
+  // Marketplace-aggregator-only blocks.
   config.blocks.blocksConfig[AGGREGATOR_PROPERTY_CARD_BLOCK_ID] =
     aggregatorPropertyCardBlock;
+  config.blocks.blocksConfig[AGGREGATOR_FILTERS_BLOCK_ID] =
+    aggregatorFiltersBlock;
+
+  // Shared map block (used on both Property pages and the marketplace).
+  config.blocks.blocksConfig[PROPERTY_MAP_BLOCK_ID] = propertyMapBlock;
 
   config.blocks.groupBlocksOrder = [
     ...(config.blocks.groupBlocksOrder ?? []).filter(

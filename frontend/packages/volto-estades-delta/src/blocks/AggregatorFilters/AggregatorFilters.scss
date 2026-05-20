@@ -1,0 +1,124 @@
+/* AggregatorFilters — search bar for the marketplace aggregator page.
+ * Uses palette-independent `--ed-*` tokens only so it renders correctly
+ * under any [data-palette] root (always Arrossar for the marketplace).
+ */
+
+.aggregatorFilters {
+  background: var(--ed-color-surface-raised);
+  border-radius: var(--ed-radius-lg);
+  box-shadow: var(--ed-shadow-sm);
+  padding: var(--ed-space-5) var(--ed-space-6);
+
+  &__heading {
+    font-family: var(--ed-font-body);
+    font-size: var(--ed-font-size-sm);
+    font-weight: var(--ed-font-weight-medium);
+    color: var(--ed-color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 var(--ed-space-4) 0;
+  }
+
+  &__form {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: var(--ed-space-3);
+    align-items: end;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ed-space-1);
+
+    label {
+      font-family: var(--ed-font-body);
+      font-size: var(--ed-font-size-sm);
+      font-weight: var(--ed-font-weight-medium);
+      color: var(--ed-color-text-primary);
+    }
+
+    input,
+    select {
+      font-family: var(--ed-font-body);
+      font-size: var(--ed-font-size-base);
+      color: var(--ed-color-text-primary);
+      background: var(--ed-color-surface-base);
+      border: 1.5px solid var(--ed-color-border-default);
+      border-radius: var(--ed-radius-md);
+      padding: var(--ed-space-2) var(--ed-space-3);
+      width: 100%;
+      transition: border-color 0.15s ease;
+
+      &:focus {
+        outline: none;
+        border-color: var(--ed-color-primary-default);
+      }
+
+      &::-webkit-calendar-picker-indicator {
+        opacity: 0.5;
+        cursor: pointer;
+      }
+    }
+
+    /* Number input: hide browser spin buttons */
+    input[type='number'] {
+      appearance: textfield;
+
+      &::-webkit-inner-spin-button,
+      &::-webkit-outer-spin-button {
+        appearance: none;
+        margin: 0;
+      }
+    }
+  }
+
+  &__submit {
+    font-family: var(--ed-font-body);
+    font-size: var(--ed-font-size-base);
+    font-weight: var(--ed-font-weight-medium);
+    color: var(--ed-color-on-primary);
+    background: var(--ed-color-primary-default);
+    border: none;
+    border-radius: var(--ed-radius-md);
+    padding: var(--ed-space-2) var(--ed-space-5);
+    cursor: pointer;
+    transition:
+      background 0.15s ease,
+      transform 0.1s ease;
+    white-space: nowrap;
+
+    &:hover {
+      background: var(--ed-color-primary-hover);
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+
+  &__clear {
+    font-family: var(--ed-font-body);
+    font-size: var(--ed-font-size-sm);
+    color: var(--ed-color-text-secondary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+    margin-top: var(--ed-space-3);
+    display: block;
+
+    &:hover {
+      color: var(--ed-color-text-primary);
+    }
+  }
+}

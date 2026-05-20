@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<import-steps>
+  <!--
+    Demo content step: creates three test Properties under /ca/properties/
+    only when the env var CREATE_DEMO_CONTENT=1 is set.
+    Safe to run in production — the guard inside the handler skips creation
+    unless the env var is explicitly set.
+  -->
+  <import-step
+    id="estades.delta.demo_content"
+    title="Estades Delta: create demo Properties"
+    handler="estades.delta.setuphandlers.demo_content.create_demo_content"
+    description="Creates three demo Property objects under /ca/properties/ for local dev testing."
+  >
+    <dependency step="content" />
+  </import-step>
+</import-steps>

@@ -94,7 +94,7 @@ services:
       REDIS_URL: "redis://redis:6379/0"
       SITE: "Plone"
       # Volto frontend talks to backend at this internal URL.
-      CORS_ALLOW_ORIGIN: "http://estadesdelta.local,http://www.estadesdelta.local,http://casa-demo.estadesdelta.local"
+      CORS_ALLOW_ORIGIN: "http://estadesdelta.local,http://www.estadesdelta.local,http://casa-demo.estadesdelta.local,http://casa-test-riu.estadesdelta.local,http://casa-test-cap.estadesdelta.local"
     labels:
       - "traefik.enable=true"
       - "traefik.constraint-label=estadesdelta-dev"
@@ -111,7 +111,7 @@ services:
       # /++api++/ on the frontend hostname (proxied by Volto SSR usually, but exposed for
       # direct REST tests). Traefik v3 requires Host() to take a single value, so we
       # OR together one Host(...) per hostname.
-      - "traefik.http.routers.rt-backend-api.rule=(Host(`estadesdelta.local`) || Host(`www.estadesdelta.local`) || Host(`casa-demo.estadesdelta.local`)) && PathPrefix(`/++api++`)"
+      - "traefik.http.routers.rt-backend-api.rule=(Host(`estadesdelta.local`) || Host(`www.estadesdelta.local`) || Host(`casa-demo.estadesdelta.local`) || Host(`casa-test-riu.estadesdelta.local`) || Host(`casa-test-cap.estadesdelta.local`)) && PathPrefix(`/++api++`)"
       - "traefik.http.routers.rt-backend-api.entrypoints=http"
       - "traefik.http.routers.rt-backend-api.service=svc-backend"
       - "traefik.http.routers.rt-backend-api.middlewares=mw-backend-vhm-api"
@@ -139,7 +139,21 @@ services:
       RAZZLE_API_PATH: "http://estadesdelta.local:8081"
       RAZZLE_DEV_PROXY_API_PATH: "http://backend:8080"
       # Multi-tenant routing map (used by middleware/tenantRouting.js).
-      VOLTO_TENANT_MAP: '{"casa-demo.estadesdelta.local":"/properties/casa-demo-riumar"}'
+      # Values are Volto URL paths WITHOUT the language prefix — Volto's
+      # multilingual router prepends /ca/ (defaultLanguage) automatically, so
+      # the middleware must NOT include it. The canonical content path in Plone
+      # for a fresh install (created by the demo_content GenericSetup step) is
+      # /Plone/ca/properties/<slug>.
+      #
+      # Option-A hotfix (existing manual content at /Plone/ca/Josep-test/...):
+      #   "casa-demo.estadesdelta.local": "/ca/Josep-test/casa-demo-riumar"
+      # Canonical path (fresh install with demo_content step):
+      #   "casa-demo.estadesdelta.local": "/properties/casa-demo-riumar"
+      #
+      # TODO(day4): replace with option B — middleware reads `custom_domain` from
+      # Plone REST API at startup and builds the map dynamically, removing the
+      # need for a static env var and the language-prefix coupling.
+      VOLTO_TENANT_MAP: '{"casa-demo.estadesdelta.local":"/properties/casa-demo-riumar","casa-test-riu.estadesdelta.local":"/properties/casa-test-riu-i-mar","casa-test-cap.estadesdelta.local":"/properties/casa-test-capvespre"}'
     healthcheck:
       # Override the default healthcheck: it follows 302 -> /ca -> 404 and fails.
       # Accept any 2xx/3xx response on /.
@@ -154,7 +168,7 @@ services:
       - "traefik.http.services.svc-frontend.loadbalancer.server.port=3000"
       # Marketplace + microsite + www variants all hit the Volto SSR; routing decisions
       # are taken inside Volto based on X-Forwarded-Host.
-      - "traefik.http.routers.rt-frontend.rule=Host(`estadesdelta.local`) || Host(`www.estadesdelta.local`) || Host(`casa-demo.estadesdelta.local`)"
+      - "traefik.http.routers.rt-frontend.rule=Host(`estadesdelta.local`) || Host(`www.estadesdelta.local`) || Host(`casa-demo.estadesdelta.local`) || Host(`casa-test-riu.estadesdelta.local`) || Host(`casa-test-cap.estadesdelta.local`)"
       - "traefik.http.routers.rt-frontend.entrypoints=http"
       - "traefik.http.routers.rt-frontend.service=svc-frontend"
       # Backend API router has a longer matcher (Host && PathPrefix), so it already wins

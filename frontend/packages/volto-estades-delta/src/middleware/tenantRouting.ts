@@ -14,6 +14,26 @@
  * VOLTO_TENANT_MAP is a JSON env var:
  *   { "casariumar.cat": "/properties/casa-riumar" }
  *
+ * IMPORTANT — path conventions for VOLTO_TENANT_MAP values:
+ *   - Do NOT include the language prefix (e.g. /ca/).
+ *     Volto's multilingual router prepends `/<defaultLanguage>/` automatically
+ *     when a path does not start with a supported language code.
+ *   - Use the Plone content path as seen from the Volto URL space.
+ *     For the canonical demo content created by the demo_content GenericSetup
+ *     step, properties live at /properties/<slug> in the CA language tree.
+ *   - EXCEPTION (Option-A hotfix): if existing content was created manually
+ *     outside the /properties/ folder (e.g. /ca/Josep-test/casa-demo-riumar),
+ *     include the full path WITH the language prefix so Volto does not
+ *     double-prepend it. See docker-compose.dev.yml for the hotfix comment.
+ *
+ * TODO(day4) Option B — remove VOLTO_TENANT_MAP entirely.
+ *   On Volto SSR startup, fetch `GET /++api++/@search?portal_type=Property&
+ *   fullobjects=0&metadata_fields=custom_domain&metadata_fields=short_name`
+ *   and build the map dynamically. Re-hydrate every N minutes so new
+ *   properties appear without a frontend restart. This removes the language-
+ *   prefix coupling and eliminates the need for ops to keep the env var in sync
+ *   with Plone content.
+ *
  * Fallback for unknown hosts: render the marketplace.
  */
 import type { Request, Response, NextFunction } from 'express';

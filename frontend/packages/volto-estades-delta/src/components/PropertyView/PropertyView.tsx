@@ -7,6 +7,7 @@ import PropertyGalleryView from '../../blocks/PropertyGallery/PropertyGalleryVie
 import PropertyDescriptionView from '../../blocks/PropertyDescription/PropertyDescriptionView';
 import PropertyAmenitiesView from '../../blocks/PropertyAmenities/PropertyAmenitiesView';
 import PropertyBookingFormView from '../../blocks/PropertyBookingForm/PropertyBookingFormView';
+import PropertyMapView from '../../blocks/PropertyMap/PropertyMapView';
 import './PropertyView.scss';
 
 /**
@@ -24,6 +25,8 @@ export interface PropertyContent {
   long_description?: { data?: string } | string;
   municipality?: string;
   zone?: string;
+  latitude?: number;
+  longitude?: number;
   max_guests?: number;
   bedrooms?: number;
   bathrooms?: number;
@@ -130,6 +133,20 @@ const PropertyView: React.FC<PropertyViewProps> = ({ content }) => {
                   items: content.amenities,
                 }}
               />
+            ) : null}
+
+            {(content.latitude || content.longitude) ? (
+              <section className="propertyView__map">
+                <Heading level={3}>Com arribar-hi</Heading>
+                <PropertyMapView
+                  data={{ '@type': 'propertyMap', zoom: 13 }}
+                  content={{
+                    title: content.title,
+                    latitude: content.latitude,
+                    longitude: content.longitude,
+                  }}
+                />
+              </section>
             ) : null}
           </div>
 
