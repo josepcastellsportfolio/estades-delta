@@ -138,21 +138,21 @@ services:
       RAZZLE_INTERNAL_API_PATH: "http://backend:8080/Plone"
       RAZZLE_API_PATH: "http://estadesdelta.local:8081"
       RAZZLE_DEV_PROXY_API_PATH: "http://backend:8080"
-      # Multi-tenant routing map (used by middleware/tenantRouting.js).
-      # Values are Volto URL paths WITHOUT the language prefix — Volto's
-      # multilingual router prepends /ca/ (defaultLanguage) automatically, so
-      # the middleware must NOT include it. The canonical content path in Plone
-      # for a fresh install (created by the demo_content GenericSetup step) is
-      # /Plone/ca/properties/<slug>.
+      # Static fallback map for multi-tenant routing. As of Day 4 Option B, the
+      # tenantRouting middleware ALSO fetches Properties from Plone at startup
+      # (every 10 min) and builds the host→path map dynamically from each
+      # Property's `custom_domain` field. The dynamic map wins; this static map
+      # is kept as a cold-start fallback (first requests before the first fetch
+      # resolves) and as the Option-A hotfix carrier for legacy content paths
+      # that don't follow the canonical /properties/<slug> shape.
       #
-      # Option-A hotfix (existing manual content at /Plone/ca/Josep-test/...):
-      #   "casa-demo.estadesdelta.local": "/ca/Josep-test/casa-demo-riumar"
-      # Canonical path (fresh install with demo_content step):
-      #   "casa-demo.estadesdelta.local": "/properties/casa-demo-riumar"
+      # Values WITHOUT a language prefix → Volto multilingual prepends /ca/.
+      # Values WITH /ca/... = Option-A hotfix (legacy /ca/Josep-test/... paths).
       #
-      # TODO(day4): replace with option B — middleware reads `custom_domain` from
-      # Plone REST API at startup and builds the map dynamically, removing the
-      # need for a static env var and the language-prefix coupling.
+      # For a fresh install with demo content (CREATE_DEMO_CONTENT=1) and the
+      # custom_domain field populated on the demo Properties, you can leave
+      # this as {} — the dynamic resolver will handle everything within ~5s of
+      # frontend startup.
       VOLTO_TENANT_MAP: '{"casa-demo.estadesdelta.local":"/properties/casa-demo-riumar","casa-test-riu.estadesdelta.local":"/properties/casa-test-riu-i-mar","casa-test-cap.estadesdelta.local":"/properties/casa-test-capvespre"}'
     healthcheck:
       # Override the default healthcheck: it follows 302 -> /ca -> 404 and fails.

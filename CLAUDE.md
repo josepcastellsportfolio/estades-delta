@@ -269,26 +269,34 @@ Transiciones disparan eventos hookeados para: notificación owner, sync Beds24, 
 
 ## 8. Multi-domain routing en Volto
 
-**Variable env clave:** `VOLTO_TENANT_MAP` — JSON con mapeo `hostname → property path`.
+Desde Day 4 el middleware resuelve hostnames **dinámicamente** desde Plone (Option B).
+Al arrancar Volto SSR y cada 10 minutos hace `GET /++api++/@search?portal_type=Property&metadata_fields=custom_domain&metadata_fields=short_name` y construye el mapa `host → /properties/<short_name>` en memoria. Las Properties cuyo campo `custom_domain` esté vacío no entran al mapa (solo accesibles vía subdominio wildcard).
+
+**Variable env opcional:** `VOLTO_TENANT_MAP` — JSON con mapeo `hostname → path`. Sirve como:
+- **Cold-start fallback**: cubre los primeros requests antes de que termine el primer fetch dinámico.
+- **Option-A hotfix carrier**: paths que no siguen `/properties/<slug>` (legacy `/ca/Josep-test/...`, etc.).
+- **Override manual**: en dev cuando Plone aún no tiene `custom_domain` rellenado.
 
 ```json
 {
   "casariumar.cat": "/properties/casa-riumar",
-  "masdelfangar.com": "/properties/mas-del-fangar",
   "casa-demo.estadesdelta.local": "/properties/casa-demo-riumar"
 }
 ```
 
-**Patrones que el middleware reconoce:**
-1. Dominio principal `estadesdelta.cat` / `.local` → marketplace `/`
-2. Dominio en TENANT_MAP → property mapeada
-3. Subdominio `<slug>.estadesdelta.cat/local` → `/properties/<slug>`
-4. Fallback → marketplace
+**Patrones de resolución (en orden):**
+1. Dominio en `MARKETPLACE_HOSTS` (`estadesdelta.cat/local`, `www.*`) → marketplace `/`
+2. Dominio en mapa **dinámico** (Plone @search) → `/properties/<short_name>`
+3. Dominio en mapa **estático** (`VOLTO_TENANT_MAP`) → path declarado
+4. Subdominio `<slug>.estadesdelta.cat/local` → `/properties/<slug>`
+5. Fallback → marketplace
 
 **Cómo añadir nuevo propietario con dominio propio:**
-1. Crear Property en Plone con `short_name` y `custom_domain` rellenos
-2. Añadir entrada en `VOLTO_TENANT_MAP` (env var, requiere restart frontend)
-3. Configurar DNS del propietario (CNAME al servidor) o si es subdominio del marketplace, ya cubierto por wildcard
+1. Crear Property en Plone con `short_name` y `custom_domain` rellenos.
+2. Esperar máximo 10 minutos (o reiniciar `frontend` para forzar refresh inmediato).
+3. Configurar DNS del propietario (CNAME al servidor); subdominios `*.estadesdelta.*` ya cubiertos por wildcard.
+
+**Requisitos backend:** `custom_domain` y `short_name` están en `portal_catalog` como metadata columns (ver `profiles/default/catalog.xml`), por lo que `@search` los devuelve sin `fullobjects=1`. `zone` está además como `FieldIndex` para filtrado del marketplace.
 
 ---
 

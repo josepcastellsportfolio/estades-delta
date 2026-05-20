@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <object name="portal_catalog">
-  <!-- Index
-  <index meta_type="FieldIndex"
-         name="industry"
-  >
-    <indexed_attr value="industry" />
+  <!--
+    FieldIndex on `zone` so AggregatorFilters can filter by it via @search
+    (`?zone=Riumar`). Without an index the catalog brains have the value as
+    metadata but @search won't filter on it.
+  -->
+  <index meta_type="FieldIndex" name="zone">
+    <indexed_attr value="zone" />
   </index>
--->
-  <!-- Metadata
-  <column value="industry" />
--->
+
+  <!--
+    Metadata columns exposed on catalog brains so plone.restapi @search returns
+    them in `items` without needing fullobjects=true. Required by:
+      - Volto tenantRouting middleware (custom_domain → URL path mapping)
+      - AggregatorPropertyList block (short_name display, zone filter, prices)
+      - Marketplace card rendering (capacity, bedrooms, bathrooms, palette)
+  -->
+  <column value="custom_domain" />
+  <column value="short_name" />
+  <column value="zone" />
+  <column value="municipality" />
+  <column value="max_guests" />
+  <column value="bedrooms" />
+  <column value="bathrooms" />
+  <column value="base_price_low_season" />
+  <column value="base_price_mid_season" />
+  <column value="base_price_high_season" />
+  <column value="palette" />
 </object>
