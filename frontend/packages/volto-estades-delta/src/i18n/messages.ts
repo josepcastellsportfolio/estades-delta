@@ -141,3 +141,54 @@ export const propertyViewMessages = defineMessages({
     defaultMessage: 'Com arribar-hi',
   },
 });
+
+export const propertyCalendarMessages = defineMessages({
+  prevMonth: {
+    id: 'estadesDelta.propertyCalendar.prevMonth',
+    defaultMessage: 'Mes anterior',
+  },
+  nextMonth: {
+    id: 'estadesDelta.propertyCalendar.nextMonth',
+    defaultMessage: 'Mes següent',
+  },
+  legendAvailable: {
+    id: 'estadesDelta.propertyCalendar.legendAvailable',
+    defaultMessage: 'Disponible',
+  },
+  legendUnavailable: {
+    id: 'estadesDelta.propertyCalendar.legendUnavailable',
+    defaultMessage: 'Ocupat',
+  },
+  legendPast: {
+    id: 'estadesDelta.propertyCalendar.legendPast',
+    defaultMessage: 'Passat',
+  },
+  weekdayShortMonday: {
+    id: 'estadesDelta.propertyCalendar.weekdayShortMonday',
+    defaultMessage: 'Dl',
+  },
+  weekdayShortTuesday: {
+    id: 'estadesDelta.propertyCalendar.weekdayShortTuesday',
+    defaultMessage: 'Dt',
+  },
+  weekdayShortWednesday: {
+    id: 'estadesDelta.propertyCalendar.weekdayShortWednesday',
+    defaultMessage: 'Dc',
+  },
+  weekdayShortThursday: {
+    id: 'estadesDelta.propertyCalendar.weekdayShortThursday',
+    defaultMessage: 'Dj',
+  },
+  weekdayShortFriday: {
+    id: 'estadesDelta.propertyCalendar.weekdayShortFriday',
+    defaultMessage: 'Dv',
+  },
+  weekdayShortSaturday: {
+    id: 'estadesDelta.propertyCalendar.weekdayShortSaturday',
+    defaultMessage: 'Ds',
+  },
+  weekdayShortSunday: {
+    id: 'estadesDelta.propertyCalendar.weekdayShortSunday',
+    defaultMessage: 'Dg',
+  },
+});

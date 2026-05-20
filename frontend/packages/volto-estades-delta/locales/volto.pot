@@ -147,3 +147,63 @@ msgstr ""
 # defaultMessage: Com arribar-hi
 msgid "estadesDelta.propertyView.howToGet"
 msgstr ""
+
+#: src/i18n/messages.ts
+# defaultMessage: Mes anterior
+msgid "estadesDelta.propertyCalendar.prevMonth"
+msgstr ""
+
+#: src/i18n/messages.ts
+# defaultMessage: Mes següent
+msgid "estadesDelta.propertyCalendar.nextMonth"
+msgstr ""
+
+#: src/i18n/messages.ts
+# defaultMessage: Disponible
+msgid "estadesDelta.propertyCalendar.legendAvailable"
+msgstr ""
+
+#: src/i18n/messages.ts
+# defaultMessage: Ocupat
+msgid "estadesDelta.propertyCalendar.legendUnavailable"
+msgstr ""
+
+#: src/i18n/messages.ts
+# defaultMessage: Passat
+msgid "estadesDelta.propertyCalendar.legendPast"
+msgstr ""
+
+#: src/i18n/messages.ts
+# defaultMessage: Dl
+msgid "estadesDelta.propertyCalendar.weekdayShortMonday"
+msgstr ""
+
+#: src/i18n/messages.ts
+# defaultMessage: Dt
+msgid "estadesDelta.propertyCalendar.weekdayShortTuesday"
+msgstr ""
+
+#: src/i18n/messages.ts
+# defaultMessage: Dc
+msgid "estadesDelta.propertyCalendar.weekdayShortWednesday"
+msgstr ""
+
+#: src/i18n/messages.ts
+# defaultMessage: Dj
+msgid "estadesDelta.propertyCalendar.weekdayShortThursday"
+msgstr ""
+
+#: src/i18n/messages.ts
+# defaultMessage: Dv
+msgid "estadesDelta.propertyCalendar.weekdayShortFriday"
+msgstr ""
+
+#: src/i18n/messages.ts
+# defaultMessage: Ds
+msgid "estadesDelta.propertyCalendar.weekdayShortSaturday"
+msgstr ""
+
+#: src/i18n/messages.ts
+# defaultMessage: Dg
+msgid "estadesDelta.propertyCalendar.weekdayShortSunday"
+msgstr ""

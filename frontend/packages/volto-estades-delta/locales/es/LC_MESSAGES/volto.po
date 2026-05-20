@@ -97,3 +97,39 @@ msgstr "Propiedad"
 
 msgid "estadesDelta.propertyView.howToGet"
 msgstr "Cómo llegar"
+
+msgid "estadesDelta.propertyCalendar.prevMonth"
+msgstr "Mes anterior"
+
+msgid "estadesDelta.propertyCalendar.nextMonth"
+msgstr "Mes siguiente"
+
+msgid "estadesDelta.propertyCalendar.legendAvailable"
+msgstr "Disponible"
+
+msgid "estadesDelta.propertyCalendar.legendUnavailable"
+msgstr "Ocupado"
+
+msgid "estadesDelta.propertyCalendar.legendPast"
+msgstr "Pasado"
+
+msgid "estadesDelta.propertyCalendar.weekdayShortMonday"
+msgstr "Lu"
+
+msgid "estadesDelta.propertyCalendar.weekdayShortTuesday"
+msgstr "Ma"
+
+msgid "estadesDelta.propertyCalendar.weekdayShortWednesday"
+msgstr "Mi"
+
+msgid "estadesDelta.propertyCalendar.weekdayShortThursday"
+msgstr "Ju"
+
+msgid "estadesDelta.propertyCalendar.weekdayShortFriday"
+msgstr "Vi"
+
+msgid "estadesDelta.propertyCalendar.weekdayShortSaturday"
+msgstr "Sá"
+
+msgid "estadesDelta.propertyCalendar.weekdayShortSunday"
+msgstr "Do"

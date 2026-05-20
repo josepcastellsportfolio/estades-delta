@@ -95,3 +95,39 @@ msgstr "Property"
 
 msgid "estadesDelta.propertyView.howToGet"
 msgstr "How to get there"
+
+msgid "estadesDelta.propertyCalendar.prevMonth"
+msgstr "Previous month"
+
+msgid "estadesDelta.propertyCalendar.nextMonth"
+msgstr "Next month"
+
+msgid "estadesDelta.propertyCalendar.legendAvailable"
+msgstr "Available"
+
+msgid "estadesDelta.propertyCalendar.legendUnavailable"
+msgstr "Booked"
+
+msgid "estadesDelta.propertyCalendar.legendPast"
+msgstr "Past"
+
+msgid "estadesDelta.propertyCalendar.weekdayShortMonday"
+msgstr "Mo"
+
+msgid "estadesDelta.propertyCalendar.weekdayShortTuesday"
+msgstr "Tu"
+
+msgid "estadesDelta.propertyCalendar.weekdayShortWednesday"
+msgstr "We"
+
+msgid "estadesDelta.propertyCalendar.weekdayShortThursday"
+msgstr "Th"
+
+msgid "estadesDelta.propertyCalendar.weekdayShortFriday"
+msgstr "Fr"
+
+msgid "estadesDelta.propertyCalendar.weekdayShortSaturday"
+msgstr "Sa"
+
+msgid "estadesDelta.propertyCalendar.weekdayShortSunday"
+msgstr "Su"

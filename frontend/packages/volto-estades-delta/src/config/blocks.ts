@@ -26,6 +26,9 @@ import aggregatorPropertyListBlock, {
 import propertyMapBlock, {
   PROPERTY_MAP_BLOCK_ID,
 } from '../blocks/PropertyMap';
+import propertyCalendarBlock, {
+  PROPERTY_CALENDAR_BLOCK_ID,
+} from '../blocks/PropertyCalendar';
 
 export default function installBlocks(config: ConfigType) {
   // Property-page blocks: hero, gallery, description, amenities, booking form.
@@ -48,6 +51,7 @@ export default function installBlocks(config: ConfigType) {
 
   // Shared map block (used on both Property pages and the marketplace).
   config.blocks.blocksConfig[PROPERTY_MAP_BLOCK_ID] = propertyMapBlock;
+  config.blocks.blocksConfig[PROPERTY_CALENDAR_BLOCK_ID] = propertyCalendarBlock;
 
   config.blocks.groupBlocksOrder = [
     ...(config.blocks.groupBlocksOrder ?? []).filter(

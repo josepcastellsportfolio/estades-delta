@@ -9,6 +9,7 @@ import PropertyDescriptionView from '../../blocks/PropertyDescription/PropertyDe
 import PropertyAmenitiesView from '../../blocks/PropertyAmenities/PropertyAmenitiesView';
 import PropertyBookingFormView from '../../blocks/PropertyBookingForm/PropertyBookingFormView';
 import PropertyMapView from '../../blocks/PropertyMap/PropertyMapView';
+import PropertyCalendarView from '../../blocks/PropertyCalendar/PropertyCalendarView';
 import { propertyViewMessages as m } from '../../i18n/messages';
 import './PropertyView.scss';
 
@@ -38,6 +39,7 @@ export interface PropertyContent {
   base_price_high_season?: number;
   cleaning_fee?: number;
   tourist_tax_per_night?: number;
+  unavailable_dates?: string[];
   // Vocabularies come through as `{title, token}` shapes via Plone REST API.
   palette?: { token?: string } | string;
 }
@@ -136,6 +138,17 @@ const PropertyView: React.FC<PropertyViewProps> = ({ content }) => {
                 }}
               />
             ) : null}
+
+            <section className="propertyView__calendar">
+              <PropertyCalendarView
+                data={{
+                  '@type': 'propertyCalendar',
+                  heading: 'Disponibilitat',
+                  monthsToShow: 2,
+                }}
+                content={{ unavailable_dates: content.unavailable_dates }}
+              />
+            </section>
 
             {(content.latitude || content.longitude) ? (
               <section className="propertyView__map">
