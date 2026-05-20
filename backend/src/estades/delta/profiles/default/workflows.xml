@@ -5,9 +5,15 @@
   <object meta_type="Workflow"
           name="booking_workflow"
   />
+  <object meta_type="Workflow"
+          name="guest_conversation_workflow"
+  />
   <bindings>
     <type type_id="Booking">
       <bound-workflow workflow_id="booking_workflow" />
+    </type>
+    <type type_id="GuestConversation">
+      <bound-workflow workflow_id="guest_conversation_workflow" />
     </type>
   </bindings>
 </object>

@@ -75,6 +75,58 @@ def preferred_languages(_context):
 
 
 @provider(IVocabularyFactory)
+def message_channels(_context):
+    """Where a guest message arrived from."""
+    return _vocabulary([
+        ("whatsapp", "WhatsApp"),
+        ("airbnb", "Airbnb"),
+        ("booking", "Booking.com"),
+        ("direct", "Direct (microsite/marketplace)"),
+    ])
+
+
+@provider(IVocabularyFactory)
+def conversation_modes(_context):
+    """How autonomously the IA can act on this conversation."""
+    return _vocabulary([
+        ("manual", "Manual - only suggestions stored, no alerts"),
+        ("assisted", "Assisted - IA suggests, owner approves"),
+        ("autonomous", "Autonomous - IA replies directly on approved FAQs"),
+    ])
+
+
+@provider(IVocabularyFactory)
+def conversation_states(_context):
+    """State variable for guest_conversation_workflow."""
+    return _vocabulary([
+        ("open", "Open"),
+        ("waiting_owner", "Waiting for owner"),
+        ("resolved", "Resolved"),
+        ("closed", "Closed"),
+    ])
+
+
+@provider(IVocabularyFactory)
+def message_classifications(_context):
+    """Output of the LLM classifier on an inbound message."""
+    return _vocabulary([
+        ("faq", "FAQ"),
+        ("urgent", "Urgent"),
+        ("team_query", "Team query"),
+        ("other", "Other"),
+        ("unclassified", "Unclassified (LLM failed)"),
+    ])
+
+
+@provider(IVocabularyFactory)
+def message_directions(_context):
+    return _vocabulary([
+        ("inbound", "Inbound (from guest)"),
+        ("outbound", "Outbound (to guest)"),
+    ])
+
+
+@provider(IVocabularyFactory)
 def palettes(_context):
     """Three boutique visual palettes the property owner can pick from.
 

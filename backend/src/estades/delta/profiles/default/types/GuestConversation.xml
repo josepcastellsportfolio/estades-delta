@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <object xmlns:i18n="http://xml.zope.org/namespaces/i18n"
         meta_type="Dexterity FTI"
-        name="Booking"
+        name="GuestConversation"
         i18n:domain="plone"
 >
   <property name="title"
             i18n:translate=""
-  >Booking</property>
+  >Guest conversation</property>
   <property name="description"
             i18n:translate=""
-  >A reservation tied to a Property.</property>
-  <property name="icon_expr">string:${portal_url}/event_icon.png</property>
-  <property name="factory">Booking</property>
-  <property name="add_view_expr">string:${folder_url}/++add++Booking</property>
+  >Messaging thread tied to a Booking. Children are GuestMessage items.</property>
+  <property name="icon_expr">string:${portal_url}/discussionitem_icon.png</property>
+  <property name="factory">GuestConversation</property>
+  <property name="add_view_expr">string:${folder_url}/++add++GuestConversation</property>
   <property name="link_target" />
   <property name="immediate_view">view</property>
-  <property name="global_allow">True</property>
+  <property name="global_allow">False</property>
   <property name="filter_content_types">True</property>
   <property name="allowed_content_types">
-    <element value="GuestConversation" />
+    <element value="GuestMessage" />
   </property>
   <property name="allow_discussion">False</property>
   <property name="default_view">view</property>
@@ -27,15 +27,14 @@
   </property>
   <property name="default_view_fallback">False</property>
   <property name="add_permission">cmf.AddPortalContent</property>
-  <property name="klass">estades.delta.content.booking.Booking</property>
+  <property name="klass">estades.delta.content.guest_conversation.GuestConversation</property>
   <property name="behaviors">
     <element value="plone.dublincore" />
     <element value="plone.namefromtitle" />
     <element value="plone.shortname" />
     <element value="plone.excludefromnavigation" />
-    <element value="plone.versioning" />
   </property>
-  <property name="schema">estades.delta.content.booking.IBooking</property>
+  <property name="schema">estades.delta.content.guest_conversation.IGuestConversation</property>
   <property name="model_source" />
   <property name="model_file" />
   <property name="schema_policy">dexterity</property>

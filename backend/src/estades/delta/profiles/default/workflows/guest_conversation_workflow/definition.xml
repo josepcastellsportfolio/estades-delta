@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dc-workflow description="Lifecycle for a GuestConversation: open -&gt; waiting_owner -&gt; resolved -&gt; closed. Cancellation is implicit (just close)."
+             initial_state="open"
+             manager_bypass="False"
+             state_variable="review_state"
+             title="Guest conversation workflow"
+             workflow_id="guest_conversation_workflow"
+>
+  <permission>Access contents information</permission>
+  <permission>Modify portal content</permission>
+  <permission>View</permission>
+
+  <state state_id="open"
+         title="Open"
+  >
+    <description>New thread, awaiting guest or IA activity.</description>
+    <exit-transition transition_id="escalate" />
+    <exit-transition transition_id="resolve" />
+    <exit-transition transition_id="close" />
+    <permission-map acquired="False"
+                    name="Access contents information"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Owner</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+    <permission-map acquired="False"
+                    name="Modify portal content"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Owner</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+    <permission-map acquired="False"
+                    name="View"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Owner</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+  </state>
+
+  <state state_id="waiting_owner"
+         title="Waiting for owner"
+  >
+    <description>An urgent or team_query message is awaiting human action.</description>
+    <exit-transition transition_id="reopen" />
+    <exit-transition transition_id="resolve" />
+    <exit-transition transition_id="close" />
+    <permission-map acquired="False"
+                    name="Access contents information"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Owner</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+    <permission-map acquired="False"
+                    name="Modify portal content"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Owner</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+    <permission-map acquired="False"
+                    name="View"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Owner</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+  </state>
+
+  <state state_id="resolved"
+         title="Resolved"
+  >
+    <description>Outstanding issue handled; thread may still receive follow-ups.</description>
+    <exit-transition transition_id="reopen" />
+    <exit-transition transition_id="close" />
+    <permission-map acquired="False"
+                    name="Access contents information"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Owner</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+    <permission-map acquired="False"
+                    name="Modify portal content"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+    <permission-map acquired="False"
+                    name="View"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Owner</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+  </state>
+
+  <state state_id="closed"
+         title="Closed"
+  >
+    <description>Booking completed and review window over; thread is archival.</description>
+    <permission-map acquired="False"
+                    name="Access contents information"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Owner</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+    <permission-map acquired="False"
+                    name="Modify portal content"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+    <permission-map acquired="False"
+                    name="View"
+    >
+      <permission-role>Manager</permission-role>
+      <permission-role>Owner</permission-role>
+      <permission-role>Site Administrator</permission-role>
+    </permission-map>
+  </state>
+
+  <transition after_script=""
+              before_script=""
+              new_state="waiting_owner"
+              title="Escalate to owner"
+              transition_id="escalate"
+              trigger="USER"
+  >
+    <description>An urgent/team_query message triggers escalation.</description>
+    <action category="workflow"
+            url="%(content_url)s/content_status_modify?workflow_action=escalate"
+    >Escalate</action>
+    <guard>
+      <guard-permission>Modify portal content</guard-permission>
+    </guard>
+  </transition>
+
+  <transition after_script=""
+              before_script=""
+              new_state="resolved"
+              title="Mark resolved"
+              transition_id="resolve"
+              trigger="USER"
+  >
+    <description>Owner or IA has handled the outstanding issue.</description>
+    <action category="workflow"
+            url="%(content_url)s/content_status_modify?workflow_action=resolve"
+    >Resolve</action>
+    <guard>
+      <guard-permission>Modify portal content</guard-permission>
+    </guard>
+  </transition>
+
+  <transition after_script=""
+              before_script=""
+              new_state="open"
+              title="Reopen"
+              transition_id="reopen"
+              trigger="USER"
+  >
+    <description>New inbound message reopens a resolved or waiting thread.</description>
+    <action category="workflow"
+            url="%(content_url)s/content_status_modify?workflow_action=reopen"
+    >Reopen</action>
+    <guard>
+      <guard-permission>Modify portal content</guard-permission>
+    </guard>
+  </transition>
+
+  <transition after_script=""
+              before_script=""
+              new_state="closed"
+              title="Close"
+              transition_id="close"
+              trigger="USER"
+  >
+    <description>Final close — typically post-checkout + review window expired.</description>
+    <action category="workflow"
+            url="%(content_url)s/content_status_modify?workflow_action=close"
+    >Close</action>
+    <guard>
+      <guard-permission>Modify portal content</guard-permission>
+    </guard>
+  </transition>
+
+  <worklist actbox_category="global"
+            actbox_name="Conversations waiting for owner (%(count)d)"
+            actbox_url="%(portal_url)s/search?review_state=waiting_owner&amp;portal_type=GuestConversation"
+            cataloged_var="review_state"
+            description="GuestConversations escalated and awaiting owner action."
+            title="Waiting conversations"
+            worklist_id="waiting_owner_conversations"
+  >
+    <match name="review_state"
+           values="waiting_owner"
+    />
+    <guard>
+      <guard-permission>Modify portal content</guard-permission>
+    </guard>
+  </worklist>
+</dc-workflow>

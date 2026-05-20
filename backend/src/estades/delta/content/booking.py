@@ -1,8 +1,14 @@
-"""Booking content type: a single reservation tied to a Property."""
+"""Booking content type: a single reservation tied to a Property.
+
+Promoted from Item to Container in M1 so that GuestConversation can hang
+beneath it as a child (per ADR-017). The booking itself still has no
+"folder-like" semantics from a UX point of view — children are exclusively
+guest conversations.
+"""
 
 from estades.delta import _
 from plone.autoform import directives
-from plone.dexterity.content import Item
+from plone.dexterity.content import Container
 from plone.supermodel import model
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
@@ -70,6 +76,15 @@ class IBooking(model.Schema):
     check_out_date = schema.Date(
         title=_("Check-out date"),
         required=True,
+    )
+    actual_checkin_time = schema.Datetime(
+        title=_("Actual check-in time"),
+        description=_(
+            "When the guest actually arrived (key collected / lockbox opened). "
+            "Used by the scheduled-messages service to anchor the post_checkin "
+            "trigger 4h later."
+        ),
+        required=False,
     )
     # nights is computed via an indexer; not stored as a writable field.
 
@@ -141,5 +156,5 @@ class IBooking(model.Schema):
 
 
 @implementer(IBooking)
-class Booking(Item):
-    """Booking content type."""
+class Booking(Container):
+    """Booking content type — folderish to host GuestConversation children."""

@@ -11,4 +11,10 @@
   <object meta_type="Dexterity FTI"
           name="Booking"
   />
+  <object meta_type="Dexterity FTI"
+          name="GuestConversation"
+  />
+  <object meta_type="Dexterity FTI"
+          name="GuestMessage"
+  />
 </object>
