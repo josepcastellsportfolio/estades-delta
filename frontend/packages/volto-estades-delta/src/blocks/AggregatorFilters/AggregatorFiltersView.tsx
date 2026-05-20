@@ -13,6 +13,8 @@
  * Param names: `checkin`, `checkout`, `guests`, `zone`.
  */
 import React, { useCallback, useEffect, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { aggregatorFiltersMessages as m } from '../../i18n/messages';
 import './AggregatorFilters.scss';
 import type { AggregatorFiltersData } from './schema';
 
@@ -73,6 +75,7 @@ interface AggregatorFiltersViewProps {
 }
 
 const AggregatorFiltersView: React.FC<AggregatorFiltersViewProps> = ({ data }) => {
+  const intl = useIntl();
   const [filters, setFilters] = useState<AggregatorFiltersState>(EMPTY_STATE);
 
   // Read initial state from URL on client mount.
@@ -120,7 +123,9 @@ const AggregatorFiltersView: React.FC<AggregatorFiltersViewProps> = ({ data }) =
       <form className="aggregatorFilters__form" onSubmit={handleSubmit}>
         {/* Check-in date */}
         <div className="aggregatorFilters__field">
-          <label htmlFor="agg-checkin">Entrada</label>
+          <label htmlFor="agg-checkin">
+            <FormattedMessage {...m.checkin} />
+          </label>
           <input
             id="agg-checkin"
             type="date"
@@ -133,7 +138,9 @@ const AggregatorFiltersView: React.FC<AggregatorFiltersViewProps> = ({ data }) =
 
         {/* Check-out date */}
         <div className="aggregatorFilters__field">
-          <label htmlFor="agg-checkout">Sortida</label>
+          <label htmlFor="agg-checkout">
+            <FormattedMessage {...m.checkout} />
+          </label>
           <input
             id="agg-checkout"
             type="date"
@@ -145,7 +152,9 @@ const AggregatorFiltersView: React.FC<AggregatorFiltersViewProps> = ({ data }) =
 
         {/* Guest count */}
         <div className="aggregatorFilters__field">
-          <label htmlFor="agg-guests">Hostes</label>
+          <label htmlFor="agg-guests">
+            <FormattedMessage {...m.guests} />
+          </label>
           <input
             id="agg-guests"
             type="number"
@@ -158,13 +167,15 @@ const AggregatorFiltersView: React.FC<AggregatorFiltersViewProps> = ({ data }) =
 
         {/* Zone selector */}
         <div className="aggregatorFilters__field">
-          <label htmlFor="agg-zone">Zona</label>
+          <label htmlFor="agg-zone">
+            <FormattedMessage {...m.zone} />
+          </label>
           <select
             id="agg-zone"
             value={filters.zone}
             onChange={handleChange('zone')}
           >
-            <option value="">Tota la zona</option>
+            <option value="">{intl.formatMessage(m.zoneAll)}</option>
             {DELTA_ZONES.map((z) => (
               <option key={z} value={z}>
                 {z}
@@ -174,7 +185,7 @@ const AggregatorFiltersView: React.FC<AggregatorFiltersViewProps> = ({ data }) =
         </div>
 
         <button type="submit" className="aggregatorFilters__submit">
-          Cercar
+          <FormattedMessage {...m.submit} />
         </button>
       </form>
 
@@ -184,7 +195,7 @@ const AggregatorFiltersView: React.FC<AggregatorFiltersViewProps> = ({ data }) =
           className="aggregatorFilters__clear"
           onClick={handleClear}
         >
-          Esborrar filtres
+          <FormattedMessage {...m.clear} />
         </button>
       ) : null}
     </div>

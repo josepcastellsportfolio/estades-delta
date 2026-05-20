@@ -6,12 +6,12 @@
  */
 import React from 'react';
 import {
-  render,
   screen,
   fireEvent,
   waitFor,
   act,
 } from '@testing-library/react';
+import { renderWithIntl as render } from '../../i18n/testUtils';
 import AggregatorPropertyListView from './AggregatorPropertyListView';
 
 const baseData = { '@type': 'aggregatorPropertyList' as const };

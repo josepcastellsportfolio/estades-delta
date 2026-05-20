@@ -6,6 +6,8 @@
  * view side.
  */
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
+import { aggregatorFiltersMessages as m } from '../../i18n/messages';
 import './AggregatorFilters.scss';
 import type { AggregatorFiltersData } from './schema';
 
@@ -29,25 +31,35 @@ const AggregatorFiltersEdit: React.FC<AggregatorFiltersEditProps> = ({
 
       <div className="aggregatorFilters__form">
         <div className="aggregatorFilters__field">
-          <label>Entrada</label>
+          <label>
+            <FormattedMessage {...m.checkin} />
+          </label>
           <input type="date" readOnly placeholder="dd/mm/aaaa" />
         </div>
         <div className="aggregatorFilters__field">
-          <label>Sortida</label>
+          <label>
+            <FormattedMessage {...m.checkout} />
+          </label>
           <input type="date" readOnly placeholder="dd/mm/aaaa" />
         </div>
         <div className="aggregatorFilters__field">
-          <label>Hostes</label>
+          <label>
+            <FormattedMessage {...m.guests} />
+          </label>
           <input type="number" readOnly value={1} />
         </div>
         <div className="aggregatorFilters__field">
-          <label>Zona</label>
+          <label>
+            <FormattedMessage {...m.zone} />
+          </label>
           <select disabled>
-            <option>Tota la zona</option>
+            <option>
+              <FormattedMessage {...m.zoneAll} />
+            </option>
           </select>
         </div>
         <button type="button" className="aggregatorFilters__submit" disabled>
-          Cercar
+          <FormattedMessage {...m.submit} />
         </button>
       </div>
     </div>

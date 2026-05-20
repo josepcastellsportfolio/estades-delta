@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
+import { renderWithIntl as render } from '../../i18n/testUtils';
 import AggregatorFiltersView from './AggregatorFiltersView';
 
 const baseData = { '@type': 'aggregatorFilters' as const };

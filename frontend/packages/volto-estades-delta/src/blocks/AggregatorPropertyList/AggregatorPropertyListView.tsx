@@ -18,9 +18,11 @@
  * availability index yet (Day 5+ work).
  */
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 import AggregatorPropertyCardView, {
   type AggregatorPropertyCardData,
 } from '../AggregatorPropertyCard/AggregatorPropertyCardView';
+import { aggregatorPropertyListMessages as m } from '../../i18n/messages';
 import './AggregatorPropertyList.scss';
 import type { AggregatorPropertyListData } from './schema';
 
@@ -154,10 +156,10 @@ interface AggregatorPropertyListViewProps {
 const AggregatorPropertyListView: React.FC<AggregatorPropertyListViewProps> = ({
   data,
 }) => {
+  const intl = useIntl();
   const pageSize = data.pageSize ?? DEFAULT_PAGE_SIZE;
   const emptyMessage =
-    data.emptyMessage ??
-    'No hi ha cap propietat que coincideixi amb els filtres. Prova a ampliar la cerca.';
+    data.emptyMessage ?? intl.formatMessage(m.empty);
 
   const [filters, setFilters] = useState<FilterParams>({
     checkin: '',
@@ -203,9 +205,7 @@ const AggregatorPropertyListView: React.FC<AggregatorPropertyListViewProps> = ({
         setTotal(body.items_total ?? filtered.length);
       } catch (err) {
         if ((err as Error).name === 'AbortError') return;
-        setError(
-          'No s’han pogut carregar les propietats. Torna-ho a provar.',
-        );
+        setError(intl.formatMessage(m.error));
         setItems([]);
         setTotal(0);
       } finally {
@@ -214,7 +214,7 @@ const AggregatorPropertyListView: React.FC<AggregatorPropertyListViewProps> = ({
         }
       }
     },
-    [pageSize],
+    [pageSize, intl],
   );
 
   // On mount: read URL params and do the first fetch.
@@ -270,13 +270,16 @@ const AggregatorPropertyListView: React.FC<AggregatorPropertyListViewProps> = ({
 
       {!loading && !error && total > 0 ? (
         <p className="aggregatorPropertyList__count">
-          {total} {total === 1 ? 'propietat' : 'propietats'}
+          <FormattedMessage
+            {...(total === 1 ? m.countSingular : m.countPlural)}
+            values={{ count: total }}
+          />
         </p>
       ) : null}
 
       {loading ? (
         <div className="aggregatorPropertyList__status" role="status">
-          Carregant propietats…
+          <FormattedMessage {...m.loading} />
         </div>
       ) : null}
 
@@ -307,17 +310,20 @@ const AggregatorPropertyListView: React.FC<AggregatorPropertyListViewProps> = ({
       {!loading && !error && hasMore ? (
         <div className="aggregatorPropertyList__pagination">
           <button type="button" onClick={handlePrev} disabled={page === 0}>
-            Anterior
+            <FormattedMessage {...m.prev} />
           </button>
           <span>
-            Pàgina {page + 1} de {maxPage + 1}
+            <FormattedMessage
+              {...m.page}
+              values={{ current: page + 1, total: maxPage + 1 }}
+            />
           </span>
           <button
             type="button"
             onClick={handleNext}
             disabled={page >= maxPage}
           >
-            Següent
+            <FormattedMessage {...m.next} />
           </button>
         </div>
       ) : null}

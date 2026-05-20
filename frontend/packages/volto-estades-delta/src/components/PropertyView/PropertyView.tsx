@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import PaletteScope from '../PaletteScope';
 import Heading from '../atoms/Heading';
 import Stack from '../atoms/Stack';
@@ -8,6 +9,7 @@ import PropertyDescriptionView from '../../blocks/PropertyDescription/PropertyDe
 import PropertyAmenitiesView from '../../blocks/PropertyAmenities/PropertyAmenitiesView';
 import PropertyBookingFormView from '../../blocks/PropertyBookingForm/PropertyBookingFormView';
 import PropertyMapView from '../../blocks/PropertyMap/PropertyMapView';
+import { propertyViewMessages as m } from '../../i18n/messages';
 import './PropertyView.scss';
 
 /**
@@ -137,7 +139,9 @@ const PropertyView: React.FC<PropertyViewProps> = ({ content }) => {
 
             {(content.latitude || content.longitude) ? (
               <section className="propertyView__map">
-                <Heading level={3}>Com arribar-hi</Heading>
+                <Heading level={3}>
+                  <FormattedMessage {...m.howToGet} />
+                </Heading>
                 <PropertyMapView
                   data={{ '@type': 'propertyMap', zoom: 13 }}
                   content={{

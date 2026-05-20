@@ -8,7 +8,8 @@
  *   - That `content.latitude / content.longitude` are used as fallback coords
  */
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderWithIntl as render } from '../../i18n/testUtils';
 import PropertyMapView from './PropertyMapView';
 
 // Mock dynamic `import('leaflet')` so it never runs in jsdom.

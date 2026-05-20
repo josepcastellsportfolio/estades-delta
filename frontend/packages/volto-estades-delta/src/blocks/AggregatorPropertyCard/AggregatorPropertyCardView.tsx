@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 import Card from '../../components/atoms/Card';
 import Heading from '../../components/atoms/Heading';
 import Pill from '../../components/atoms/Pill';
@@ -6,6 +7,7 @@ import Stack from '../../components/atoms/Stack';
 import Price from '../../components/atoms/Price';
 import Rating from '../../components/atoms/Rating';
 import Button from '../../components/atoms/Button';
+import { aggregatorPropertyCardMessages as m } from '../../i18n/messages';
 import './AggregatorPropertyCard.scss';
 
 export interface AggregatorPropertyCardData {
@@ -37,12 +39,17 @@ interface ViewProps {
   className?: string;
 }
 
-function fmtMeta(data: AggregatorPropertyCardData): string[] {
+function fmtMeta(
+  data: AggregatorPropertyCardData,
+  intl: ReturnType<typeof useIntl>,
+): string[] {
   const parts: string[] = [];
-  if (typeof data.capacity === 'number') parts.push(`${data.capacity} hostes`);
+  if (typeof data.capacity === 'number')
+    parts.push(intl.formatMessage(m.guestsMeta, { count: data.capacity }));
   if (typeof data.bedrooms === 'number')
-    parts.push(`${data.bedrooms} ${data.bedrooms === 1 ? 'hab' : 'hab'}`);
-  if (typeof data.bathrooms === 'number') parts.push(`${data.bathrooms} banys`);
+    parts.push(intl.formatMessage(m.bedroomsMeta, { count: data.bedrooms }));
+  if (typeof data.bathrooms === 'number')
+    parts.push(intl.formatMessage(m.bathroomsMeta, { count: data.bathrooms }));
   return parts;
 }
 
@@ -50,7 +57,8 @@ const AggregatorPropertyCardView: React.FC<ViewProps> = ({
   data,
   className,
 }) => {
-  const meta = fmtMeta(data);
+  const intl = useIntl();
+  const meta = fmtMeta(data, intl);
   const heroStyle = data.image
     ? { backgroundImage: `url(${data.image})` }
     : undefined;
@@ -69,7 +77,7 @@ const AggregatorPropertyCardView: React.FC<ViewProps> = ({
         >
           {data.image ? null : (
             <span className="aggregatorPropertyCard__media-placeholder">
-              (sense imatge)
+              <FormattedMessage {...m.noImage} />
             </span>
           )}
           {data.tag ? (
@@ -85,13 +93,13 @@ const AggregatorPropertyCardView: React.FC<ViewProps> = ({
             {typeof data.fromPrice === 'number' ? (
               <>
                 <span className="aggregatorPropertyCard__price-prefix">
-                  des de
+                  <FormattedMessage {...m.pricePrefix} />
                 </span>
                 <Price
                   amount={data.fromPrice}
                   currency={data.currency ?? 'EUR'}
                   locale={data.locale ?? 'ca-ES'}
-                  suffix="/ nit"
+                  suffix={intl.formatMessage(m.pricePerNight)}
                   size="lg"
                 />
               </>
@@ -99,7 +107,7 @@ const AggregatorPropertyCardView: React.FC<ViewProps> = ({
           </div>
           {data.href ? (
             <Button as="a" variant="secondary" size="sm" href={data.href}>
-              Veure
+              <FormattedMessage {...m.view} />
             </Button>
           ) : null}
         </div>

@@ -5,7 +5,9 @@
  * the grid layout without firing real network requests during edit.
  */
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import AggregatorPropertyCardView from '../AggregatorPropertyCard/AggregatorPropertyCardView';
+import { aggregatorPropertyListMessages as m } from '../../i18n/messages';
 import './AggregatorPropertyList.scss';
 import type { AggregatorPropertyListData } from './schema';
 
@@ -66,7 +68,7 @@ const AggregatorPropertyListEdit: React.FC<AggregatorPropertyListEditProps> = ({
         <h2 className="aggregatorPropertyList__heading">{data.heading}</h2>
       ) : null}
       <p className="aggregatorPropertyList__count">
-        Vista prèvia — 3 propietats d'exemple
+        <FormattedMessage {...m.editPreview} />
       </p>
       <div className="aggregatorPropertyList__grid">
         {PLACEHOLDER_CARDS.map((card) => (

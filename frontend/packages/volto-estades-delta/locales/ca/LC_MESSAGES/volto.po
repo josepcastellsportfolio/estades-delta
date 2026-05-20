@@ -1,97 +1,97 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plone\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-20T12:00:00.000Z\n"
 "PO-Revision-Date: 2026-05-20T12:00:00.000Z\n"
 "Last-Translator: Estades Delta <noreply@estadesdelta.cat>\n"
-"Language: en\n"
-"Language-Team: EN <plone-i18n@lists.sourceforge.net>\n"
+"Language: ca\n"
+"Language-Team: CA <plone-i18n@lists.sourceforge.net>\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Preferred-Encodings: utf-8\n"
 "MIME-Version: 1.0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
+"Language-Code: ca\n"
+"Language-Name: Català\n"
 "Domain: volto\n"
 
 msgid "estadesDelta.aggregatorFilters.checkin"
-msgstr "Check-in"
+msgstr "Entrada"
 
 msgid "estadesDelta.aggregatorFilters.checkout"
-msgstr "Check-out"
+msgstr "Sortida"
 
 msgid "estadesDelta.aggregatorFilters.guests"
-msgstr "Guests"
+msgstr "Hostes"
 
 msgid "estadesDelta.aggregatorFilters.zone"
-msgstr "Area"
+msgstr "Zona"
 
 msgid "estadesDelta.aggregatorFilters.zoneAll"
-msgstr "All areas"
+msgstr "Tota la zona"
 
 msgid "estadesDelta.aggregatorFilters.submit"
-msgstr "Search"
+msgstr "Cercar"
 
 msgid "estadesDelta.aggregatorFilters.clear"
-msgstr "Clear filters"
+msgstr "Esborrar filtres"
 
 msgid "estadesDelta.aggregatorPropertyList.loading"
-msgstr "Loading properties…"
+msgstr "Carregant propietats…"
 
 msgid "estadesDelta.aggregatorPropertyList.error"
-msgstr "Couldn’t load the properties. Please try again."
+msgstr "No s’han pogut carregar les propietats. Torna-ho a provar."
 
 msgid "estadesDelta.aggregatorPropertyList.empty"
-msgstr "No properties match these filters. Try widening your search."
+msgstr "No hi ha cap propietat que coincideixi amb els filtres. Prova a ampliar la cerca."
 
 msgid "estadesDelta.aggregatorPropertyList.countSingular"
-msgstr "{count} property"
+msgstr "{count} propietat"
 
 msgid "estadesDelta.aggregatorPropertyList.countPlural"
-msgstr "{count} properties"
+msgstr "{count} propietats"
 
 msgid "estadesDelta.aggregatorPropertyList.prev"
-msgstr "Previous"
+msgstr "Anterior"
 
 msgid "estadesDelta.aggregatorPropertyList.next"
-msgstr "Next"
+msgstr "Següent"
 
 msgid "estadesDelta.aggregatorPropertyList.page"
-msgstr "Page {current} of {total}"
+msgstr "Pàgina {current} de {total}"
 
 msgid "estadesDelta.aggregatorPropertyList.editPreview"
-msgstr "Preview — 3 sample properties"
+msgstr "Vista prèvia — 3 propietats d’exemple"
 
 msgid "estadesDelta.aggregatorPropertyCard.pricePrefix"
-msgstr "from"
+msgstr "des de"
 
 msgid "estadesDelta.aggregatorPropertyCard.pricePerNight"
-msgstr "/ night"
+msgstr "/ nit"
 
 msgid "estadesDelta.aggregatorPropertyCard.guestsMeta"
-msgstr "{count} guests"
+msgstr "{count} hostes"
 
 msgid "estadesDelta.aggregatorPropertyCard.bedroomsMeta"
-msgstr "{count, plural, one {# bed} other {# beds}}"
+msgstr "{count, plural, one {# hab} other {# hab}}"
 
 msgid "estadesDelta.aggregatorPropertyCard.bathroomsMeta"
-msgstr "{count, plural, one {# bath} other {# baths}}"
+msgstr "{count, plural, one {# bany} other {# banys}}"
 
 msgid "estadesDelta.aggregatorPropertyCard.noImage"
-msgstr "(no image)"
+msgstr "(sense imatge)"
 
 msgid "estadesDelta.aggregatorPropertyCard.view"
-msgstr "View"
+msgstr "Veure"
 
 msgid "estadesDelta.propertyMap.noCoords"
-msgstr "No coordinates — add latitude and longitude to the property."
+msgstr "Sense coordenades — afegeix latitud i longitud a la propietat."
 
 msgid "estadesDelta.propertyMap.ariaLabel"
-msgstr "Location map for {title}"
+msgstr "Mapa de localització de {title}"
 
 msgid "estadesDelta.propertyMap.fallbackTitle"
-msgstr "Property"
+msgstr "Propietat"
 
 msgid "estadesDelta.propertyView.howToGet"
-msgstr "How to get there"
+msgstr "Com arribar-hi"

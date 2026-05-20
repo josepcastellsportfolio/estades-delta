@@ -16,6 +16,8 @@
  * Tiles: OpenStreetMap standard layer (no API key required).
  */
 import React, { useCallback, useEffect, useRef } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { propertyMapMessages as m } from '../../i18n/messages';
 import './PropertyMap.scss';
 import type { PropertyMapData } from './schema';
 
@@ -50,6 +52,7 @@ function parseCoord(val: number | string | undefined): number | null {
 }
 
 const PropertyMapView: React.FC<PropertyMapViewProps> = ({ data, content }) => {
+  const intl = useIntl();
   const containerRef = useRef<HTMLDivElement>(null);
   // Hold the Leaflet map instance so we can destroy it on unmount.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -59,7 +62,7 @@ const PropertyMapView: React.FC<PropertyMapViewProps> = ({ data, content }) => {
   const lng = parseCoord(data.longitude) ?? parseCoord(content?.longitude);
   const zoom = data.zoom ?? DEFAULT_ZOOM;
   const height = data.height ?? DEFAULT_HEIGHT;
-  const title = content?.title ?? 'Propietat';
+  const title = content?.title ?? intl.formatMessage(m.fallbackTitle);
 
   const initMap = useCallback(async () => {
     if (!containerRef.current) return;
@@ -122,11 +125,11 @@ const PropertyMapView: React.FC<PropertyMapViewProps> = ({ data, content }) => {
         <div
           ref={containerRef}
           className="propertyMap__container"
-          aria-label={`Mapa de localització de ${title}`}
+          aria-label={intl.formatMessage(m.ariaLabel, { title })}
         />
       ) : (
         <div className="propertyMap__placeholder">
-          Sense coordenades — afegeix latitud i longitud a la propietat.
+          <FormattedMessage {...m.noCoords} />
         </div>
       )}
     </div>

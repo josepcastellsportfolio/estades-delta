@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plone\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-09 11:45-0400\n"
-"PO-Revision-Date: 2023-05-10 11:34-0400\n"
-"Last-Translator: Leonardo J. Caballero G. <leonardocaballero@gmail.com>\n"
+"POT-Creation-Date: 2026-05-20T12:00:00.000Z\n"
+"PO-Revision-Date: 2026-05-20T12:00:00.000Z\n"
+"Last-Translator: Estades Delta <noreply@estadesdelta.cat>\n"
 "Language: es\n"
 "Language-Team: ES <LL@li.org>\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -16,4 +16,84 @@ msgstr ""
 "Language-Name: Español\n"
 "Domain: volto\n"
 "X-Is-Fallback-For: es-ar es-bo es-cl es-co es-cr es-do es-ec es-es es-sv es-gt es-hn es-mx es-ni es-pa es-py es-pe es-pr es-us es-uy es-ve\n"
-"X-Generator: Poedit 2.2.1\n"
+
+msgid "estadesDelta.aggregatorFilters.checkin"
+msgstr "Entrada"
+
+msgid "estadesDelta.aggregatorFilters.checkout"
+msgstr "Salida"
+
+msgid "estadesDelta.aggregatorFilters.guests"
+msgstr "Huéspedes"
+
+msgid "estadesDelta.aggregatorFilters.zone"
+msgstr "Zona"
+
+msgid "estadesDelta.aggregatorFilters.zoneAll"
+msgstr "Toda la zona"
+
+msgid "estadesDelta.aggregatorFilters.submit"
+msgstr "Buscar"
+
+msgid "estadesDelta.aggregatorFilters.clear"
+msgstr "Borrar filtros"
+
+msgid "estadesDelta.aggregatorPropertyList.loading"
+msgstr "Cargando propiedades…"
+
+msgid "estadesDelta.aggregatorPropertyList.error"
+msgstr "No se han podido cargar las propiedades. Inténtalo de nuevo."
+
+msgid "estadesDelta.aggregatorPropertyList.empty"
+msgstr "No hay ninguna propiedad que coincida con los filtros. Prueba a ampliar la búsqueda."
+
+msgid "estadesDelta.aggregatorPropertyList.countSingular"
+msgstr "{count} propiedad"
+
+msgid "estadesDelta.aggregatorPropertyList.countPlural"
+msgstr "{count} propiedades"
+
+msgid "estadesDelta.aggregatorPropertyList.prev"
+msgstr "Anterior"
+
+msgid "estadesDelta.aggregatorPropertyList.next"
+msgstr "Siguiente"
+
+msgid "estadesDelta.aggregatorPropertyList.page"
+msgstr "Página {current} de {total}"
+
+msgid "estadesDelta.aggregatorPropertyList.editPreview"
+msgstr "Vista previa — 3 propiedades de ejemplo"
+
+msgid "estadesDelta.aggregatorPropertyCard.pricePrefix"
+msgstr "desde"
+
+msgid "estadesDelta.aggregatorPropertyCard.pricePerNight"
+msgstr "/ noche"
+
+msgid "estadesDelta.aggregatorPropertyCard.guestsMeta"
+msgstr "{count} huéspedes"
+
+msgid "estadesDelta.aggregatorPropertyCard.bedroomsMeta"
+msgstr "{count, plural, one {# hab} other {# habs}}"
+
+msgid "estadesDelta.aggregatorPropertyCard.bathroomsMeta"
+msgstr "{count, plural, one {# baño} other {# baños}}"
+
+msgid "estadesDelta.aggregatorPropertyCard.noImage"
+msgstr "(sin imagen)"
+
+msgid "estadesDelta.aggregatorPropertyCard.view"
+msgstr "Ver"
+
+msgid "estadesDelta.propertyMap.noCoords"
+msgstr "Sin coordenadas — añade latitud y longitud a la propiedad."
+
+msgid "estadesDelta.propertyMap.ariaLabel"
+msgstr "Mapa de localización de {title}"
+
+msgid "estadesDelta.propertyMap.fallbackTitle"
+msgstr "Propiedad"
+
+msgid "estadesDelta.propertyView.howToGet"
+msgstr "Cómo llegar"
