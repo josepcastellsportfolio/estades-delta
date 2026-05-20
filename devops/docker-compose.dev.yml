@@ -95,6 +95,18 @@ services:
       SITE: "Plone"
       # Volto frontend talks to backend at this internal URL.
       CORS_ALLOW_ORIGIN: "http://estadesdelta.local,http://www.estadesdelta.local,http://casa-demo.estadesdelta.local,http://casa-test-riu.estadesdelta.local,http://casa-test-cap.estadesdelta.local"
+      # M1 — Messaging IA. See .env.example for full documentation.
+      LLM_BASE_URL: "${LLM_BASE_URL:-http://ollama:11434}"
+      LLM_MODEL: "${LLM_MODEL:-llama3.1:8b-instruct}"
+      LLM_TIMEOUT_SECONDS: "${LLM_TIMEOUT_SECONDS:-30}"
+      LLM_MAX_RETRIES: "${LLM_MAX_RETRIES:-1}"
+      EMBEDDING_DIM: "${EMBEDDING_DIM:-768}"
+      MESSAGING_ADAPTER: "${MESSAGING_ADAPTER:-stub}"
+      WEBHOOK_HMAC_SECRET: "${WEBHOOK_HMAC_SECRET:-}"
+      SCHEDULED_MESSAGES_TZ: "${SCHEDULED_MESSAGES_TZ:-Europe/Madrid}"
+      CELERY_BROKER_URL: "${CELERY_BROKER_URL:-redis://redis:6379/1}"
+      CELERY_RESULT_BACKEND: "${CELERY_RESULT_BACKEND:-redis://redis:6379/2}"
+      EMBEDDINGS_DB_DSN: "${EMBEDDINGS_DB_DSN:-postgresql://plone:plonedev@postgres:5432/plone}"
     labels:
       - "traefik.enable=true"
       - "traefik.constraint-label=estadesdelta-dev"
@@ -121,6 +133,84 @@ services:
       - "traefik.http.routers.rt-backend-classic.entrypoints=http"
       - "traefik.http.routers.rt-backend-classic.service=svc-backend"
       - "traefik.http.routers.rt-backend-classic.middlewares=mw-backend-vhm-classic"
+    networks:
+      - estadesdelta
+
+  # --- M1: Messaging IA core ----------------------------------------------
+  #
+  # Ollama serves the self-hosted Llama model used by the LLM adapter. First
+  # `up` triggers a model pull (`docker compose exec ollama ollama pull
+  # llama3.1:8b-instruct`); subsequent boots use the cached weights stored in
+  # the `estadesdelta-ollama-data` volume. The model takes ~30-60s to load
+  # into memory on the first generate request after a cold start — tests
+  # therefore use MockLLMAdapter via LLM_BASE_URL="" or by injection.
+  ollama:
+    image: ollama/ollama:latest
+    container_name: estadesdelta-ollama
+    restart: unless-stopped
+    volumes:
+      - estadesdelta-ollama-data:/root/.ollama
+    networks:
+      - estadesdelta
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # Celery worker — processes async messaging tasks (scheduled messages,
+  # outbound deliveries, pipeline runs triggered from webhooks).
+  worker:
+    image: estadesdelta-backend:dev
+    container_name: estadesdelta-worker
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    environment:
+      RELSTORAGE_DSN: "dbname='${DB_NAME:-plone}' user='${DB_USER:-plone}' host='postgres' password='${DB_PASSWORD:-plonedev}' port='5432'"
+      REDIS_URL: "redis://redis:6379/0"
+      SITE: "Plone"
+      LLM_BASE_URL: "${LLM_BASE_URL:-http://ollama:11434}"
+      LLM_MODEL: "${LLM_MODEL:-llama3.1:8b-instruct}"
+      LLM_TIMEOUT_SECONDS: "${LLM_TIMEOUT_SECONDS:-30}"
+      LLM_MAX_RETRIES: "${LLM_MAX_RETRIES:-1}"
+      EMBEDDING_DIM: "${EMBEDDING_DIM:-768}"
+      MESSAGING_ADAPTER: "${MESSAGING_ADAPTER:-stub}"
+      WEBHOOK_HMAC_SECRET: "${WEBHOOK_HMAC_SECRET:-}"
+      SCHEDULED_MESSAGES_TZ: "${SCHEDULED_MESSAGES_TZ:-Europe/Madrid}"
+      CELERY_BROKER_URL: "${CELERY_BROKER_URL:-redis://redis:6379/1}"
+      CELERY_RESULT_BACKEND: "${CELERY_RESULT_BACKEND:-redis://redis:6379/2}"
+      EMBEDDINGS_DB_DSN: "${EMBEDDINGS_DB_DSN:-postgresql://plone:plonedev@postgres:5432/plone}"
+    command: ["celery", "-A", "estades.delta.celery_app", "worker", "--loglevel=INFO"]
+    networks:
+      - estadesdelta
+
+  # Celery beat — cron-like scheduler that fans out scheduled messages
+  # (welcome, pre_checkin, etc.) by enqueuing tasks the worker consumes.
+  beat:
+    image: estadesdelta-backend:dev
+    container_name: estadesdelta-beat
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    environment:
+      RELSTORAGE_DSN: "dbname='${DB_NAME:-plone}' user='${DB_USER:-plone}' host='postgres' password='${DB_PASSWORD:-plonedev}' port='5432'"
+      REDIS_URL: "redis://redis:6379/0"
+      SITE: "Plone"
+      LLM_BASE_URL: "${LLM_BASE_URL:-http://ollama:11434}"
+      LLM_MODEL: "${LLM_MODEL:-llama3.1:8b-instruct}"
+      SCHEDULED_MESSAGES_TZ: "${SCHEDULED_MESSAGES_TZ:-Europe/Madrid}"
+      CELERY_BROKER_URL: "${CELERY_BROKER_URL:-redis://redis:6379/1}"
+      CELERY_RESULT_BACKEND: "${CELERY_RESULT_BACKEND:-redis://redis:6379/2}"
+      EMBEDDINGS_DB_DSN: "${EMBEDDINGS_DB_DSN:-postgresql://plone:plonedev@postgres:5432/plone}"
+    command: ["celery", "-A", "estades.delta.celery_app", "beat", "--loglevel=INFO"]
     networks:
       - estadesdelta
 
@@ -183,3 +273,4 @@ networks:
 volumes:
   estadesdelta-pg-data:
   estadesdelta-redis-data:
+  estadesdelta-ollama-data:
