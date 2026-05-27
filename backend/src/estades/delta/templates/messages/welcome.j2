@@ -1,0 +1,86 @@
+{% if language == 'ca' -%}
+Hola {{ guest_name }}! 👋
+
+Benvingut/da a {{ property_title }}. La teva reserva del {{ check_in_date }} al {{ check_out_date }} està confirmada.
+
+{% if check_in_instructions -%}
+📋 Instruccions d'entrada:
+{{ check_in_instructions }}
+{% endif -%}
+
+{% if wifi_ssid -%}
+📶 WiFi: {{ wifi_ssid }} / {{ wifi_password }}
+{% endif -%}
+
+Si tens qualsevol dubte, respon a aquest missatge i et contestarem tan aviat com puguem.
+
+Gràcies i bona estada!
+{% elif language == 'es' -%}
+¡Hola {{ guest_name }}! 👋
+
+Bienvenido/a a {{ property_title }}. Tu reserva del {{ check_in_date }} al {{ check_out_date }} está confirmada.
+
+{% if check_in_instructions -%}
+📋 Instrucciones de entrada:
+{{ check_in_instructions }}
+{% endif -%}
+
+{% if wifi_ssid -%}
+📶 WiFi: {{ wifi_ssid }} / {{ wifi_password }}
+{% endif -%}
+
+Si tienes alguna duda, responde a este mensaje y te contestaremos lo antes posible.
+
+¡Gracias y buena estancia!
+{% elif language == 'fr' -%}
+Bonjour {{ guest_name }} ! 👋
+
+Bienvenue à {{ property_title }}. Votre réservation du {{ check_in_date }} au {{ check_out_date }} est confirmée.
+
+{% if check_in_instructions -%}
+📋 Instructions d'arrivée :
+{{ check_in_instructions }}
+{% endif -%}
+
+{% if wifi_ssid -%}
+📶 WiFi : {{ wifi_ssid }} / {{ wifi_password }}
+{% endif -%}
+
+Si vous avez des questions, répondez à ce message et nous vous répondrons dès que possible.
+
+Merci et bon séjour !
+{% elif language == 'de' -%}
+Hallo {{ guest_name }}! 👋
+
+Willkommen bei {{ property_title }}. Ihre Buchung vom {{ check_in_date }} bis {{ check_out_date }} ist bestätigt.
+
+{% if check_in_instructions -%}
+📋 Check-in-Anweisungen:
+{{ check_in_instructions }}
+{% endif -%}
+
+{% if wifi_ssid -%}
+📶 WLAN: {{ wifi_ssid }} / {{ wifi_password }}
+{% endif -%}
+
+Bei Fragen antworten Sie einfach auf diese Nachricht.
+
+Vielen Dank und einen schönen Aufenthalt!
+{% else -%}
+Hello {{ guest_name }}! 👋
+
+Welcome to {{ property_title }}. Your booking from {{ check_in_date }} to {{ check_out_date }} is confirmed.
+
+{% if check_in_instructions -%}
+📋 Check-in instructions:
+{{ check_in_instructions }}
+{% endif -%}
+
+{% if wifi_ssid -%}
+📶 WiFi: {{ wifi_ssid }} / {{ wifi_password }}
+{% endif -%}
+
+If you have any questions, reply to this message and we'll get back to you as soon as possible.
+
+Thank you and enjoy your stay!
+{% endif -%}

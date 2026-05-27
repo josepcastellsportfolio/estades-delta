@@ -1,0 +1,66 @@
+{% if language == 'ca' -%}
+Hola {{ guest_name }}!
+
+Esperem que estiguis gaudint de {{ property_title }} i del Delta de l'Ebre! 🌅
+
+Ja fa un dia que has arribat — tot bé? Si necessites qualsevol cosa (tovalloles extra, informació sobre la zona, o qualsevol incidència), respon aquí.
+
+{% if emergency_contacts -%}
+🆘 Contactes d'emergència:
+{{ emergency_contacts }}
+{% endif -%}
+
+Bona estada!
+{% elif language == 'es' -%}
+¡Hola {{ guest_name }}!
+
+¡Esperamos que estés disfrutando de {{ property_title }} y del Delta del Ebro! 🌅
+
+Ya llevas un día — ¿todo bien? Si necesitas algo (toallas extra, información sobre la zona, o cualquier incidencia), responde aquí.
+
+{% if emergency_contacts -%}
+🆘 Contactos de emergencia:
+{{ emergency_contacts }}
+{% endif -%}
+
+¡Buena estancia!
+{% elif language == 'fr' -%}
+Bonjour {{ guest_name }} !
+
+Nous espérons que vous profitez de {{ property_title }} et du Delta de l'Èbre ! 🌅
+
+Cela fait un jour que vous êtes arrivé — tout va bien ? Si vous avez besoin de quoi que ce soit, répondez ici.
+
+{% if emergency_contacts -%}
+🆘 Contacts d'urgence :
+{{ emergency_contacts }}
+{% endif -%}
+
+Bon séjour !
+{% elif language == 'de' -%}
+Hallo {{ guest_name }}!
+
+Wir hoffen, Sie genießen {{ property_title }} und das Ebro-Delta! 🌅
+
+Sie sind seit einem Tag da — alles in Ordnung? Falls Sie etwas brauchen, antworten Sie hier.
+
+{% if emergency_contacts -%}
+🆘 Notfallkontakte:
+{{ emergency_contacts }}
+{% endif -%}
+
+Schönen Aufenthalt!
+{% else -%}
+Hello {{ guest_name }}!
+
+We hope you're enjoying {{ property_title }} and the Ebro Delta! 🌅
+
+You've been here for a day now — everything alright? If you need anything (extra towels, area info, or to report any issues), just reply here.
+
+{% if emergency_contacts -%}
+🆘 Emergency contacts:
+{{ emergency_contacts }}
+{% endif -%}
+
+Enjoy your stay!
+{% endif -%}
