@@ -1,7 +1,19 @@
 <configure xmlns="http://namespaces.zope.org/zope">
 
-  <!-- Indexers/Metadata -->
+  <!-- GuestConversation indexers -->
+  <adapter factory=".conversation_mode" name="conversation_mode"
+           provides="plone.indexer.interfaces.IIndexer" />
+  <adapter factory=".channel" name="channel"
+           provides="plone.indexer.interfaces.IIndexer" />
+  <adapter factory=".last_activity" name="last_activity"
+           provides="plone.indexer.interfaces.IIndexer" />
 
-  <!-- -*- extra stuff goes here -*- -->
+  <!-- GuestMessage indexers -->
+  <adapter factory=".external_message_id" name="external_message_id"
+           provides="plone.indexer.interfaces.IIndexer" />
+  <adapter factory=".direction" name="direction"
+           provides="plone.indexer.interfaces.IIndexer" />
+  <adapter factory=".classification" name="classification"
+           provides="plone.indexer.interfaces.IIndexer" />
 
 </configure>
