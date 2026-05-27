@@ -10,6 +10,8 @@ an approved fact AND the model returns high confidence on the classification,
 the pipeline can send the response without owner approval.
 """
 
+import json
+
 from estades.delta import _
 from plone.app.textfield import RichText
 from plone.autoform.interfaces import IFormFieldProvider
@@ -20,11 +22,12 @@ from zope.interface import Interface
 from zope.interface import provider
 
 
-# JSON schema used by `kb_approved_facts`. We keep it permissive: the editorial
-# UI in Volto enforces the shape, the backend validates that it's a list and
-# that each element is an object — anything more strict would slow iteration
-# while owners and translators experiment with the format.
-KB_APPROVED_FACTS_SCHEMA = {
+# JSON schema (as a JSON-encoded string — plone.schema.JSONField expects str).
+# We keep it permissive: the editorial UI in Volto enforces the shape, the
+# backend validates that it's a list and that each element is an object —
+# anything more strict would slow iteration while owners and translators
+# experiment with the format.
+KB_APPROVED_FACTS_SCHEMA = json.dumps({
     "type": "array",
     "items": {
         "type": "object",
@@ -38,7 +41,7 @@ KB_APPROVED_FACTS_SCHEMA = {
         },
         "required": ["question", "answer_template"],
     },
-}
+})
 
 
 class IKnowledgeBaseMarker(Interface):
@@ -135,7 +138,6 @@ class IKnowledgeBase(model.Schema):
     )
 
 
-@provider(IFormFieldProvider)
 class KnowledgeBase:
     """Behavior adapter — no extra logic; fields are stored as annotations.
 

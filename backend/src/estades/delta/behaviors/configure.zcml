@@ -7,9 +7,9 @@
   <plone:behavior
       title="Knowledge Base"
       description="Property-level knowledge base used by the messaging IA: WiFi credentials, parking instructions, house rules, owner-approved FAQ facts."
-      provides=".knowledge_base.IKnowledgeBase"
-      marker=".knowledge_base.IKnowledgeBaseMarker"
-      factory=".knowledge_base.KnowledgeBase"
+      provides="estades.delta.behaviors.knowledge_base.IKnowledgeBase"
+      marker="estades.delta.behaviors.knowledge_base.IKnowledgeBaseMarker"
+      factory="estades.delta.behaviors.knowledge_base.KnowledgeBase"
       for="plone.dexterity.interfaces.IDexterityContent"
       />
 
