@@ -27,4 +27,33 @@
   <column value="base_price_mid_season" />
   <column value="base_price_high_season" />
   <column value="palette" />
+
+  <!-- M1: GuestConversation indexes for @conversations and pipeline queries -->
+  <index meta_type="FieldIndex" name="channel">
+    <indexed_attr value="channel" />
+  </index>
+  <index meta_type="FieldIndex" name="conversation_mode">
+    <indexed_attr value="conversation_mode" />
+  </index>
+  <index meta_type="DateIndex" name="last_activity">
+    <indexed_attr value="last_activity" />
+  </index>
+
+  <!-- M1: GuestMessage indexes for dedup and classification queries -->
+  <index meta_type="FieldIndex" name="external_message_id">
+    <indexed_attr value="external_message_id" />
+  </index>
+  <index meta_type="FieldIndex" name="direction">
+    <indexed_attr value="direction" />
+  </index>
+  <index meta_type="FieldIndex" name="classification">
+    <indexed_attr value="classification" />
+  </index>
+
+  <!-- M1: Metadata columns for conversation list rendering -->
+  <column value="channel" />
+  <column value="last_activity" />
+  <column value="direction" />
+  <column value="classification" />
+  <column value="external_message_id" />
 </object>

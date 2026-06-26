@@ -38,4 +38,26 @@
       component=".palettes"
       />
 
+  <!-- M1 messaging IA vocabularies -->
+  <utility
+      name="estades.delta.vocabularies.MessageChannels"
+      component=".message_channels"
+      />
+  <utility
+      name="estades.delta.vocabularies.ConversationModes"
+      component=".conversation_modes"
+      />
+  <utility
+      name="estades.delta.vocabularies.ConversationStates"
+      component=".conversation_states"
+      />
+  <utility
+      name="estades.delta.vocabularies.MessageClassifications"
+      component=".message_classifications"
+      />
+  <utility
+      name="estades.delta.vocabularies.MessageDirections"
+      component=".message_directions"
+      />
+
 </configure>

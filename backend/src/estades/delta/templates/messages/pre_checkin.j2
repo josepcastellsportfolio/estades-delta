@@ -1,0 +1,116 @@
+{% if language == 'ca' -%}
+Hola {{ guest_name }}!
+
+Un recordatori que la teva estada a {{ property_title }} comença demà, {{ check_in_date }}.
+
+🕐 Hora d'entrada: {{ check_in_time | default("15:00", true) }}
+
+{% if parking_instructions -%}
+🚗 Aparcament:
+{{ parking_instructions }}
+{% endif -%}
+
+{% if house_rules_kb -%}
+📌 Normes de la casa:
+{{ house_rules_kb }}
+{% endif -%}
+
+{% if local_recommendations -%}
+🗺️ Recomanacions locals:
+{{ local_recommendations }}
+{% endif -%}
+
+Bon viatge! Si necessites res, respon aquí.
+{% elif language == 'es' -%}
+¡Hola {{ guest_name }}!
+
+Un recordatorio de que tu estancia en {{ property_title }} comienza mañana, {{ check_in_date }}.
+
+🕐 Hora de entrada: {{ check_in_time | default("15:00", true) }}
+
+{% if parking_instructions -%}
+🚗 Aparcamiento:
+{{ parking_instructions }}
+{% endif -%}
+
+{% if house_rules_kb -%}
+📌 Normas de la casa:
+{{ house_rules_kb }}
+{% endif -%}
+
+{% if local_recommendations -%}
+🗺️ Recomendaciones locales:
+{{ local_recommendations }}
+{% endif -%}
+
+¡Buen viaje! Si necesitas algo, responde aquí.
+{% elif language == 'fr' -%}
+Bonjour {{ guest_name }} !
+
+Un rappel : votre séjour à {{ property_title }} commence demain, le {{ check_in_date }}.
+
+🕐 Heure d'arrivée : {{ check_in_time | default("15:00", true) }}
+
+{% if parking_instructions -%}
+🚗 Stationnement :
+{{ parking_instructions }}
+{% endif -%}
+
+{% if house_rules_kb -%}
+📌 Règlement intérieur :
+{{ house_rules_kb }}
+{% endif -%}
+
+{% if local_recommendations -%}
+🗺️ Recommandations locales :
+{{ local_recommendations }}
+{% endif -%}
+
+Bon voyage ! Si vous avez des questions, répondez ici.
+{% elif language == 'de' -%}
+Hallo {{ guest_name }}!
+
+Eine Erinnerung: Ihr Aufenthalt in {{ property_title }} beginnt morgen, am {{ check_in_date }}.
+
+🕐 Check-in-Zeit: {{ check_in_time | default("15:00", true) }}
+
+{% if parking_instructions -%}
+🚗 Parken:
+{{ parking_instructions }}
+{% endif -%}
+
+{% if house_rules_kb -%}
+📌 Hausordnung:
+{{ house_rules_kb }}
+{% endif -%}
+
+{% if local_recommendations -%}
+🗺️ Lokale Empfehlungen:
+{{ local_recommendations }}
+{% endif -%}
+
+Gute Reise! Bei Fragen antworten Sie hier.
+{% else -%}
+Hello {{ guest_name }}!
+
+A reminder that your stay at {{ property_title }} starts tomorrow, {{ check_in_date }}.
+
+🕐 Check-in time: {{ check_in_time | default("15:00", true) }}
+
+{% if parking_instructions -%}
+🚗 Parking:
+{{ parking_instructions }}
+{% endif -%}
+
+{% if house_rules_kb -%}
+📌 House rules:
+{{ house_rules_kb }}
+{% endif -%}
+
+{% if local_recommendations -%}
+🗺️ Local recommendations:
+{{ local_recommendations }}
+{% endif -%}
+
+Safe travels! If you need anything, reply here.
+{% endif -%}

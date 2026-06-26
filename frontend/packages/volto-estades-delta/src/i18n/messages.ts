@@ -192,3 +192,82 @@ export const propertyCalendarMessages = defineMessages({
     defaultMessage: 'Dg',
   },
 });
+
+export const messagingMessages = defineMessages({
+  listTitle: {
+    id: 'estadesDelta.messaging.listTitle',
+    defaultMessage: 'Conversacions amb hostes',
+  },
+  listSubtitle: {
+    id: 'estadesDelta.messaging.listSubtitle',
+    defaultMessage: '{count, plural, =0 {Cap conversa} one {1 conversa} other {# converses}}',
+  },
+  loading: {
+    id: 'estadesDelta.messaging.loading',
+    defaultMessage: 'Carregant…',
+  },
+  loadError: {
+    id: 'estadesDelta.messaging.loadError',
+    defaultMessage: 'No s’han pogut carregar les converses.',
+  },
+  empty: {
+    id: 'estadesDelta.messaging.empty',
+    defaultMessage: 'Encara no hi ha cap conversa.',
+  },
+  colTitle: {
+    id: 'estadesDelta.messaging.colTitle',
+    defaultMessage: 'Conversa',
+  },
+  colChannel: {
+    id: 'estadesDelta.messaging.colChannel',
+    defaultMessage: 'Canal',
+  },
+  colState: {
+    id: 'estadesDelta.messaging.colState',
+    defaultMessage: 'Estat',
+  },
+  colModified: {
+    id: 'estadesDelta.messaging.colModified',
+    defaultMessage: 'Darrera activitat',
+  },
+  prev: {
+    id: 'estadesDelta.messaging.prev',
+    defaultMessage: 'Anterior',
+  },
+  next: {
+    id: 'estadesDelta.messaging.next',
+    defaultMessage: 'Següent',
+  },
+  page: {
+    id: 'estadesDelta.messaging.page',
+    defaultMessage: 'Pàgina {current} de {total}',
+  },
+  backToList: {
+    id: 'estadesDelta.messaging.backToList',
+    defaultMessage: 'Tornar al llistat',
+  },
+  detailSubtitle: {
+    id: 'estadesDelta.messaging.detailSubtitle',
+    defaultMessage: 'Canal: {channel} · Mode: {mode} · Estat: {state}',
+  },
+  noMessages: {
+    id: 'estadesDelta.messaging.noMessages',
+    defaultMessage: 'Aquesta conversa encara no té missatges.',
+  },
+  suggestedResponse: {
+    id: 'estadesDelta.messaging.suggestedResponse',
+    defaultMessage: 'Resposta suggerida per la IA (editable):',
+  },
+  approveSend: {
+    id: 'estadesDelta.messaging.approveSend',
+    defaultMessage: 'Aprovar i enviar',
+  },
+  approving: {
+    id: 'estadesDelta.messaging.approving',
+    defaultMessage: 'Enviant…',
+  },
+  approveError: {
+    id: 'estadesDelta.messaging.approveError',
+    defaultMessage: 'Error en aprovar la resposta',
+  },
+});

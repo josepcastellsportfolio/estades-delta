@@ -1,0 +1,36 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="estades.delta"
+    >
+
+  <include package="plone.restapi" file="meta.zcml" />
+
+  <!-- POST /++api++/@messaging-webhook — inbound guest messages -->
+  <plone:service
+      method="POST"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".messaging_webhook.MessagingWebhookPost"
+      name="@messaging-webhook"
+      permission="zope2.View"
+      />
+
+  <!-- GET /++api++/@conversations — list conversations for the current user -->
+  <plone:service
+      method="GET"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".conversations.ConversationsGet"
+      name="@conversations"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <!-- POST /++api++/@approve-response — owner approves an IA-suggested response -->
+  <plone:service
+      method="POST"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".approve_response.ApproveResponsePost"
+      name="@approve-response"
+      permission="cmf.ModifyPortalContent"
+      />
+
+</configure>

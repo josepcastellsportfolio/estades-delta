@@ -1,0 +1,16 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="estades.delta"
+    >
+
+  <plone:behavior
+      title="Knowledge Base"
+      description="Property-level knowledge base used by the messaging IA: WiFi credentials, parking instructions, house rules, owner-approved FAQ facts."
+      provides="estades.delta.behaviors.knowledge_base.IKnowledgeBase"
+      marker="estades.delta.behaviors.knowledge_base.IKnowledgeBaseMarker"
+      factory="estades.delta.behaviors.knowledge_base.KnowledgeBase"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
+
+</configure>
