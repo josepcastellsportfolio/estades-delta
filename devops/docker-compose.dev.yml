@@ -97,7 +97,7 @@ services:
       CORS_ALLOW_ORIGIN: "http://estadesdelta.local,http://www.estadesdelta.local,http://casa-demo.estadesdelta.local,http://casa-test-riu.estadesdelta.local,http://casa-test-cap.estadesdelta.local"
       # M1 — Messaging IA. See .env.example for full documentation.
       LLM_BASE_URL: "${LLM_BASE_URL:-http://ollama:11434}"
-      LLM_MODEL: "${LLM_MODEL:-llama3.1:8b-instruct}"
+      LLM_MODEL: "${LLM_MODEL:-llama3.1:8b}"
       LLM_TIMEOUT_SECONDS: "${LLM_TIMEOUT_SECONDS:-30}"
       LLM_MAX_RETRIES: "${LLM_MAX_RETRIES:-1}"
       EMBEDDING_DIM: "${EMBEDDING_DIM:-768}"
@@ -140,7 +140,7 @@ services:
   #
   # Ollama serves the self-hosted Llama model used by the LLM adapter. First
   # `up` triggers a model pull (`docker compose exec ollama ollama pull
-  # llama3.1:8b-instruct`); subsequent boots use the cached weights stored in
+  # llama3.1:8b`); subsequent boots use the cached weights stored in
   # the `estadesdelta-ollama-data` volume. The model takes ~30-60s to load
   # into memory on the first generate request after a cold start — tests
   # therefore use MockLLMAdapter via LLM_BASE_URL="" or by injection.
@@ -175,7 +175,7 @@ services:
       REDIS_URL: "redis://redis:6379/0"
       SITE: "Plone"
       LLM_BASE_URL: "${LLM_BASE_URL:-http://ollama:11434}"
-      LLM_MODEL: "${LLM_MODEL:-llama3.1:8b-instruct}"
+      LLM_MODEL: "${LLM_MODEL:-llama3.1:8b}"
       LLM_TIMEOUT_SECONDS: "${LLM_TIMEOUT_SECONDS:-30}"
       LLM_MAX_RETRIES: "${LLM_MAX_RETRIES:-1}"
       EMBEDDING_DIM: "${EMBEDDING_DIM:-768}"
@@ -210,7 +210,7 @@ services:
       REDIS_URL: "redis://redis:6379/0"
       SITE: "Plone"
       LLM_BASE_URL: "${LLM_BASE_URL:-http://ollama:11434}"
-      LLM_MODEL: "${LLM_MODEL:-llama3.1:8b-instruct}"
+      LLM_MODEL: "${LLM_MODEL:-llama3.1:8b}"
       SCHEDULED_MESSAGES_TZ: "${SCHEDULED_MESSAGES_TZ:-Europe/Madrid}"
       CELERY_BROKER_URL: "${CELERY_BROKER_URL:-redis://redis:6379/1}"
       CELERY_RESULT_BACKEND: "${CELERY_RESULT_BACKEND:-redis://redis:6379/2}"
@@ -268,6 +268,44 @@ services:
       - "traefik.http.routers.rt-frontend.service=svc-frontend"
       # Backend API router has a longer matcher (Host && PathPrefix), so it already wins
       # for /++api++/* on those hostnames; no explicit priority needed here.
+    networks:
+      - estadesdelta
+
+  # --- Shared assistant service (ADR-021) ---------------------------------
+  #
+  # The recetia_assistant package in a minimal Django host. Multi-tenant RAG
+  # orchestrator: it owns no embeddings and queries each tenant's own store
+  # over HTTP (federated RAG, ADR-022). For Estades Delta the tenant search URL
+  # is Plone's internal @assistant-search (ADR-024 contract B). LLM is the same
+  # self-hosted Ollama the messaging IA uses.
+  assistant:
+    build:
+      context: ../../../assistant
+      dockerfile: host/Dockerfile
+    image: assistant-service:dev
+    container_name: estadesdelta-assistant
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+    environment:
+      DJANGO_DEBUG: "1"
+      DJANGO_SECRET_KEY: "${ASSISTANT_SECRET_KEY:-dev-insecure-change-me}"
+      ASSISTANT_DB_HOST: "postgres"
+      ASSISTANT_DB_USER: "${DB_USER:-plone}"
+      ASSISTANT_DB_PASSWORD: "${DB_PASSWORD:-plonedev}"
+      ASSISTANT_DB_NAME: "assistant"
+      ASSISTANT_DEFAULT_DB: "assistant_default"
+      LLM_BASE_URL: "${LLM_BASE_URL:-http://ollama:11434}"
+      LLM_MODEL: "${LLM_MODEL:-llama3.1:8b}"
+      # Estades Delta tenant → Plone's internal @assistant-search (root-level
+      # plone.restapi service; internal URL bypasses the Traefik VHM rewrite).
+      ESTADES_SEARCH_URL: "http://backend:8080/Plone/++api++/@assistant-search"
+      ESTADES_SERVICE_TOKEN: "${ASSISTANT_SERVICE_TOKEN:-}"
+    ports:
+      - "8092:8080"
     networks:
       - estadesdelta
 

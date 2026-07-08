@@ -20,3 +20,11 @@ CREATE SCHEMA IF NOT EXISTS umami AUTHORIZATION plone;
 COMMENT ON SCHEMA plone_zodb IS 'RelStorage tables for the Plone ZODB';
 COMMENT ON SCHEMA embeddings IS 'pgvector embeddings for the assistant service (Phase 2+)';
 COMMENT ON SCHEMA umami    IS 'Umami analytics (Phase 1+, reserved)';
+
+-- Databases for the shared assistant service (ADR-021). `assistant` holds the
+-- package's own models (sessions/messages); `assistant_default` holds Django's
+-- auth/contenttypes. CREATE DATABASE has no IF NOT EXISTS, so guard with \gexec.
+SELECT 'CREATE DATABASE assistant OWNER plone'
+    WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'assistant')\gexec
+SELECT 'CREATE DATABASE assistant_default OWNER plone'
+    WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'assistant_default')\gexec
