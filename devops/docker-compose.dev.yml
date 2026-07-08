@@ -185,7 +185,12 @@ services:
       CELERY_BROKER_URL: "${CELERY_BROKER_URL:-redis://redis:6379/1}"
       CELERY_RESULT_BACKEND: "${CELERY_RESULT_BACKEND:-redis://redis:6379/2}"
       EMBEDDINGS_DB_DSN: "${EMBEDDINGS_DB_DSN:-postgresql://plone:plonedev@postgres:5432/plone}"
-    command: ["celery", "-A", "estades.delta.celery_app", "worker", "--loglevel=INFO"]
+    # /app/bin is not on PATH in the prod-config image, so call celery by its
+    # absolute path (the entrypoint's `exec "$@"` inherits the container PATH).
+    # -Q lists every queue the routes in celery_app.py target; without it the
+    # worker would only consume the default (messaging) queue, leaving
+    # scheduled + embeddings (incl. content indexing) tasks unconsumed.
+    command: ["/app/bin/celery", "-A", "estades.delta.celery_app", "worker", "--loglevel=INFO", "-Q", "messaging,scheduled,embeddings"]
     networks:
       - estadesdelta
 
@@ -210,7 +215,7 @@ services:
       CELERY_BROKER_URL: "${CELERY_BROKER_URL:-redis://redis:6379/1}"
       CELERY_RESULT_BACKEND: "${CELERY_RESULT_BACKEND:-redis://redis:6379/2}"
       EMBEDDINGS_DB_DSN: "${EMBEDDINGS_DB_DSN:-postgresql://plone:plonedev@postgres:5432/plone}"
-    command: ["celery", "-A", "estades.delta.celery_app", "beat", "--loglevel=INFO"]
+    command: ["/app/bin/celery", "-A", "estades.delta.celery_app", "beat", "--loglevel=INFO"]
     networks:
       - estadesdelta
 
