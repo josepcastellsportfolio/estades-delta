@@ -298,6 +298,9 @@ services:
     environment:
       DJANGO_DEBUG: "1"
       DJANGO_SECRET_KEY: "${ASSISTANT_SECRET_KEY:-dev-insecure-change-me}"
+      # Must exceed the LLM call timeout (Ollama generate, ~120s on a cold model
+      # load) or gunicorn kills the worker mid-inference and the request 500s.
+      GUNICORN_TIMEOUT: "${GUNICORN_TIMEOUT:-180}"
       ASSISTANT_DB_HOST: "postgres"
       ASSISTANT_DB_USER: "${DB_USER:-plone}"
       ASSISTANT_DB_PASSWORD: "${DB_PASSWORD:-plonedev}"

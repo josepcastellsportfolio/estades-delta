@@ -1,5 +1,6 @@
 import type { ConfigType } from '@plone/registry';
 import MessagingRoute from '../components/Messaging/MessagingRoute';
+import { AssistantRoute } from '../components/Assistant';
 
 /**
  * Register addon-level routes.
@@ -7,9 +8,10 @@ import MessagingRoute from '../components/Messaging/MessagingRoute';
  * /messaging       → conversation list
  * /messaging/*     → conversation detail (path-suffix is the Plone path of
  *                    the GuestConversation object)
+ * /assistant       → editor-facing assistant chat (RAG Q&A with citations)
  *
- * The same component handles both — it branches on window.location.pathname.
- * We register a single exact:false route to capture the prefix.
+ * MessagingRoute handles both messaging paths by branching on
+ * window.location.pathname; we register one exact:false route per prefix.
  */
 export default function installRoutes(config: ConfigType) {
   if (!Array.isArray(config.addonRoutes)) {
@@ -20,6 +22,11 @@ export default function installRoutes(config: ConfigType) {
     {
       path: '/messaging',
       component: MessagingRoute,
+      exact: false,
+    },
+    {
+      path: '/assistant',
+      component: AssistantRoute,
       exact: false,
     },
   ];

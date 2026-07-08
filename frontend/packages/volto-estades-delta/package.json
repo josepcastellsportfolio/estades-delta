@@ -29,6 +29,7 @@
   "addons": [],
   "theme": "",
   "dependencies": {
+    "@stellifyit/assistant-ui-engine": "file:./vendor/assistant-ui-engine",
     "leaflet": "^1.9.4"
   },
   "peerDependencies": {
