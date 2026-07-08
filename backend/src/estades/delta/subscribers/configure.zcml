@@ -1,0 +1,30 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="estades.delta"
+    >
+
+  <!-- Content-event subscribers driving the RAG indexer (ADR-022). Registered
+       for all content (Interface); each handler filters to indexable types. -->
+
+  <!-- Index on publish / de-index on retract (workflow transition). -->
+  <subscriber
+      for="zope.interface.Interface
+           Products.DCWorkflow.interfaces.IAfterTransitionEvent"
+      handler=".on_transition"
+      />
+
+  <!-- Re-index a published object when it is modified. -->
+  <subscriber
+      for="zope.interface.Interface
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".on_modified"
+      />
+
+  <!-- De-index when an object is removed. -->
+  <subscriber
+      for="zope.interface.Interface
+           zope.lifecycleevent.interfaces.IObjectRemovedEvent"
+      handler=".on_removed"
+      />
+
+</configure>

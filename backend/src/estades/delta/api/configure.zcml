@@ -33,4 +33,14 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <!-- POST /++api++/@assistant-search — federated RAG retrieval (ADR-024 contract B).
+       Guarded by the ASSISTANT_SERVICE_TOKEN header check inside the service. -->
+  <plone:service
+      method="POST"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".assistant_search.AssistantSearchPost"
+      name="@assistant-search"
+      permission="zope2.View"
+      />
+
 </configure>

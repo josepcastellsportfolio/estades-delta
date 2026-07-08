@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <import-steps>
   <!--
+    Ensure the pgvector embeddings tables (message + content) exist. Idempotent;
+    no-ops when EMBEDDINGS_DB_DSN is unset. See ADR-022.
+  -->
+  <import-step
+    id="estades.delta.ensure_embeddings_tables"
+    title="Estades Delta: ensure embeddings tables"
+    handler="estades.delta.setuphandlers.embeddings_schema.ensure_embeddings_tables"
+  >
+    Creates the embeddings.message_embeddings and embeddings.content_embeddings
+    tables (pgvector) if missing.
+  </import-step>
+
+  <!--
     Demo content step: creates three test Properties under /ca/properties/
     only when the env var CREATE_DEMO_CONTENT=1 is set.
     Safe to run in production: the guard inside the handler skips creation
