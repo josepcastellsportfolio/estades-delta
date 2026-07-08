@@ -107,6 +107,11 @@ services:
       CELERY_BROKER_URL: "${CELERY_BROKER_URL:-redis://redis:6379/1}"
       CELERY_RESULT_BACKEND: "${CELERY_RESULT_BACKEND:-redis://redis:6379/2}"
       EMBEDDINGS_DB_DSN: "${EMBEDDINGS_DB_DSN:-postgresql://plone:plonedev@postgres:5432/plone}"
+      # Assistant chat proxy (@assistant-chat): Plone forwards editor turns to
+      # the assistant service, authenticating as a service with the shared token.
+      ASSISTANT_CHAT_URL: "${ASSISTANT_CHAT_URL:-http://assistant:8080/api/v1/assistant/chat/}"
+      ASSISTANT_SERVICE_TOKEN: "${ASSISTANT_SERVICE_TOKEN:-dev-assistant-token}"
+      ASSISTANT_TENANT_ID: "${ASSISTANT_TENANT_ID:-estades-delta}"
     labels:
       - "traefik.enable=true"
       - "traefik.constraint-label=estadesdelta-dev"
@@ -300,10 +305,15 @@ services:
       ASSISTANT_DEFAULT_DB: "assistant_default"
       LLM_BASE_URL: "${LLM_BASE_URL:-http://ollama:11434}"
       LLM_MODEL: "${LLM_MODEL:-llama3.1:8b}"
+      # Shared service token, three uses, one value:
+      #  - SERVICE_TOKEN (settings): validates inbound @assistant-chat proxy calls
+      #  - ESTADES_SERVICE_TOKEN: what THIS service presents to Plone @assistant-search
+      #  - the same token the backend presents here (see backend service above)
+      ASSISTANT_SERVICE_TOKEN: "${ASSISTANT_SERVICE_TOKEN:-dev-assistant-token}"
       # Estades Delta tenant → Plone's internal @assistant-search (root-level
       # plone.restapi service; internal URL bypasses the Traefik VHM rewrite).
       ESTADES_SEARCH_URL: "http://backend:8080/Plone/++api++/@assistant-search"
-      ESTADES_SERVICE_TOKEN: "${ASSISTANT_SERVICE_TOKEN:-}"
+      ESTADES_SERVICE_TOKEN: "${ASSISTANT_SERVICE_TOKEN:-dev-assistant-token}"
     ports:
       - "8092:8080"
     networks:

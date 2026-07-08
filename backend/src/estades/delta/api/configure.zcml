@@ -43,4 +43,15 @@
       permission="zope2.View"
       />
 
+  <!-- POST /++api++/@assistant-chat — browser→Plone→assistant chat proxy
+       (ADR-024 contract A). Editor-facing: Plone cookie auth on the way in,
+       service token forwarded to the assistant on the way out. -->
+  <plone:service
+      method="POST"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".assistant_chat.AssistantChatPost"
+      name="@assistant-chat"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>
