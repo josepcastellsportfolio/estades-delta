@@ -243,6 +243,12 @@ interface HttpAssistantClientOptions {
      * is sent; 'omit' (default) for a token-based direct call.
      */
     credentials?: RequestCredentials;
+    /**
+     * Optional RAG scope sent with every turn — restricts retrieval to one
+     * source object (e.g. the property a guest is viewing). The service filters
+     * by it; omit for unscoped (whole-tenant) search.
+     */
+    sourceUid?: string;
 }
 declare class HttpAssistantClient implements AssistantClient {
     private readonly opts;

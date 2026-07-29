@@ -305,4 +305,12 @@ export const assistantMessages = defineMessages({
     id: 'estadesDelta.assistant.stop',
     defaultMessage: 'Aturar',
   },
+  openLabel: {
+    id: 'estadesDelta.assistant.openLabel',
+    defaultMessage: 'Obrir l’assistent',
+  },
+  close: {
+    id: 'estadesDelta.assistant.close',
+    defaultMessage: 'Tancar',
+  },
 });

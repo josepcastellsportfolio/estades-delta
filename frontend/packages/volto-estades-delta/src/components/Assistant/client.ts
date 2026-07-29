@@ -8,10 +8,14 @@
  */
 import { HttpAssistantClient } from '@stellifyit/assistant-ui-engine';
 
-/** A fresh client per conversation (it threads session_id internally). */
-export function createAssistantClient(): HttpAssistantClient {
+/**
+ * A fresh client per conversation (it threads session_id internally).
+ * `sourceUid` scopes every turn's RAG to the property being viewed.
+ */
+export function createAssistantClient(sourceUid?: string): HttpAssistantClient {
   return new HttpAssistantClient({
     chatPath: '/++api++/@assistant-chat',
     credentials: 'same-origin',
+    sourceUid,
   });
 }

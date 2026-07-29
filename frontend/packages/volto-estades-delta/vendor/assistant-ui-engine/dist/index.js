@@ -83,6 +83,7 @@ var HttpAssistantClient = class {
   async send(turn, _history, signal) {
     const body = { query: turn.message };
     if (this.sessionId) body.session_id = this.sessionId;
+    if (this.opts.sourceUid) body.source_uid = this.opts.sourceUid;
     const res = await this.fetchFn(this.opts.chatPath, {
       method: "POST",
       headers: { "Content-Type": "application/json", ...this.opts.headers },

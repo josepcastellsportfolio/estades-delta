@@ -33,19 +33,20 @@ export interface UseAssistantChat {
   cancelSend: () => void;
 }
 
-export function useAssistantChat(): UseAssistantChat {
+export function useAssistantChat(sourceUid?: string): UseAssistantChat {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Registry is cheap and pure. The client is created lazily on first send
-  // (client-only) so we never touch `fetch` during SSR render.
+  // (client-only) so we never touch `fetch` during SSR render. It's scoped to
+  // the property in view via sourceUid.
   const registry = useMemo(() => new ActionRegistry(), []);
   const clientRef = useRef<ReturnType<typeof createAssistantClient> | null>(null);
   const getClient = useCallback(() => {
-    if (!clientRef.current) clientRef.current = createAssistantClient();
+    if (!clientRef.current) clientRef.current = createAssistantClient(sourceUid);
     return clientRef.current;
-  }, []);
+  }, [sourceUid]);
   const abortRef = useRef<AbortController | null>(null);
   const lastSendRef = useRef<number>(0);
 

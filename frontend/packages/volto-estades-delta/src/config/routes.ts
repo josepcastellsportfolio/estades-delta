@@ -1,6 +1,5 @@
 import type { ConfigType } from '@plone/registry';
 import MessagingRoute from '../components/Messaging/MessagingRoute';
-import { AssistantRoute } from '../components/Assistant';
 
 /**
  * Register addon-level routes.
@@ -8,10 +7,12 @@ import { AssistantRoute } from '../components/Assistant';
  * /messaging       → conversation list
  * /messaging/*     → conversation detail (path-suffix is the Plone path of
  *                    the GuestConversation object)
- * /assistant       → editor-facing assistant chat (RAG Q&A with citations)
  *
  * MessagingRoute handles both messaging paths by branching on
  * window.location.pathname; we register one exact:false route per prefix.
+ *
+ * The assistant is NOT a route — it's a floating widget mounted via appExtras
+ * (see config/assistant.ts) that appears on property microsites for guests.
  */
 export default function installRoutes(config: ConfigType) {
   if (!Array.isArray(config.addonRoutes)) {
@@ -22,11 +23,6 @@ export default function installRoutes(config: ConfigType) {
     {
       path: '/messaging',
       component: MessagingRoute,
-      exact: false,
-    },
-    {
-      path: '/assistant',
-      component: AssistantRoute,
       exact: false,
     },
   ];
