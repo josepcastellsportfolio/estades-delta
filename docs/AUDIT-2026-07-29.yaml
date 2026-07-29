@@ -1,0 +1,231 @@
+# Auditoría técnica pre-producción — resumen estructurado
+# Informe completo: docs/AUDIT-2026-07-29.md
+# Modo solo lectura: no se modificó ningún fichero del proyecto.
+
+proyecto: "Estades Delta"
+fecha_auditoria: "2026-07-29"
+commit_auditado: "1a5ba0d"
+rama: "feat/content-rag-tenant-vector"
+ficheros_sin_commitear: 25
+
+# --- Campos específicos solicitados -----------------------------------------
+plone_version: "6.1.4"          # pin exacto, backend/pyproject.toml:33
+volto_version: "18.33.1"        # devops/docker-compose.dev.yml:265
+zope_version: "6.1"
+
+# ZODB vive en PostgreSQL vía RelStorage — NO hay Data.fs en disco.
+# Se reportan los equivalentes reales, medidos con du -sh sobre el volumen Docker.
+data_fs_mb: 0                   # NO APLICA: RelStorage, sin Data.fs de fichero
+postgres_zodb_mb: 84.3          # medido: volumen estadesdelta-pg-data completo
+postgres_base_mb: 51.4          # medido: /var/lib/postgresql/data/base
+blobstorage_mb: 0               # NO DETERMINADO: shared-blob-dir sin fijar (relstorage.conf:28)
+                                # afecta a la estrategia de backup — resolver antes de desplegar
+ram_zope_mb: 167                # MEDIDO en reposo con docker stats (no estimado)
+ram_zope_mb_bajo_carga_est: 450 # SOSPECHA: extrapolado
+caching_configurado: true       # plone.app.caching + with-caching-proxy en metadata.xml:6-7
+                                # ICacheSettings.enabled=True en registry/
+                                # PERO: el proxy (Varnish/purger) NO existe en el compose desplegable
+caching_efectivo: false         # matiz crítico: purga apunta a http://purger, host inexistente
+datos_reales_a_anonimizar: false # sólo 3 Properties de demo (setuphandlers/demo_content.py)
+
+# --- Estado general ---------------------------------------------------------
+desplegable_hoy: false
+bloqueadores_duros: 3
+veredicto: >-
+  El código de aplicación está por encima de la media (adapters con Protocol+Mock,
+  índices de catálogo correctos, HNSW justificado, rate limiting implementado,
+  IDOR bien defendido). El problema es la capa de despliegue, que no existe.
+  Con las acciones 1-5 del top-10 (~2-3 días) pasa a desplegable.
+
+# --- Inventario -------------------------------------------------------------
+loc:
+  backend_src: {ficheros: 46, lineas: 3947}
+  backend_tests: {ficheros: 22, lineas: 1135}
+  frontend_src: {ficheros: 134, lineas: 9722}
+
+servicios: [traefik, postgres, redis, backend, frontend, worker, beat, ollama, assistant]
+
+entrypoints:
+  plone: "waitress egg:Zope#main, threads=2"        # /app/etc/zope.ini:9 (leído del contenedor)
+  worker: "celery worker -Q messaging,scheduled,embeddings"  # sin --concurrency
+  beat: "celery beat"
+  assistant: "gunicorn --workers 2 --timeout 180"
+  frontend: "Volto SSR :3000"
+
+# --- Riesgos ordenados por impacto bajo carga -------------------------------
+riesgos_criticos:
+  - id: E.0
+    titulo: "threads=2 en waitress con endpoint LLM síncrono de 120s"
+    evidencia: "/app/etc/zope.ini:9 + api/assistant_chat.py:44,123"
+    impacto: "2 usuarios concurrentes en el chat dejan TODO Plone sin servir"
+    severidad: critica
+  - id: G.1
+    titulo: "@messaging-webhook permite escritura anónima sin auth efectiva"
+    evidencia: "api/configure.zcml:15-21 (zope2.View) + messaging_webhook.py:29-35"
+    impacto: "HMAC opcional y vacío por defecto: cualquiera crea contenido ZODB y encola tareas LLM"
+    severidad: critica
+  - id: F.1
+    titulo: "Ollama (5.5-6.5 GB) no cabe en el VPS objetivo"
+    evidencia: "volumen medido 4.8 GB; CX32 = 8 GB total"
+    impacto: "OOM garantizado; sin mem_limit se lleva por delante los otros proyectos del VPS"
+    severidad: critica
+  - id: E.4
+    titulo: "Deadlock potencial Plone -> assistant -> Plone (@assistant-search)"
+    evidencia: "assistant_chat.py:123 + docker-compose.dev.yml:320"
+    impacto: "con threads=2, ambos hilos pueden bloquearse mutuamente hasta timeout"
+    severidad: alta
+  - id: E.7
+    titulo: "Sin pool de conexiones a Postgres"
+    evidencia: "embedding_store.py:234-237 y :67-70 (psycopg2.connect por llamada)"
+    impacto: "~35-40 conexiones en reposo; max_connections compartido con otros proyectos"
+    severidad: alta
+  - id: E.9
+    titulo: "Race en replace_document (DELETE+INSERT sin lock)"
+    evidencia: "embedding_store.py:287-317, UNIQUE en :266"
+    impacto: "dos index_content concurrentes -> UniqueViolation -> tarea muere sin retry"
+    severidad: media
+  - id: E.8
+    titulo: "_check_and_mark_sent reenvía ante fallo transitorio"
+    evidencia: "tasks/scheduled.py:219-221 (except -> return False)"
+    impacto: "docstring dice at-most-once; el código es at-least-once. Mensaje duplicado al huésped"
+    severidad: media
+  - id: E.5
+    titulo: "max_retries declarado pero self.retry() nunca se llama"
+    evidencia: "tasks/pipeline.py:31,79"
+    impacto: "no hay retry storm: hay pérdida silenciosa de mensajes"
+    severidad: media
+
+# --- Production readiness ---------------------------------------------------
+production_readiness:
+  debug_desactivable: parcial       # Plone ok (DEBUG_MODE=off medido); assistant default DJANGO_DEBUG=1
+  secretos_fuera_repo: false        # FCuYlsoLfNgX committeada desde 06b492b, presente en HEAD
+  allowed_hosts_restringible: false # assistant default "*" (settings.py:28)
+  cors_restringible: true
+  config_dev_prod_separada: false
+  migraciones_al_dia: true
+  dockerfile_multistage: true
+  docker_compose_prod: false        # NO EXISTE
+  wsgi_produccion: true             # waitress + gunicorn
+  workers_configurable: parcial     # assistant sí; Plone NO (threads hardcoded en imagen)
+  healthcheck_endpoint: parcial     # backend, worker, beat y assistant SIN healthcheck
+  logging_estructurado: parcial     # stdout sí, JSON no, sin request-id
+  gestion_estaticos: true
+  error_tracking_sentry: false      # NO EXISTE
+  graceful_shutdown: parcial        # celery sin time_limit ni max-tasks-per-child
+  limites_memoria_cpu: false        # NO EXISTE ningún mem_limit — crítico en VPS compartido
+
+# --- Huella de recursos (medido vs estimado) --------------------------------
+recursos:
+  medido_en_reposo_mb:
+    plone_backend: 167
+    postgres: 25.4
+    redis: 3.2
+  estimado_bajo_carga_mb:           # SOSPECHA: extrapolaciones
+    plone_backend: 450
+    volto_frontend: 500
+    celery_worker: 800              # 4 procesos x ~170 MB
+    ollama: 6000                    # el mayor consumidor, con diferencia
+    assistant: 300
+    postgres: 300
+  volumenes_medidos_mb:
+    ollama_data: 4800
+    pg_data: 84.3
+    redis_data: 0
+  imagenes_docker_total_gb: 12.4
+  ram_minima_sin_ollama_gb: 6
+  ram_minima_con_ollama_gb: 16
+  componente_mas_memoria: "ollama (llama3.1:8b) — más que todo el resto junto"
+
+# --- Tests y CI (ejecución real) --------------------------------------------
+tests:
+  backend_total: 93
+  backend_passed: 80
+  backend_failed: 1
+  backend_errors: 12
+  frontend_total: 83
+  frontend_ejecutados: false        # pnpm excedió timeout
+  causa_raiz_fallos: "bugs de test, no de producto"
+  detalle_fallos:
+    - "test_behavior_is_registered no toma fixture 'integration' -> ZCML no cargado"
+    - "12 errores: transaction.commit() dentro de IntegrationTesting rompe aislamiento"
+  areas_sin_cobertura:
+    - "api/assistant_chat.py — 0 tests (el endpoint público más peligroso)"
+    - "api/assistant_search.py — 0 tests (no se testea el chequeo de token)"
+    - "api/_ratelimit.py — 0 tests (lógica de seguridad nueva)"
+    - "api/messaging_webhook.py — sólo HMAC aislado, no el endpoint"
+ci:
+  existe: true
+  ultimo_commit_workflows: "2026-05-11"   # 2.5 meses de desfase
+  deploy_workflow: false                  # NO EXISTE
+  probablemente_en_rojo: true             # SOSPECHA: no verificado en GitHub Actions
+
+# --- Arranque en frío -------------------------------------------------------
+arranque_en_frio:
+  tercero_puede_levantarlo: false
+  bloqueadores:
+    - "context ../../../assistant apunta FUERA del repo (/home/jcastells/projects/assistant, otro repo Git)"
+    - "DNS local *.estadesdelta.local no automatizado"
+    - "pull de nomic-embed-text no documentado en ningún sitio; sin él todo el RAG falla"
+  env_vars_backend: 20
+  env_vars_no_documentadas: 8
+  fixtures_disponibles: true        # CREATE_DEMO_CONTENT=1 -> 3 Properties
+
+# --- Seguridad --------------------------------------------------------------
+seguridad:
+  secretos_en_historico: true
+  secreto_detectado: "FCuYlsoLfNgX (password Postgres), commit 06b492b, aún en HEAD"
+  ficheros_afectados:
+    - "docker-compose.yml:84,132"
+    - "devops/stacks/estadesdelta.local.yml:150,199"
+  env_trackeado_en_git: false       # correcto
+  endpoints_sin_proteger: ["@messaging-webhook", "@assistant-search (si token vacío)"]
+  idor_defendido: true              # assistant_chat.py:68-74 valida review_state=published
+  sql_crudo_seguro: true            # f-string sólo con literales; valores parametrizados
+  rate_limiting_parcial: true       # sólo @assistant-chat; falla abierto si Redis cae
+  cves_revisadas: false             # NO VERIFICADO: pnpm audit timeout, pip-audit ausente
+
+# --- Estado funcional -------------------------------------------------------
+features:
+  completas: [content_types, catalog_indexes, routing_multitenant, rag_federado, rate_limiting]
+  a_medias:
+    widget_assistant: "6 ficheros sin commitear, nunca probado en vivo"
+    beds24: "stub puro (adapters/beds24.py:61-104)"
+    stripe: "stub puro (adapters/stripe_connect.py:63-113)"
+    messaging: "sólo stub; cualquier otro adapter cae al stub con warning, no falla"
+  muertas:
+    - "docker-compose.yml raíz — boilerplate cookiecutter con credenciales"
+    - "devops/stacks/estadesdelta.local.yml — no referenciado"
+    - "varnish — VCL escrito pero sólo lo usa el compose muerto"
+  todos_fixmes_encontrados: 0       # barrido limpio, inusual y positivo
+  commits_sin_mergear_a_main: 6
+  ramas_remotas_sin_mergear: 3
+
+# --- Top 10 acciones (impacto/esfuerzo) -------------------------------------
+top_acciones:
+  - {n: 1,  accion: "Subir threads waitress 2 -> 8-12", esfuerzo: S, riesgo: bajo}
+  - {n: 2,  accion: "Cerrar @messaging-webhook (HMAC obligatorio + permiso)", esfuerzo: S, riesgo: bajo}
+  - {n: 3,  accion: "mem_limit/cpus en todos los servicios", esfuerzo: S, riesgo: bajo}
+  - {n: 4,  accion: "Sacar Ollama del VPS o bajar a modelo 3B", esfuerzo: S, riesgo: medio}
+  - {n: 5,  accion: "@assistant-chat asíncrono o timeout 20-30s", esfuerzo: M, riesgo: medio}
+  - {n: 6,  accion: "Límites Celery (concurrency, time_limit, max-tasks-per-child)", esfuerzo: S, riesgo: bajo}
+  - {n: 7,  accion: "Rate limit + token obligatorio en @assistant-search", esfuerzo: S, riesgo: bajo}
+  - {n: 8,  accion: "Activar Varnish o desactivar with-caching-proxy", esfuerzo: M, riesgo: medio}
+  - {n: 9,  accion: "Arreglar 13 tests rotos y CI", esfuerzo: S, riesgo: ninguno}
+  - {n: 10, accion: "Borrar ficheros muertos con credenciales + rotar", esfuerzo: S, riesgo: bajo}
+
+# --- Features candidatas para portfolio -------------------------------------
+features_candidatas:
+  - {nombre: "Panel de observabilidad del RAG", esfuerzo: M, apoyo: "embedding_store.py, assistant_search.py"}
+  - {nombre: "Evaluación automática del asistente (golden set)", esfuerzo: M, apoyo: "MockEmbedder determinista, tests"}
+  - {nombre: "Modo degradado con circuit breaker", esfuerzo: M, apoyo: "llm.py factory, knowledge_base, _ratelimit"}
+  - {nombre: "Sincronización iCal bidireccional", esfuerzo: L, apoyo: "booking.py, tasks/scheduled.py, beds24 Protocol"}
+  - {nombre: "Panel de ahorro vs Booking por propietario", esfuerzo: M, apoyo: "booking.py comisiones, stripe compute_commission"}
+
+# --- Límites de esta auditoría ----------------------------------------------
+no_verificado:
+  - "CVEs de dependencias (pnpm audit timeout, pip-audit ausente)"
+  - "83 tests de frontend localizados pero no ejecutados"
+  - "Estado real de GitHub Actions"
+  - "RAM bajo carga (sólo se midió en reposo)"
+  - "Ollama y assistant en ejecución (no se levantaron)"
+  - "shared-blob-dir: blobs en disco o en Postgres — afecta a la estrategia de backup"
