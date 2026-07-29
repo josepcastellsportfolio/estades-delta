@@ -44,14 +44,16 @@
       />
 
   <!-- POST /++api++/@assistant-chat — browser→Plone→assistant chat proxy
-       (ADR-024 contract A). Editor-facing: Plone cookie auth on the way in,
-       service token forwarded to the assistant on the way out. -->
+       (ADR-024 contract A). Guest-facing: a public visitor on a property
+       microsite chats about the property. zope2.View (anonymous-allowed, like
+       @assistant-search); abuse is gated by a per-IP rate limit inside the
+       service, and the LLM service token is added server-side. -->
   <plone:service
       method="POST"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".assistant_chat.AssistantChatPost"
       name="@assistant-chat"
-      permission="cmf.ModifyPortalContent"
+      permission="zope2.View"
       />
 
 </configure>

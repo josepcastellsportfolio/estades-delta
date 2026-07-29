@@ -1,16 +1,19 @@
 """POST /++api++/@assistant-chat — browser→Plone→assistant chat proxy.
 
 The outward half of the assistant integration (ADR-024 contract A, consumed
-side). A logged-in editor's browser calls this same-origin, so Plone's own auth
-cookie authenticates the request — no JWT in the browser. Plone then forwards
-the turn to the shared assistant service, authenticating as a *service* with a
-shared token and forwarding the editor's identity + tenant so the assistant's
-per-(tenant, user) session isolation still holds (ADR-023).
+side). GUEST-facing: an anonymous visitor on a property microsite calls this
+same-origin and asks about the property. Plone forwards the turn to the shared
+assistant service, authenticating as a *service* with a shared token and
+forwarding the visitor's identity (0 for anonymous) + tenant (ADR-023). This
+keeps the JWT-only assistant service off the public browser surface — the only
+thing the browser talks to is Plone.
 
-This keeps the JWT-only assistant service off the public browser surface: the
-only thing the browser talks to is Plone, which it already trusts.
+Because it's public and proxies an LLM, it is abuse-gated by a per-IP rate
+limit (Plone sees the real client IP; the downstream service does not). The
+optional `source_uid` scopes RAG to the property being viewed, validated to be
+a published object so a guest can't probe unpublished content.
 
-Body:  {query: str, session_id?: str}
+Body:  {query: str, session_id?: str, source_uid?: str}
 Reply: the assistant's chat response verbatim
        {session_id, response, agent_type, structured_data, sources, ...}
 
@@ -19,6 +22,7 @@ Config (env):
                          (default http://assistant:8080/api/v1/assistant/chat/)
   ASSISTANT_SERVICE_TOKEN shared token presented as X-Assistant-Token
   ASSISTANT_TENANT_ID    tenant slug forwarded as X-Tenant-Id (default estades-delta)
+  ASSISTANT_CHAT_RATE_LIMIT / _WINDOW  per-IP requests per window seconds
 """
 
 from __future__ import annotations
@@ -28,6 +32,7 @@ import os
 import zlib
 
 from estades.delta import logger
+from estades.delta.api._ratelimit import is_rate_limited
 from plone.restapi.services import Service
 
 import httpx
@@ -37,6 +42,10 @@ import plone.api
 DEFAULT_CHAT_URL = "http://assistant:8080/api/v1/assistant/chat/"
 DEFAULT_TENANT = "estades-delta"
 TIMEOUT_SECONDS = float(os.environ.get("ASSISTANT_CHAT_TIMEOUT", "120"))
+# Per-IP rate limit for the public guest widget (abuse control for the anon
+# LLM endpoint). Tunable via env; generous enough for a real conversation.
+RATE_LIMIT = int(os.environ.get("ASSISTANT_CHAT_RATE_LIMIT", "20"))
+RATE_WINDOW = int(os.environ.get("ASSISTANT_CHAT_RATE_WINDOW", "60"))
 
 
 def _forwarded_user_id() -> int:
@@ -55,7 +64,21 @@ def _forwarded_user_id() -> int:
 
 class AssistantChatPost(Service):
 
+    @staticmethod
+    def _is_published_uid(uid: str) -> bool:
+        """True if `uid` is a published content object (guest-visible)."""
+        try:
+            brains = plone.api.content.find(UID=uid, review_state="published")
+        except Exception:  # noqa: BLE001 — bad UID / catalog hiccup → treat as not scoped
+            return False
+        return len(brains) > 0
+
     def reply(self):
+        # Per-IP abuse gate for the public guest endpoint.
+        if is_rate_limited(self.request, "assistant-chat", RATE_LIMIT, RATE_WINDOW):
+            self.request.response.setStatus(429)
+            return {"error": "Too many requests. Please slow down."}
+
         raw_body = self.request.get("BODY")
         if isinstance(raw_body, bytes):
             try:
@@ -78,6 +101,12 @@ class AssistantChatPost(Service):
         session_id = data.get("session_id")
         if session_id:
             payload["session_id"] = session_id
+        # Property scope: constrain RAG to the content the visitor is viewing.
+        # Only honour a UID that resolves to a *published* object, so a guest
+        # can't probe unpublished content by guessing UIDs.
+        source_uid = data.get("source_uid")
+        if source_uid and self._is_published_uid(source_uid):
+            payload["source_uid"] = source_uid
 
         chat_url = os.environ.get("ASSISTANT_CHAT_URL", DEFAULT_CHAT_URL)
         token = os.environ.get("ASSISTANT_SERVICE_TOKEN", "")

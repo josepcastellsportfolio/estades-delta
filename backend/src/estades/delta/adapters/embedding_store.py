@@ -202,9 +202,16 @@ class IContentEmbeddingStore(Protocol):
         ...
 
     def search(
-        self, embedding: list[float], limit: int = 5, min_score: float = 0.0
+        self,
+        embedding: list[float],
+        limit: int = 5,
+        min_score: float = 0.0,
+        source_uid: str | None = None,
     ) -> list[RetrievedChunk]:
-        """Return the closest chunks with cosine similarity >= min_score."""
+        """Return the closest chunks with cosine similarity >= min_score.
+
+        When `source_uid` is given, restrict the search to that source object.
+        """
         ...
 
 
@@ -325,24 +332,33 @@ class PgvectorContentStore:
         return deleted
 
     def search(
-        self, embedding: list[float], limit: int = 5, min_score: float = 0.0
+        self,
+        embedding: list[float],
+        limit: int = 5,
+        min_score: float = 0.0,
+        source_uid: str | None = None,
     ) -> list[RetrievedChunk]:
         # cosine similarity = 1 - (embedding <=> query). pgvector's cosine
         # distance is in [0, 2], so similarity is in [-1, 1]. Only apply a
         # distance ceiling when a positive floor is requested; with min_score
         # <= 0 we return the nearest k regardless of how weak (true KNN), so
         # the caller's "no consta" decision is driven solely by min_score.
+        # `source_uid` scopes the search to one content object (a property the
+        # guest is viewing) when provided.
         self._ensure_once()
-        # One %s for the SELECT distance; the WHERE (only when a positive floor
-        # is set) adds its own embedding + ceiling params; LIMIT is last.
+        # One %s for the SELECT distance; each optional clause adds its own
+        # params; LIMIT is last. All conditions are fixed strings; every value
+        # goes through psycopg2 parameters.
         params: list = [str(embedding)]
-        where = ""
+        clauses: list[str] = []
         if min_score > 0:
-            where = "WHERE embedding <=> %s::vector <= %s"
+            clauses.append("embedding <=> %s::vector <= %s")
             params.extend([str(embedding), 1.0 - min_score])
+        if source_uid:
+            clauses.append("source_uid = %s")
+            params.append(source_uid)
+        where = f"WHERE {' AND '.join(clauses)}" if clauses else ""
         params.append(limit)
-        # `where` is a hardcoded constant (empty or a fixed clause), never user
-        # input; all values go through psycopg2 parameters. Safe to interpolate.
         with self._connect() as conn, conn.cursor() as cur:
             cur.execute(
                 f"""
@@ -352,7 +368,7 @@ class PgvectorContentStore:
                     {where}
                     ORDER BY distance
                     LIMIT %s
-                    """,  # noqa: S608 — `where` is a trusted constant, values are parametrized
+                    """,  # noqa: S608 — clauses are trusted constants, values parametrized
                 params,
             )
             return [
@@ -387,10 +403,16 @@ class MockContentStore:
         return len(removed)
 
     def search(
-        self, embedding: list[float], limit: int = 5, min_score: float = 0.0
+        self,
+        embedding: list[float],
+        limit: int = 5,
+        min_score: float = 0.0,
+        source_uid: str | None = None,
     ) -> list[RetrievedChunk]:
         results: list[RetrievedChunk] = []
-        for source_uid, chunks in self._store.items():
+        for doc_uid, chunks in self._store.items():
+            if source_uid and doc_uid != source_uid:
+                continue
             for c in chunks:
                 stored = c["embedding"]
                 dot = sum(a * b for a, b in zip(embedding, stored, strict=False))
@@ -404,7 +426,7 @@ class MockContentStore:
                 results.append(
                     RetrievedChunk(
                         text=c["text"],
-                        source_uid=source_uid,
+                        source_uid=doc_uid,
                         url=c.get("url", ""),
                         title=c.get("title", ""),
                         portal_type=c.get("portal_type", ""),

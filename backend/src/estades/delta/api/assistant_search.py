@@ -6,7 +6,8 @@ with, runs a KNN over its own content_embeddings store, and returns the top-k
 chunks with citation metadata (source_uid, url, title). Plone owns the vector
 (ADR-022) — the assistant never sees the embeddings or the model.
 
-Body: {query: str, k?: int, min_score?: float, language?: str}
+Body: {query: str, k?: int, min_score?: float, language?: str, source_uid?: str}
+      source_uid scopes the KNN to one content object (a property being viewed).
 Reply: {chunks: [{text, source_uid, url, title, portal_type, chunk_index, score}]}
 
 Auth: a shared service token (ASSISTANT_SERVICE_TOKEN) presented in the
@@ -62,16 +63,19 @@ class AssistantSearchPost(Service):
 
         k = min(int(data.get("k", DEFAULT_K)), MAX_K)
         min_score = float(data.get("min_score", DEFAULT_MIN_SCORE))
+        source_uid = data.get("source_uid") or None
 
         embedder = get_embedder()
         store = get_content_store()
 
         query_embedding = embedder.embed(query)
-        chunks = store.search(query_embedding, limit=k, min_score=min_score)
+        chunks = store.search(
+            query_embedding, limit=k, min_score=min_score, source_uid=source_uid
+        )
 
         logger.info(
-            "assistant-search: query=%r k=%d min_score=%.2f -> %d chunks",
-            query[:80], k, min_score, len(chunks),
+            "assistant-search: query=%r k=%d min_score=%.2f source_uid=%s -> %d chunks",
+            query[:80], k, min_score, source_uid, len(chunks),
         )
 
         return {

@@ -116,3 +116,19 @@ def test_positive_floor_gates_negative_matches():
 
 def test_search_empty_store():
     assert MockContentStore().search([1.0, 0.0], limit=5) == []
+
+
+def test_source_uid_scopes_search_to_one_object():
+    # A guest viewing one property should only get that property's chunks.
+    store = MockContentStore()
+    store.replace_document("prop-1", [_chunk(0, "riumar wifi", [1.0, 0.0])])
+    store.replace_document("prop-2", [_chunk(0, "other house wifi", [1.0, 0.0])])
+
+    # Without scope: both properties' chunks are candidates.
+    unscoped = store.search([1.0, 0.0], limit=5)
+    assert {r.source_uid for r in unscoped} == {"prop-1", "prop-2"}
+
+    # Scoped to prop-1: only its chunk comes back.
+    scoped = store.search([1.0, 0.0], limit=5, source_uid="prop-1")
+    assert [r.source_uid for r in scoped] == ["prop-1"]
+    assert scoped[0].text == "riumar wifi"
