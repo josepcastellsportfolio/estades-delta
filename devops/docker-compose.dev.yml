@@ -93,8 +93,11 @@ services:
       RELSTORAGE_DSN: "dbname='${DB_NAME:-plone}' user='${DB_USER:-plone}' host='postgres' password='${DB_PASSWORD:-plonedev}' port='5432'"
       REDIS_URL: "redis://redis:6379/0"
       SITE: "Plone"
-      # Volto frontend talks to backend at this internal URL.
-      CORS_ALLOW_ORIGIN: "http://estadesdelta.local,http://www.estadesdelta.local,http://casa-demo.estadesdelta.local,http://casa-test-riu.estadesdelta.local,http://casa-test-cap.estadesdelta.local"
+      # Volto frontend talks to backend at this internal URL. Origins are listed
+      # both bare and with :8081 because the browser's actual origin includes the
+      # Traefik port (Apache owns :80 on the host, so all dev URLs use :8081) —
+      # without the :8081 variants, cross-origin calls like @login are blocked.
+      CORS_ALLOW_ORIGIN: "http://estadesdelta.local,http://estadesdelta.local:8081,http://www.estadesdelta.local,http://www.estadesdelta.local:8081,http://casa-demo.estadesdelta.local,http://casa-demo.estadesdelta.local:8081,http://casa-test-riu.estadesdelta.local,http://casa-test-riu.estadesdelta.local:8081,http://casa-test-cap.estadesdelta.local,http://casa-test-cap.estadesdelta.local:8081"
       # M1 — Messaging IA. See .env.example for full documentation.
       LLM_BASE_URL: "${LLM_BASE_URL:-http://ollama:11434}"
       LLM_MODEL: "${LLM_MODEL:-llama3.1:8b}"
