@@ -1,5 +1,4 @@
 import PropertyGalleryView from './PropertyGalleryView';
-import PropertyGalleryEdit from './PropertyGalleryEdit';
 import PropertyGallerySchema from './schema';
 
 export const PROPERTY_GALLERY_BLOCK_ID = 'propertyGallery';
@@ -10,7 +9,6 @@ export const propertyGalleryBlock = {
   icon: undefined,
   group: 'estadesDelta',
   view: PropertyGalleryView,
-  edit: PropertyGalleryEdit,
   blockSchema: PropertyGallerySchema,
   restricted: false,
   mostUsed: false,

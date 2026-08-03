@@ -1,5 +1,4 @@
 import PropertyHeroView from './PropertyHeroView';
-import PropertyHeroEdit from './PropertyHeroEdit';
 import PropertyHeroSchema from './schema';
 
 export const PROPERTY_HERO_BLOCK_ID = 'propertyHero';
@@ -10,7 +9,6 @@ export const propertyHeroBlock = {
   icon: undefined,
   group: 'estadesDelta',
   view: PropertyHeroView,
-  edit: PropertyHeroEdit,
   blockSchema: PropertyHeroSchema,
   restricted: false,
   mostUsed: true,

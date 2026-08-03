@@ -7,6 +7,8 @@
  */
 import React from 'react';
 import PropertyCalendarView from './PropertyCalendarView';
+import BlockSidebar from '../../components/BlockSidebar';
+import PropertyCalendarSchema from './schema';
 import type { PropertyCalendarData } from './schema';
 
 interface PropertyCalendarEditProps {
@@ -16,15 +18,15 @@ interface PropertyCalendarEditProps {
   selected?: boolean;
 }
 
-const PropertyCalendarEdit: React.FC<PropertyCalendarEditProps> = ({
-  data,
-  content,
-  selected,
-}) => {
+const PropertyCalendarEdit: React.FC<PropertyCalendarEditProps> = (props) => {
+  const { data, content, selected } = props;
   return (
-    <div style={{ opacity: selected ? 1 : 0.85, pointerEvents: 'none' }}>
-      <PropertyCalendarView data={data} content={content} />
-    </div>
+    <>
+      <div style={{ opacity: selected ? 1 : 0.85, pointerEvents: 'none' }}>
+        <PropertyCalendarView data={data} content={content} />
+      </div>
+      <BlockSidebar {...props} schema={PropertyCalendarSchema} />
+    </>
   );
 };
 

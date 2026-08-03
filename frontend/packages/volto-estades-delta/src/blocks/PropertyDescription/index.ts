@@ -1,5 +1,4 @@
 import PropertyDescriptionView from './PropertyDescriptionView';
-import PropertyDescriptionEdit from './PropertyDescriptionEdit';
 import PropertyDescriptionSchema from './schema';
 
 export const PROPERTY_DESCRIPTION_BLOCK_ID = 'propertyDescription';
@@ -10,7 +9,6 @@ export const propertyDescriptionBlock = {
   icon: undefined,
   group: 'estadesDelta',
   view: PropertyDescriptionView,
-  edit: PropertyDescriptionEdit,
   blockSchema: PropertyDescriptionSchema,
   restricted: false,
   mostUsed: true,
