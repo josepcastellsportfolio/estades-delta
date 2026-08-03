@@ -5,7 +5,9 @@ import Heading from '../atoms/Heading';
 import Stack from '../atoms/Stack';
 import Pill from '../atoms/Pill';
 import PropertyGalleryView from '../../blocks/PropertyGallery/PropertyGalleryView';
-import PropertyDescriptionView from '../../blocks/PropertyDescription/PropertyDescriptionView';
+import PropertyDescriptionView, {
+  type RichTextValue,
+} from '../../blocks/PropertyDescription/PropertyDescriptionView';
 import PropertyAmenitiesView from '../../blocks/PropertyAmenities/PropertyAmenitiesView';
 import PropertyBookingFormView from '../../blocks/PropertyBookingForm/PropertyBookingFormView';
 import PropertyMapView from '../../blocks/PropertyMap/PropertyMapView';
@@ -25,7 +27,7 @@ export interface PropertyContent {
   subtitle?: string;
   short_name?: string;
   description?: string;
-  long_description?: { data?: string } | string;
+  long_description?: RichTextValue | string;
   municipality?: string;
   zone?: string;
   latitude?: number;
@@ -64,12 +66,16 @@ function joinMeta(parts: Array<string | number | undefined>): string[] {
 
 const PropertyView: React.FC<PropertyViewProps> = ({ content }) => {
   const paletteToken = getPaletteToken(content.palette);
-  const longDescription =
+  // Hand the RichText value over untouched: PropertyDescriptionView unwraps it
+  // and renders the markup. Flattening it to a string here is what used to make
+  // the <p> tags show up literally on the page.
+  const hasLongDescription =
     typeof content.long_description === 'string'
-      ? content.long_description
-      : content.long_description?.data ?? '';
-  const description = content.description ?? '';
-  const bodyText = longDescription || description;
+      ? content.long_description.length > 0
+      : Boolean(content.long_description?.data);
+  const bodyText = hasLongDescription
+    ? content.long_description
+    : content.description ?? '';
 
   const headerMeta = joinMeta([content.municipality, content.zone]).join(' · ');
 
@@ -150,7 +156,7 @@ const PropertyView: React.FC<PropertyViewProps> = ({ content }) => {
               />
             </section>
 
-            {(content.latitude || content.longitude) ? (
+            {content.latitude || content.longitude ? (
               <section className="propertyView__map">
                 <Heading level={3}>
                   <FormattedMessage {...m.howToGet} />
