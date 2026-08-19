@@ -140,7 +140,7 @@ Una sola Plone Site (`/Plone`) contiene todos los Properties (chalets). Cada Pro
 
 ### 5.3 Servicios futuros (mes 2+, no construir todavía)
 
-- `assistant` — Django microservice basado en fork de `recetia_assistant`, integración chatbot multi-tenant. Comunicará con Plone vía REST API, usará pgvector para RAG, Anthropic Claude Haiku 4.5 como LLM default.
+- `assistant` — **servicio Django compartido multi-tenant** (el paquete `recetia_assistant`, montado en un host Django mínimo; **no un fork por proyecto** — ver ADR-021). Estades Delta es un tenant. LLM default **self-hosted Ollama/Llama** (ADR-021, deroga la fila 009). RAG **federado**: cada proyecto posee su propio vector store y el assistant lo consulta vía HTTP (ADR-022); en Estades Delta ese vector es el pgvector de M1 revivido. Contrato API en ADR-024.
 - `listmonk` — newsletter / email marketing (cuando llegue contenido editorial).
 - `cal-com` — agendamiento reuniones comerciales.
 - `plane` — project management self-hosted.
@@ -407,13 +407,13 @@ Auto-merge PRs propios después de pasar CI y revisar diff completo manualmente.
 4. Frontend abre Stripe Checkout / Elements con `client_secret`
 5. Guest paga → Stripe webhook → Booking transiciona a `confirmed` → Beds24 sync → email al owner y al guest
 
-### LLM (Anthropic Claude) — mes 2+
+### LLM (Ollama/Llama self-hosted) — parcialmente implementado
 
-**Estado:** no implementado. Reserva pgvector + campos chatbot en content types.
+**Estado:** M1 (commit `245cc4b`) implementó la **Messaging IA guest-facing** (clasificar/responder mensajes de huéspedes con gate de aprobación del owner) sobre **Ollama/Llama self-hosted** (`llama3.1:8b-instruct`), Celery, y un pgvector adapter (hoy inerte). El **assistant editor-facing compartido** (Q&A/RAG sobre contenido, redacción, tagging, traducción) es trabajo pendiente sobre ese fundamento.
 
-**Modelo default cuando llegue:** `claude-haiku-4-5-20251001`. Sonnet 4.6 para agentes complejos del planner (area_recommendations, comparison). Opus prácticamente no se usa.
+**Modelo default:** **Ollama/Llama self-hosted**, coste recurrente 0 (coherente con Fase 1). `ClaudeAdapter` queda como opción config-only si alguna feature sensible a calidad lo justifica. Esto **deroga** la fila 009 (Claude Haiku) — ver ADR-021.
 
-**Integración:** microservicio Django separado (fork de `recetia_assistant`) en mismo docker-compose, comunicación vía REST API con Plone como `domain_data_port`, pgvector como `vector_store_port`.
+**Integración:** **servicio Django compartido multi-tenant** (paquete `recetia_assistant` en host mínimo, mismo docker-compose), **no un fork** (ADR-021). RAG **federado**: Plone posee su vector y expone `@assistant-search`; el assistant orquesta (ADR-022, ADR-024). Tenancy vía `tenant_id` + service token (ADR-023).
 
 ---
 
@@ -465,7 +465,7 @@ Necesario tener presente porque informa decisiones técnicas (defaults de comisi
 ### Mes 2
 - Integración real Beds24 sandbox → producción
 - Integración real Stripe Connect sandbox → producción
-- Fork `recetia_assistant` → `estades_assistant`, adaptar adapters (Plone REST, pgvector, tenant-aware sessions)
+- ~~Fork `recetia_assistant` → `estades_assistant`~~ **[derogado por ADR-021]** → construir el **assistant compartido multi-tenant** (paquete `recetia_assistant` en host Django mínimo) + adapters genéricos: `RemoteSearchAdapter` (RAG federado), `ContentQueryPort` sobre Plone REST, `tenant_id` en sesiones
 - Diseñar set de agentes vertical "accommodation" para chatbot
 
 ### Mes 3
@@ -506,10 +506,14 @@ ADRs completos en `docs/ADRs/`. Estos son los resumidos:
 | 004 | Stripe Connect Express accounts | Onboarding mínimo propietario, KYC delegado a Stripe |
 | 005 | Self-hosted en Hetzner (Fase 3+) | Soberanía datos EU, coste predecible, GDPR clean |
 | 006 | Local-first desarrollo (Fase 1) | Iteración rápida, no exposición pública prematura, no gasto antes de demostrable |
-| 007 | pgvector en Postgres en lugar de Chroma | Reutiliza Postgres existente, un servicio menos, backup unificado |
-| 008 | Fork `recetia_assistant` para chatbot, no refactor | Validar demanda primero, extraer core genérico después |
-| 009 | Claude Haiku 4.5 como LLM default | Mejor relación calidad/precio multilingüe, margen sano todos los tiers |
+| 007 | pgvector en Postgres en lugar de Chroma | Reutiliza Postgres existente, un servicio menos, backup unificado. **Sigue vigente como store local de Estades Delta** (ADR-022) |
+| 008 | ~~Fork `recetia_assistant` para chatbot~~ | **DEROGADO por ADR-021** → servicio compartido multi-tenant, no fork |
+| 009 | ~~Claude Haiku 4.5 como LLM default~~ | **DEROGADO por ADR-021** → Ollama/Llama self-hosted (coste 0, Fase 1) |
 | 010 | Holded para facturación (no self-hosted) | Verifactu compliance (2026) no negociable |
+| 021 | Assistant como servicio compartido multi-tenant (no fork) | Un core, no N forks divergentes. ADR-021 |
+| 022 | Vector federado: cada proyecto posee su store | Aislamiento estructural + localidad de datos. ADR-022 |
+| 023 | Tenancy vía `tenant_id` slug + service token | Namespacing de conversaciones + routing RAG. ADR-023 |
+| 024 | Contrato API canónico (chat session-based + `@assistant-search`) | Reconcilia contratos divergentes frontend/backend. ADR-024 |
 | 013 | 3 paletas visuales + tipografía única (DM Serif Display + DM Sans), marketplace master Arrossar | Identidad por propiedad sin perder coherencia de agregador. ADR completo en `docs/ADRs/013-multi-palette-theming.md` |
 
 ---
@@ -598,4 +602,4 @@ docker compose -f devops/docker-compose.dev.yml up -d --build frontend
 
 ---
 
-*Última actualización: 2026-05-11. Próxima revisión obligatoria: tras Day 1, tras Fase 2 cutover, tras Fase 3 cutover.*
+*Última actualización: 2026-07-07 (ADRs 021-024: assistant compartido multi-tenant + vector federado; deroga forks 008/009). Próxima revisión obligatoria: tras piloto Q&A/RAG, tras Fase 2 cutover, tras Fase 3 cutover.*

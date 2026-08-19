@@ -6,6 +6,8 @@
  */
 import React from 'react';
 import PropertyMapView from './PropertyMapView';
+import BlockSidebar from '../../components/BlockSidebar';
+import PropertyMapSchema from './schema';
 import type { PropertyMapData } from './schema';
 
 interface PropertyMapEditProps {
@@ -15,15 +17,15 @@ interface PropertyMapEditProps {
   selected?: boolean;
 }
 
-const PropertyMapEdit: React.FC<PropertyMapEditProps> = ({
-  data,
-  content,
-  selected,
-}) => {
+const PropertyMapEdit: React.FC<PropertyMapEditProps> = (props) => {
+  const { data, content, selected } = props;
   return (
-    <div style={{ opacity: selected ? 1 : 0.85 }}>
-      <PropertyMapView data={data} content={content} />
-    </div>
+    <>
+      <div style={{ opacity: selected ? 1 : 0.85 }}>
+        <PropertyMapView data={data} content={content} />
+      </div>
+      <BlockSidebar {...props} schema={PropertyMapSchema} />
+    </>
   );
 };
 

@@ -1,0 +1,132 @@
+{
+  "@components": {
+    "actions": {
+      "@id": "http://estadesdelta.local:8081/josep-test/casa-demo-riumar/@actions"
+    }, 
+    "aliases": {
+      "@id": "http://estadesdelta.local:8081/josep-test/casa-demo-riumar/@aliases"
+    }, 
+    "breadcrumbs": {
+      "@id": "http://estadesdelta.local:8081/josep-test/casa-demo-riumar/@breadcrumbs"
+    }, 
+    "contextnavigation": {
+      "@id": "http://estadesdelta.local:8081/josep-test/casa-demo-riumar/@contextnavigation"
+    }, 
+    "navigation": {
+      "@id": "http://estadesdelta.local:8081/josep-test/casa-demo-riumar/@navigation"
+    }, 
+    "navroot": {
+      "@id": "http://estadesdelta.local:8081/josep-test/casa-demo-riumar/@navroot"
+    }, 
+    "translations": {
+      "@id": "http://estadesdelta.local:8081/josep-test/casa-demo-riumar/@translations"
+    }, 
+    "types": {
+      "@id": "http://estadesdelta.local:8081/josep-test/casa-demo-riumar/@types"
+    }, 
+    "workflow": {
+      "@id": "http://estadesdelta.local:8081/josep-test/casa-demo-riumar/@workflow"
+    }
+  }, 
+  "@id": "http://estadesdelta.local:8081/josep-test/casa-demo-riumar", 
+  "@type": "Property", 
+  "UID": "f7584c5089fe48f2855ce46f686b0730", 
+  "address": null, 
+  "allow_discussion": false, 
+  "amenities": [
+    "wifi", 
+    "ac", 
+    "kitchen", 
+    "parking"
+  ], 
+  "base_price_high_season": 160.0, 
+  "base_price_low_season": 85.0, 
+  "base_price_mid_season": 110.0, 
+  "bathrooms": 2, 
+  "bedrooms": 3, 
+  "beds24_property_id": null, 
+  "beds_double": 2, 
+  "beds_single": 2, 
+  "blocks": {}, 
+  "blocks_layout": {
+    "items": []
+  }, 
+  "changeNote": "", 
+  "chatbot_custom_prompt": null, 
+  "chatbot_enabled": false, 
+  "chatbot_tier": null, 
+  "check_in_time": "16:00", 
+  "check_out_time": "11:00", 
+  "cleaning_fee": 50.0, 
+  "contributors": [], 
+  "created": "2026-05-11T12:48:57+00:00", 
+  "creators": [
+    "admin"
+  ], 
+  "custom_domain": null, 
+  "description": "", 
+  "effective": "2026-05-11T17:17:08+00:00", 
+  "exclude_from_nav": false, 
+  "expires": null, 
+  "house_rules": null, 
+  "id": "casa-demo-riumar", 
+  "is_folderish": true, 
+  "items": [], 
+  "items_total": 0, 
+  "language": "", 
+  "latitude": 40.7148, 
+  "layout": "view", 
+  "lock": {
+    "locked": false, 
+    "stealable": true
+  }, 
+  "long_description": {
+    "content-type": "text/html", 
+    "data": "<p>Casa Riumar sleeps six, beachfront in the Ebro Delta. Dogs allowed with notice, check-in from 4pm.</p>", 
+    "encoding": "utf8"
+  }, 
+  "longitude": 0.7506, 
+  "max_guests": 6, 
+  "minimum_stay_high": 4, 
+  "minimum_stay_low": 2, 
+  "modified": "2026-07-08T10:23:31+00:00", 
+  "municipality": "Deltebre", 
+  "next_item": {}, 
+  "owner_ref": null, 
+  "palette": {
+    "title": "Arrossar (rural green)", 
+    "token": "arrossar"
+  }, 
+  "parent": {
+    "@id": "http://estadesdelta.local:8081/josep-test", 
+    "@type": "Owner", 
+    "Subject": [], 
+    "description": "", 
+    "effective": "2026-05-11T17:17:14+00:00", 
+    "end": null, 
+    "getObjSize": null, 
+    "getRemoteUrl": null, 
+    "head_title": null, 
+    "image_field": null, 
+    "image_scales": {}, 
+    "mime_type": null, 
+    "nav_title": null, 
+    "review_state": "published", 
+    "start": null, 
+    "title": "Josep Castells (test)", 
+    "type_title": "Propietari"
+  }, 
+  "previous_item": {}, 
+  "relatedItems": [], 
+  "review_state": "published", 
+  "rights": "", 
+  "short_name": "casa-demo-riumar", 
+  "subjects": [], 
+  "subtitle": "Demo property in Riumar (Delta de l Ebre)", 
+  "title": "Casa Demo - Riumar", 
+  "tourist_tax_per_night": 1.1, 
+  "type_title": "Property", 
+  "version": "current", 
+  "versioning_enabled": true, 
+  "zone": "Riumar"
+}

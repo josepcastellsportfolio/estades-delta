@@ -1,5 +1,4 @@
 import PropertyBookingFormView from './PropertyBookingFormView';
-import PropertyBookingFormEdit from './PropertyBookingFormEdit';
 import PropertyBookingFormSchema from './schema';
 
 export const PROPERTY_BOOKING_FORM_BLOCK_ID = 'propertyBookingForm';
@@ -10,7 +9,6 @@ export const propertyBookingFormBlock = {
   icon: undefined,
   group: 'estadesDelta',
   view: PropertyBookingFormView,
-  edit: PropertyBookingFormEdit,
   blockSchema: PropertyBookingFormSchema,
   restricted: false,
   mostUsed: true,

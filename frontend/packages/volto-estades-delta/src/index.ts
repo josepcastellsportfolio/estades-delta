@@ -5,6 +5,7 @@ import installMiddleware from './config/middleware';
 import installPalette from './config/palette';
 import installViews from './config/views';
 import installRoutes from './config/routes';
+import installAssistant from './config/assistant';
 
 // Importing the entry .scss once at addon load registers all design tokens,
 // palette custom properties, font @imports, and the typography reset on the
@@ -19,6 +20,7 @@ function applyConfig(config: ConfigType) {
   installRoutes(config);
   installMiddleware(config);
   installPalette(config);
+  installAssistant(config);
 
   return config;
 }

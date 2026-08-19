@@ -10,4 +10,38 @@
   font-family: var(--ed-font-body);
   font-size: var(--ed-font-size-md);
   line-height: var(--ed-line-height-relaxed);
+
+  /* RichText fields emit real markup: paragraphs, lists, links, emphasis.
+     Style the children so a formatted description keeps the same rhythm as
+     the rest of the page instead of inheriting Plone's defaults. */
+  > * {
+    margin: 0;
+  }
+
+  > * + * {
+    margin-top: var(--ed-space-4);
+  }
+
+  ul,
+  ol {
+    padding-left: var(--ed-space-6);
+  }
+
+  li + li {
+    margin-top: var(--ed-space-2);
+  }
+
+  a {
+    color: var(--ed-color-primary-default);
+    text-decoration: underline;
+
+    &:hover {
+      color: var(--ed-color-primary-hover);
+    }
+  }
+
+  strong,
+  b {
+    font-weight: var(--ed-font-weight-bold);
+  }
 }

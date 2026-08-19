@@ -1,0 +1,20 @@
+{
+  "name": "@stellifyit/assistant-ui-engine",
+  "version": "0.1.0",
+  "description": "Vendored build of the framework-agnostic assistant UI engine. Source of truth: ~/projects/assistant-ui-engine. Refresh with scripts/vendor-engine.sh.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT"
+}

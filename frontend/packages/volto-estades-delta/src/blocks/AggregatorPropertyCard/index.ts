@@ -1,5 +1,4 @@
 import AggregatorPropertyCardView from './AggregatorPropertyCardView';
-import AggregatorPropertyCardEdit from './AggregatorPropertyCardEdit';
 import AggregatorPropertyCardSchema from './schema';
 
 export const AGGREGATOR_PROPERTY_CARD_BLOCK_ID = 'aggregatorPropertyCard';
@@ -10,7 +9,6 @@ export const aggregatorPropertyCardBlock = {
   icon: undefined,
   group: 'estadesDelta',
   view: AggregatorPropertyCardView,
-  edit: AggregatorPropertyCardEdit,
   blockSchema: AggregatorPropertyCardSchema,
   restricted: false,
   mostUsed: false,

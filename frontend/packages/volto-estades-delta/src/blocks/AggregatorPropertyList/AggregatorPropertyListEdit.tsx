@@ -8,6 +8,8 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import AggregatorPropertyCardView from '../AggregatorPropertyCard/AggregatorPropertyCardView';
 import { aggregatorPropertyListMessages as m } from '../../i18n/messages';
+import BlockSidebar from '../../components/BlockSidebar';
+import AggregatorPropertyListSchema from './schema';
 import './AggregatorPropertyList.scss';
 import type { AggregatorPropertyListData } from './schema';
 
@@ -55,27 +57,30 @@ interface AggregatorPropertyListEditProps {
   selected?: boolean;
 }
 
-const AggregatorPropertyListEdit: React.FC<AggregatorPropertyListEditProps> = ({
-  data,
-  selected,
-}) => {
+const AggregatorPropertyListEdit: React.FC<AggregatorPropertyListEditProps> = (
+  props,
+) => {
+  const { data, selected } = props;
   return (
-    <div
-      className="aggregatorPropertyList"
-      style={{ opacity: selected ? 1 : 0.85, pointerEvents: 'none' }}
-    >
-      {data.heading ? (
-        <h2 className="aggregatorPropertyList__heading">{data.heading}</h2>
-      ) : null}
-      <p className="aggregatorPropertyList__count">
-        <FormattedMessage {...m.editPreview} />
-      </p>
-      <div className="aggregatorPropertyList__grid">
-        {PLACEHOLDER_CARDS.map((card) => (
-          <AggregatorPropertyCardView key={card.title} data={card} />
-        ))}
+    <>
+      <div
+        className="aggregatorPropertyList"
+        style={{ opacity: selected ? 1 : 0.85, pointerEvents: 'none' }}
+      >
+        {data.heading ? (
+          <h2 className="aggregatorPropertyList__heading">{data.heading}</h2>
+        ) : null}
+        <p className="aggregatorPropertyList__count">
+          <FormattedMessage {...m.editPreview} />
+        </p>
+        <div className="aggregatorPropertyList__grid">
+          {PLACEHOLDER_CARDS.map((card) => (
+            <AggregatorPropertyCardView key={card.title} data={card} />
+          ))}
+        </div>
       </div>
-    </div>
+      <BlockSidebar {...props} schema={AggregatorPropertyListSchema} />
+    </>
   );
 };
 

@@ -271,3 +271,46 @@ export const messagingMessages = defineMessages({
     defaultMessage: 'Error en aprovar la resposta',
   },
 });
+
+export const assistantMessages = defineMessages({
+  heading: {
+    id: 'estadesDelta.assistant.heading',
+    defaultMessage: 'Assistent',
+  },
+  subheading: {
+    id: 'estadesDelta.assistant.subheading',
+    defaultMessage: 'Pregunta sobre el contingut publicat i respondré amb enllaços a les fonts.',
+  },
+  emptyHint: {
+    id: 'estadesDelta.assistant.emptyHint',
+    defaultMessage: 'Escriu una pregunta per començar.',
+  },
+  thinking: {
+    id: 'estadesDelta.assistant.thinking',
+    defaultMessage: 'Pensant…',
+  },
+  inputPlaceholder: {
+    id: 'estadesDelta.assistant.inputPlaceholder',
+    defaultMessage: 'Fes una pregunta…',
+  },
+  inputLabel: {
+    id: 'estadesDelta.assistant.inputLabel',
+    defaultMessage: 'Missatge per a l’assistent',
+  },
+  send: {
+    id: 'estadesDelta.assistant.send',
+    defaultMessage: 'Enviar',
+  },
+  stop: {
+    id: 'estadesDelta.assistant.stop',
+    defaultMessage: 'Aturar',
+  },
+  openLabel: {
+    id: 'estadesDelta.assistant.openLabel',
+    defaultMessage: 'Obrir l’assistent',
+  },
+  close: {
+    id: 'estadesDelta.assistant.close',
+    defaultMessage: 'Tancar',
+  },
+});

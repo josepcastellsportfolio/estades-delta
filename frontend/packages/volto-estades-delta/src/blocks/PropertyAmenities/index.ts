@@ -1,5 +1,4 @@
 import PropertyAmenitiesView from './PropertyAmenitiesView';
-import PropertyAmenitiesEdit from './PropertyAmenitiesEdit';
 import PropertyAmenitiesSchema from './schema';
 
 export const PROPERTY_AMENITIES_BLOCK_ID = 'propertyAmenities';
@@ -10,7 +9,6 @@ export const propertyAmenitiesBlock = {
   icon: undefined,
   group: 'estadesDelta',
   view: PropertyAmenitiesView,
-  edit: PropertyAmenitiesEdit,
   blockSchema: PropertyAmenitiesSchema,
   restricted: false,
   mostUsed: false,
