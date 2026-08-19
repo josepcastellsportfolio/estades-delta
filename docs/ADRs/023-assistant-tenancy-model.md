@@ -82,3 +82,47 @@ and (c) authenticates a project to the service.
   to the existing per-user ownership check.
 - Vector isolation is already structural via federation (ADR 022); `tenant_id`
   here governs *conversation* isolation and *search routing*.
+
+---
+
+## Amendment (2026-08-19) — how `user_id` actually arrives
+
+Recorded after an isolation audit of the assistant service. The decision above
+stands; this corrects the record of **how the second identity dimension is
+carried**, which the implementation resolved differently.
+
+This ADR says `user_id` comes from the JWT — "the existing JWT `user_id`" under
+*Decision*, and "`user_id` from JWT" under *Trade-offs we accepted*. That is true
+for a browser talking to the service directly. It is **not** true for the
+proxied path this project actually uses.
+
+Estades Delta proxies chat through Plone, which holds no per-user JWT for the
+assistant. It authenticates as a *service* and forwards the end user in a plain
+header:
+
+- `X-Assistant-Token` — the tenant credential. `tenant_id` is derived from it and
+  from nothing else. This half matches the ADR exactly.
+- `X-Forwarded-User` — the end user's id, **an unsigned header set by the proxy**
+  (`backend/src/estades/delta/api/assistant_chat.py:117`, derived server-side
+  from `plone.api.user.get_current()`).
+
+### What follows from that
+
+- Only **one** of the two dimensions is a proven credential. The tenant is; the
+  user is asserted by the tenant's backend.
+- So a tenant's backend can act as **any of its own users**, and its user ids are
+  guessable — this project derives them as `crc32(login)`. It cannot reach
+  another tenant's users, because the tenant still comes from the token.
+- That is the inherent trust model of a service-to-service proxy and is
+  **accepted**: the tenant's backend is already the authority on who its users
+  are. It was simply never written down as a residual risk, which is what this
+  amendment fixes.
+- The claim in *Trade-offs* that "neither end users nor tenants can cross their
+  boundary" holds **between tenants**. Within one tenant it rests on that
+  tenant's backend being uncompromised, not on cryptography.
+
+Not a decision to revisit here. Making the user dimension provable would mean
+per-user tokens minted by the tenant, which is a different ADR.
+
+See `INTEGRATION.md` in the assistant repo for the header contract, and
+`api/authentication.py` for where the tenant is resolved.
