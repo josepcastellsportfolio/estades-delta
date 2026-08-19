@@ -3,10 +3,11 @@
 The outward half of the assistant integration (ADR-024 contract A, consumed
 side). GUEST-facing: an anonymous visitor on a property microsite calls this
 same-origin and asks about the property. Plone forwards the turn to the shared
-assistant service, authenticating as a *service* with a shared token and
-forwarding the visitor's identity (0 for anonymous) + tenant (ADR-023). This
-keeps the JWT-only assistant service off the public browser surface — the only
-thing the browser talks to is Plone.
+assistant service, authenticating as a *service* with this tenant's own token
+and forwarding the visitor's identity (0 for anonymous). The tenant is not
+forwarded: the assistant derives it from the token (ADR-023). This keeps the
+JWT-only assistant service off the public browser surface — the only thing the
+browser talks to is Plone.
 
 Because it's public and proxies an LLM, it is abuse-gated by a per-IP rate
 limit (Plone sees the real client IP; the downstream service does not). The
@@ -18,11 +19,20 @@ Reply: the assistant's chat response verbatim
        {session_id, response, agent_type, structured_data, sources, ...}
 
 Config (env):
-  ASSISTANT_CHAT_URL     internal URL of the assistant chat endpoint
-                         (default http://assistant:8080/api/v1/assistant/chat/)
-  ASSISTANT_SERVICE_TOKEN shared token presented as X-Assistant-Token
-  ASSISTANT_TENANT_ID    tenant slug forwarded as X-Tenant-Id (default estades-delta)
+  ASSISTANT_CHAT_URL      internal URL of the assistant chat endpoint
+                          (default http://assistant:8080/api/v1/assistant/chat/)
+  ASSISTANT_INBOUND_TOKEN this tenant's own token, presented as X-Assistant-Token.
+                          Preferred. It is what identifies us to the assistant.
+  ASSISTANT_SERVICE_TOKEN legacy shared token, used only if the above is unset.
+                          Deprecated: it is shared by every consumer, cannot be
+                          rotated per project, and resolves to NO tenant on the
+                          assistant side, so our sessions land outside the
+                          `estades-delta` scope and our RAG is never routed
+                          through the tenant registry.
   ASSISTANT_CHAT_RATE_LIMIT / _WINDOW  per-IP requests per window seconds
+
+Note there is no X-Tenant-Id: the assistant ignores it. Our tenant is derived
+from the token we present, which is why the inbound token matters.
 """
 
 from __future__ import annotations
@@ -40,7 +50,6 @@ import plone.api
 
 
 DEFAULT_CHAT_URL = "http://assistant:8080/api/v1/assistant/chat/"
-DEFAULT_TENANT = "estades-delta"
 TIMEOUT_SECONDS = float(os.environ.get("ASSISTANT_CHAT_TIMEOUT", "120"))
 # Per-IP rate limit for the public guest widget (abuse control for the anon
 # LLM endpoint). Tunable via env; generous enough for a real conversation.
@@ -109,11 +118,15 @@ class AssistantChatPost(Service):
             payload["source_uid"] = source_uid
 
         chat_url = os.environ.get("ASSISTANT_CHAT_URL", DEFAULT_CHAT_URL)
-        token = os.environ.get("ASSISTANT_SERVICE_TOKEN", "")
-        tenant = os.environ.get("ASSISTANT_TENANT_ID", DEFAULT_TENANT)
+        # Our own inbound token first; the shared one only while migrating.
+        # The assistant derives our tenant from whichever we present, so the
+        # legacy token silently scopes us to "no tenant" rather than to
+        # `estades-delta`.
+        token = os.environ.get("ASSISTANT_INBOUND_TOKEN", "") or os.environ.get(
+            "ASSISTANT_SERVICE_TOKEN", ""
+        )
         headers = {
             "Content-Type": "application/json",
-            "X-Tenant-Id": tenant,
             "X-Forwarded-User": str(_forwarded_user_id()),
         }
         if token:
